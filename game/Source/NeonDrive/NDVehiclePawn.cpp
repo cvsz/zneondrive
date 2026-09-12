@@ -53,6 +53,11 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
         return;
     }
 
+    if (!bDurableIdentityBound && GetNetMode() != NM_Standalone)
+    {
+        return;
+    }
+
     const float ClampedThrottle = FMath::Clamp(AuthoritativeThrottle, -1.0f, 1.0f);
     const float ClampedSteering = FMath::Clamp(AuthoritativeSteering, -1.0f, 1.0f);
 
@@ -105,10 +110,34 @@ void ANDVehiclePawn::ServerSetDrivingInput_Implementation(float Throttle, float 
     AuthoritativeSteering = FMath::Clamp(Steering, -1.0f, 1.0f);
 }
 
+void ANDVehiclePawn::ApplyDurableIdentity(
+    const FString& VehicleID,
+    int32 BuildRevision,
+    const TArray<FString>& PartIDs,
+    bool bRoadworthy)
+{
+    if (!HasAuthority() || VehicleID.IsEmpty() || BuildRevision < 1)
+    {
+        return;
+    }
+
+    DurableVehicleID = VehicleID;
+    DurableBuildRevision = BuildRevision;
+    DurablePartIDs = PartIDs;
+    bDurableRoadworthy = bRoadworthy;
+    bDurableIdentityBound = true;
+    ForceNetUpdate();
+}
+
 void ANDVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(ANDVehiclePawn, AuthoritativeThrottle);
     DOREPLIFETIME(ANDVehiclePawn, AuthoritativeSteering);
+    DOREPLIFETIME(ANDVehiclePawn, DurableVehicleID);
+    DOREPLIFETIME(ANDVehiclePawn, DurableBuildRevision);
+    DOREPLIFETIME(ANDVehiclePawn, DurablePartIDs);
+    DOREPLIFETIME(ANDVehiclePawn, bDurableRoadworthy);
+    DOREPLIFETIME(ANDVehiclePawn, bDurableIdentityBound);
 }
