@@ -51,12 +51,16 @@ func (p *Postgres) Ping(ctx context.Context) error {
 }
 
 func (p *Postgres) EnsureSchema(ctx context.Context) error {
-	for name, sql := range map[string]string{
-		"001_init":         migrationSQL,
-		"002_game_tickets": ticketMigrationSQL,
-	} {
-		if _, err := p.pool.Exec(ctx, sql); err != nil {
-			return fmt.Errorf("apply schema %s: %w", name, err)
+	migrations := []struct {
+		name string
+		sql  string
+	}{
+		{name: "001_init", sql: migrationSQL},
+		{name: "002_game_tickets", sql: ticketMigrationSQL},
+	}
+	for _, migration := range migrations {
+		if _, err := p.pool.Exec(ctx, migration.sql); err != nil {
+			return fmt.Errorf("apply schema %s: %w", migration.name, err)
 		}
 	}
 	return nil
