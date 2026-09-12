@@ -3,6 +3,7 @@ package httpapi
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"log"
 	"math"
 	"net"
 	"net/http"
@@ -33,10 +34,24 @@ type rateLimiter struct {
 type rateLimitMiddleware struct {
 	next    http.Handler
 	limiter *rateLimiter
+	redis   *redisRateLimiter
 }
 
 func NewRateLimitedHandler(next http.Handler) http.Handler {
 	return &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000)}
+}
+
+// NewDistributedRateLimitedHandler coordinates rate-limit decisions through
+// Redis so multiple API replicas share the same abuse budget. If Redis is
+// temporarily unavailable, the bounded in-process limiter remains active and
+// a credential-safe security event is logged. Redis failure never moves
+// gameplay authority away from PostgreSQL/dedicated-server validation.
+func NewDistributedRateLimitedHandler(next http.Handler, redisAddr string) http.Handler {
+	middleware := &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000)}
+	if strings.TrimSpace(redisAddr) != "" {
+		middleware.redis = newRedisRateLimiter(redisAddr)
+	}
+	return middleware
 }
 
 func newRateLimiter(maxEntries int) *rateLimiter {
@@ -53,12 +68,23 @@ func newRateLimiter(maxEntries int) *rateLimiter {
 func (m *rateLimitMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	policy, scope, identity, limited := rateLimitRule(r)
 	if limited {
-		allowed, retryAfter := m.limiter.allow(rateLimitKey(scope, identity), policy)
+		key := rateLimitKey(scope, identity)
+		backend := "local"
+		allowed, retryAfter := m.limiter.allow(key, policy)
+		if m.redis != nil {
+			redisAllowed, redisRetry, err := m.redis.allow(r.Context(), key, policy, m.limiter.now())
+			if err == nil {
+				allowed, retryAfter, backend = redisAllowed, redisRetry, "redis"
+			} else {
+				log.Printf("security_event=rate_limit_backend_fallback scope=%s bucket=%s backend=local", scope, key)
+			}
+		}
 		if !allowed {
 			seconds := int(math.Ceil(retryAfter.Seconds()))
 			if seconds < 1 {
 				seconds = 1
 			}
+			log.Printf("security_event=rate_limit_rejected scope=%s bucket=%s backend=%s retry_after_seconds=%d", scope, key, backend, seconds)
 			w.Header().Set("Retry-After", strconv.Itoa(seconds))
 			writeError(w, http.StatusTooManyRequests, "rate_limited")
 			return
@@ -183,12 +209,12 @@ func remoteIdentity(r *http.Request) string {
 }
 
 var (
-	bootstrapRatePolicy       = rateLimitPolicy{Burst: 8, RefillEvery: 8 * time.Second}
-	stateRatePolicy           = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
-	gameTicketRatePolicy      = rateLimitPolicy{Burst: 12, RefillEvery: 5 * time.Second}
-	mutationRatePolicy        = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
-	internalAuthRatePolicy    = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
-	raceStartRatePolicy       = rateLimitPolicy{Burst: 20, RefillEvery: 3 * time.Second}
-	raceCheckpointRatePolicy  = rateLimitPolicy{Burst: 120, RefillEvery: 500 * time.Millisecond}
-	raceFinishRatePolicy      = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	bootstrapRatePolicy      = rateLimitPolicy{Burst: 8, RefillEvery: 8 * time.Second}
+	stateRatePolicy          = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	gameTicketRatePolicy     = rateLimitPolicy{Burst: 12, RefillEvery: 5 * time.Second}
+	mutationRatePolicy       = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	internalAuthRatePolicy   = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	raceStartRatePolicy      = rateLimitPolicy{Burst: 20, RefillEvery: 3 * time.Second}
+	raceCheckpointRatePolicy = rateLimitPolicy{Burst: 120, RefillEvery: 500 * time.Millisecond}
+	raceFinishRatePolicy     = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
 )
