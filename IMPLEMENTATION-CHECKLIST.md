@@ -81,6 +81,21 @@
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 
+## Documentation / governance baseline
+- [x] complete documentation index
+- [x] product requirements
+- [x] API + data model docs
+- [x] multiplayer/networking spec
+- [x] threat-model baseline (production abuse testing still open)
+- [x] testing + performance-budget strategy
+- [x] observability/SLO target contract (measurement still open)
+- [x] deployment + backup/restore/DR plans (verification still open)
+- [x] incident-response runbook (exercise still open)
+- [x] accessibility + localization baselines
+- [x] economy/fairness + moderation + privacy + live-ops policies
+- [x] governance + support + maintainers
+- [x] release-readiness + asset/IP guidance
+
 ## Content production
 - [ ] Full dialogue/script MQ001–MQ100
 - [ ] Side-quest narratives
