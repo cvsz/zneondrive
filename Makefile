@@ -1,26 +1,24 @@
 SHELL := /bin/sh
 
-.PHONY: help setup format lint test build security ci
+.PHONY: help validate-design check-json lint test build security ci
 
 help:
-	@printf '%s\n' 'Targets: setup format lint test build security ci'
+	@printf '%s\n' 'Targets: validate-design check-json lint test build security ci'
 
-setup:
-	@echo 'Replace with project bootstrap command.'
+validate-design:
+	python3 tools/validate_design.py
 
-format:
-	@echo 'Replace with project formatter command.'
+check-json:
+	python3 -c 'import json,pathlib; [json.loads(p.read_text(encoding="utf-8")) for p in pathlib.Path("design").rglob("*.json")]; print("JSON OK")'
 
-lint:
-	@echo 'Replace with project lint command.'
+lint: check-json validate-design
 
-test:
-	@echo 'Replace with project test command.'
+test: validate-design
 
 build:
-	@echo 'Replace with project build command.'
+	@echo 'Runtime build intentionally undefined until engine/server technology ADRs are accepted.'
 
 security:
-	@echo 'Use repository security workflows and add stack-specific scanners.'
+	@echo 'Repository security workflows remain authoritative; add runtime scanners after stack selection.'
 
-ci: lint test build security
+ci: lint test
