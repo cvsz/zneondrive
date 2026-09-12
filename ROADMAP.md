@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v0.5
+## Phase 4 — Runtime prototype / integration v0.6
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -59,7 +59,7 @@
 - [x] Implement one-primary-character persistence
 - [x] Implement starter-vehicle persistence and immutable build revisions
 - [x] Implement optimistic/idempotent durable mutation semantics
-- [ ] Implement inventory/blueprint prototype
+- [x] Implement inventory/blueprint prototype
 - [x] Implement sequential quest-state persistence
 - [ ] Implement authoritative race instance/result runtime
 - [ ] Implement relationship/faction-state runtime
@@ -71,6 +71,9 @@
 - [x] Add HTTP/PostgreSQL reconnect + gameplay-ticket E2E
 - [x] Add Unreal session subsystem + dedicated-server ticket redemption source
 - [x] Bind durable vehicle/build/Roadworthy state only on authority
+- [x] Enforce canonical part catalog on build mutations
+- [x] Make MQ004/MQ009 item grants idempotent and MQ005 blueprint unlock durable
+- [x] Make rebuild inventory consume/return atomic with immutable build revision
 - [ ] Complete Python-reference parity tests in Go
 - [ ] Produce live Unreal ↔ Go packaged/session E2E evidence
 
