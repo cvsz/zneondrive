@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v0.7
+## Phase 4 — Runtime prototype / integration v0.8
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -64,6 +64,9 @@
 - [x] Implement authoritative race instance/result runtime in Go/PostgreSQL
 - [x] Bind race instances to the exact active build revision + validation hash
 - [x] Enforce ordered/monotonic checkpoint acceptance and idempotent race writes
+- [x] Add bounded per-process token-bucket abuse controls for public/internal HTTP mutations
+- [x] Hash credential-derived limiter identities and bound limiter memory cardinality
+- [ ] Add Redis-backed distributed rate-limit coordination for multi-replica deployment
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -87,6 +90,7 @@
 - [x] API / data / networking contracts synchronized through race runtime v0.7
 - [x] gameplay authoring specs for quests, vehicles/races, world, factions, crews and companions
 - [x] threat model, testing strategy and performance-budget targets
+- [x] runtime security hardening v0.8 evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -95,7 +99,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, anti-cheat, load/soak, restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, distributed Redis rate limiting, anti-cheat, load/soak, restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -118,6 +122,8 @@
 
 ## Phase 7 — Production hardening
 - [x] Threat-model baseline documented
+- [x] Per-process HTTP abuse limiter implemented and unit tested
+- [ ] Distributed Redis-backed rate limiting exercised across replicas
 - [ ] Threat/abuse cases exercised against integrated runtime
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
@@ -142,4 +148,4 @@
 - [ ] Disaster-recovery evidence
 - [ ] Go/no-go release review
 
-**Rule:** do not mark playable content, production, HA, DR, anti-cheat, or live-ops complete without executable evidence.
+**Rule:** do not mark playable content, production, HA, DR, anti-cheat, distributed abuse protection, or live-ops complete without executable evidence.

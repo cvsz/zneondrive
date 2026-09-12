@@ -64,6 +64,10 @@ All notable changes to zNeonDrive are documented here.
 - Strict checkpoint cursor + monotonic elapsed-time enforcement
 - Idempotent race start/checkpoint/finish operations and deterministic build-bound result hashes
 - PostgreSQL integration proof for Roadworthy gating, immutable race/build binding, out-of-order rejection, replay safety, finish persistence, and post-finish mutation rejection
+- Runtime Security Hardening v0.8 evidence/non-claim documentation
+- Bounded per-process token-bucket middleware for public and internal service-plane request classes
+- Credential-safe hashed rate-limit identities, bounded limiter bucket cardinality, and HTTP 429 + Retry-After behavior
+- Unit coverage for limiter refill, memory bounds, identity isolation, credential non-disclosure, rejection behavior, and health-probe exemption
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -92,6 +96,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced Phase 4.1 to source-level Unreal↔Go integration while keeping live Unreal build/session evidence open
 - Advanced Phase 4.2 to durable inventory/blueprint and rebuild-state integration without claiming playable Garage 17 evidence
 - Advanced Phase 4.3 to durable server-authoritative race lifecycle persistence without claiming live Unreal race or anti-cheat evidence
+- Advanced the service-plane source baseline to v0.8 abuse resistance while keeping distributed Redis limiting, telemetry, anti-cheat and multi-replica evidence open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -108,4 +113,9 @@ All notable changes to zNeonDrive are documented here.
 - Race lifecycle writes are internal-only, dedicated-server authenticated, and derive build identity from PostgreSQL rather than client input
 - Race checkpoints reject skipped/out-of-order indices and elapsed-time regression before durable acceptance
 - Final race result hashes bind the exact accepted build revision/hash and authoritative checkpoint cursor
+- Service-plane bootstrap/state/ticket/quest/build/race traffic is protected by bounded per-process token-bucket controls
+- Rate-limit bucket identities hash bearer credentials rather than retaining raw secrets
+- Rate-limit state has bounded cardinality with stale/oldest eviction to resist attacker-controlled memory growth
+- Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
+- Distributed Redis-backed rate limiting, trusted-ingress identity handling, rejection telemetry and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

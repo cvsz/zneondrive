@@ -37,9 +37,10 @@ func main() {
 		log.Fatalf("ensure race schema: %v", err)
 	}
 
+	apiHandler := httpapi.New(db, gameServerKey)
 	server := &http.Server{
 		Addr:              listenAddr,
-		Handler:           httpapi.New(db, gameServerKey),
+		Handler:           httpapi.NewRateLimitedHandler(apiHandler),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      15 * time.Second,
