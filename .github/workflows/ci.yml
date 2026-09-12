@@ -44,6 +44,7 @@ jobs:
             docs/runtime-prototype-v0.4.md
             docs/runtime-integration-v0.5.md
             docs/runtime-inventory-rebuild-v0.6.md
+            docs/runtime-authoritative-race-v0.7.md
             docs/architecture.md
             docs/content-contracts.md
             docs/adr/0003-executable-reference-runtime.md
@@ -62,6 +63,7 @@ jobs:
             src/zneondrive/domain.py
             tests/test_reference_runtime.py
             tools/validate_design.py
+            tools/validate_docs.py
             tools/validate_client_demo.py
             tools/validate_runtime_v0_4.py
             tools/validate_runtime_v0_5.py
@@ -123,6 +125,9 @@ jobs:
 
       - name: Validate design invariants
         run: python3 tools/validate_design.py
+
+      - name: Validate documentation completeness and links
+        run: python3 tools/validate_docs.py
 
       - name: Validate client presentation package
         run: python3 tools/validate_client_demo.py

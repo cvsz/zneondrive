@@ -1,6 +1,10 @@
 # zNeonDrive — PROJECT: NEON DRIVE
 
 <p align="center">
+  <img src="./assets/zneondrive-banner.svg" alt="PROJECT: NEON DRIVE — NOVA CITY 2097" width="100%" />
+</p>
+
+<p align="center">
 
 [![CI](https://github.com/cvsz/zneondrive/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/cvsz/zneondrive/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/codeql.yml)
@@ -152,6 +156,10 @@ Open `http://localhost:8080`.
 
 The browser demo is presentation-only; the Unreal/Go code is the implementation baseline. Neither is a claim that the full MMORPG is production-ready.
 
+## Documentation
+
+Start with the complete [PROJECT: NEON DRIVE documentation index](./docs/README.md). It covers product requirements, API/data/networking contracts, gameplay systems, security/threat modeling, testing, observability/SLO targets, deployment, backup/restore/DR, incident response, accessibility, localization, moderation, privacy, live ops, release readiness, governance and support.
+
 ## Canonical design
 
 - [Original Story Bible / Master Plot](./zNeonDrive-concept.md)
@@ -168,6 +176,9 @@ The browser demo is presentation-only; the Unreal/Go code is the implementation 
 - [Content Contracts](./docs/content-contracts.md)
 - [Roadmap](./ROADMAP.md)
 - [Implementation Checklist](./IMPLEMENTATION-CHECKLIST.md)
+- [Complete Documentation Index](./docs/README.md)
+- [Governance](./GOVERNANCE.md)
+- [Support](./SUPPORT.md)
 
 ## Production-direction ADRs
 

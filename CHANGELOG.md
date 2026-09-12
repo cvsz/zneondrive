@@ -65,6 +65,23 @@ All notable changes to zNeonDrive are documented here.
 - Idempotent race start/checkpoint/finish operations and deterministic build-bound result hashes
 - PostgreSQL integration proof for Roadworthy gating, immutable race/build binding, out-of-order rejection, replay safety, finish persistence, and post-finish mutation rejection
 
+- Repository documentation index and status-language contract
+- Product requirements and brand guide
+- API contract synchronized through authoritative race runtime v0.7
+- Durable PostgreSQL data-model documentation including race instances/checkpoints/results
+- Multiplayer/networking authority specification
+- Threat model and security-production exit criteria
+- Testing strategy and performance-budget targets
+- Observability/SLO target contract
+- Deployment, backup/restore/DR, and incident-response runbooks
+- Accessibility and localization baselines
+- Content pipeline, quest authoring, world-streaming, vehicle/race-integrity, faction/relationship, crew/social, and companion specs
+- Economy/monetization fairness, moderation/player-safety, privacy/data-retention, and live-ops policies
+- Release-readiness checklist, asset/IP policy, glossary, governance, support, and maintainers documents
+- GitHub bug-report and documentation issue templates
+- Repository 1280×640 SVG README banner asset
+- Documentation completeness and relative-link validator
+
 ### Changed
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
 - Advanced Phase 3 vertical-slice specification to complete while keeping playable/runtime claims evidence-gated

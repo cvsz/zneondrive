@@ -80,6 +80,23 @@
 - [ ] Produce live Unreal ↔ Go packaged/session E2E evidence
 - [ ] Produce live Unreal ↔ Go race lifecycle evidence
 
+## Repository documentation readiness
+- [x] GitHub governance / support / maintainers baseline
+- [x] canonical documentation index + evidence status language
+- [x] product requirements and brand guide
+- [x] API / data / networking contracts synchronized through race runtime v0.7
+- [x] gameplay authoring specs for quests, vehicles/races, world, factions, crews and companions
+- [x] threat model, testing strategy and performance-budget targets
+- [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
+- [x] accessibility, localization, content pipeline and economy/fairness policy
+- [x] moderation/player safety, privacy/data retention and live-ops policy
+- [x] release-readiness, asset/IP and glossary docs
+- [x] bug/documentation issue templates
+- [x] README 1280×640 banner asset
+- [x] documentation completeness + relative-link CI validator
+
+> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, anti-cheat, load/soak, restore/DR, or production deployment.
+
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
 - [ ] Presence/social
@@ -100,16 +117,19 @@
 - [ ] Localization pipeline
 
 ## Phase 7 — Production hardening
-- [ ] Threat model
-- [ ] Abuse/cheat model
-- [ ] SLOs and observability
-- [ ] Incident/rollback runbooks
-- [ ] Capacity model
-- [ ] Restore evidence
-- [ ] Security review
-- [ ] Privacy/data-retention review
+- [x] Threat-model baseline documented
+- [ ] Threat/abuse cases exercised against integrated runtime
+- [ ] SLOs/observability measured in deployed environment
+- [x] Incident/rollback runbook baseline documented
+- [ ] Incident/rollback exercise passed
+- [ ] Capacity model backed by load evidence
+- [x] Backup/restore/DR plan documented
+- [ ] Restore/DR evidence
+- [ ] Security review of complete runtime
+- [x] Privacy/data-retention baseline documented
+- [ ] Privacy/legal review for target launch regions
 - [ ] VIP fairness test suite in production runtime
-- [ ] Ranked race integrity test suite
+- [ ] Ranked race integrity / anti-cheat suite
 
 ## Phase 8 — Launch readiness
 - [ ] 100 main quests implemented and verified in runtime
