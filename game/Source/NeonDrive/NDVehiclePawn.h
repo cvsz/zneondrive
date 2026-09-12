@@ -39,6 +39,9 @@ protected:
     UPROPERTY(Replicated)
     float AuthoritativeSteering = 0.0f;
 
+    float LocalThrottle = 0.0f;
+    float LocalSteering = 0.0f;
+
     UPROPERTY(EditDefaultsOnly, Category = "Prototype Driving")
     float MaxSpeedCmPerSecond = 1400.0f;
 
@@ -47,7 +50,8 @@ protected:
 
     void InputThrottle(float Value);
     void InputSteering(float Value);
+    void PushDrivingInput();
 
-    UFUNCTION(Server, Reliable)
+    UFUNCTION(Server, Unreliable)
     void ServerSetDrivingInput(float Throttle, float Steering);
 };
