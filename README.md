@@ -1,7 +1,7 @@
 # zNeonDrive — PROJECT: NEON DRIVE
 
 <p align="center">
-  <img src="./assets/zneondrive-banner.svg" alt="PROJECT: NEON DRIVE — NOVA CITY 2097" width="100%" />
+  <img src="./assets/neondrive.png" alt="PROJECT: NEON DRIVE — NOVA CITY 2097" width="100%" />
 </p>
 
 <p align="center">
