@@ -77,28 +77,26 @@ void ANDVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ANDVehiclePawn::InputThrottle(float Value)
 {
-    const float Clamped = FMath::Clamp(Value, -1.0f, 1.0f);
-    if (HasAuthority())
-    {
-        AuthoritativeThrottle = Clamped;
-    }
-    else
-    {
-        ServerSetDrivingInput(Clamped, AuthoritativeSteering);
-    }
+    LocalThrottle = FMath::Clamp(Value, -1.0f, 1.0f);
+    PushDrivingInput();
 }
 
 void ANDVehiclePawn::InputSteering(float Value)
 {
-    const float Clamped = FMath::Clamp(Value, -1.0f, 1.0f);
+    LocalSteering = FMath::Clamp(Value, -1.0f, 1.0f);
+    PushDrivingInput();
+}
+
+void ANDVehiclePawn::PushDrivingInput()
+{
     if (HasAuthority())
     {
-        AuthoritativeSteering = Clamped;
+        AuthoritativeThrottle = LocalThrottle;
+        AuthoritativeSteering = LocalSteering;
+        return;
     }
-    else
-    {
-        ServerSetDrivingInput(AuthoritativeThrottle, Clamped);
-    }
+
+    ServerSetDrivingInput(LocalThrottle, LocalSteering);
 }
 
 void ANDVehiclePawn::ServerSetDrivingInput_Implementation(float Throttle, float Steering)
