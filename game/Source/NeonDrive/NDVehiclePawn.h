@@ -20,6 +20,31 @@ public:
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+    void ApplyDurableIdentity(
+        const FString& VehicleID,
+        int32 BuildRevision,
+        const TArray<FString>& PartIDs,
+        bool bRoadworthy
+    );
+
+    UFUNCTION(BlueprintPure, Category = "NeonDrive|Vehicle")
+    bool HasDurableIdentity() const { return bDurableIdentityBound; }
+
+    UPROPERTY(Replicated, BlueprintReadOnly, Category = "NeonDrive|Vehicle")
+    FString DurableVehicleID;
+
+    UPROPERTY(Replicated, BlueprintReadOnly, Category = "NeonDrive|Vehicle")
+    int32 DurableBuildRevision = 0;
+
+    UPROPERTY(Replicated, BlueprintReadOnly, Category = "NeonDrive|Vehicle")
+    TArray<FString> DurablePartIDs;
+
+    UPROPERTY(Replicated, BlueprintReadOnly, Category = "NeonDrive|Vehicle")
+    bool bDurableRoadworthy = false;
+
+    UPROPERTY(Replicated, BlueprintReadOnly, Category = "NeonDrive|Vehicle")
+    bool bDurableIdentityBound = false;
+
 protected:
     UPROPERTY(VisibleAnywhere, Category = "Vehicle")
     TObjectPtr<UBoxComponent> Collision;
