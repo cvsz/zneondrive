@@ -11,8 +11,8 @@
 [![Runtime Go](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml)
 [![Dependency Review](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml)
 
-![Phase](https://img.shields.io/badge/Phase-4.6%20Trusted%20Ingress-00D8FF?style=flat-square)
-![Runtime](https://img.shields.io/badge/Runtime-v1.0-8A2BE2?style=flat-square)
+![Phase](https://img.shields.io/badge/Phase-4.7%20Multi--Replica%20Load%20Evidence-00D8FF?style=flat-square)
+![Runtime](https://img.shields.io/badge/Runtime-v1.1-8A2BE2?style=flat-square)
 ![Production Readiness](https://img.shields.io/badge/Production%20Readiness-Evidence%20Gated-F59E0B?style=flat-square)
 ![UE Source Build](https://img.shields.io/badge/UE%20Source%20Build-Evidence%20Pending-EF4444?style=flat-square)
 
@@ -47,7 +47,7 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** **Phase 4.6 Trusted Ingress Security v1.0**
+- **Current phase:** **Phase 4.7 Multi-Replica Load Evidence v1.1**
 - **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
 
 ## Runtime prototype v0.4
@@ -84,7 +84,7 @@ See [game/README.md](./game/README.md).
 - Redis-coordinated distributed rate-limit state with bounded local fallback,
 - explicit trusted-ingress client identity policy,
 - credential-safe rate-limit security events,
-- unit, PostgreSQL and Redis integration tests.
+- unit, PostgreSQL/Redis integration, and concurrent two-replica HTTP limiter tests.
 
 Local stack:
 
@@ -186,9 +186,24 @@ The service plane now has an explicit proxy trust boundary for source-IP based a
 - forwarded header contents are not written to the malformed-chain security event,
 - unit tests cover spoof resistance, multi-hop chains, malformed values, exact-IP/CIDR configuration, and distinct client buckets behind one ingress.
 
-This is source/unit evidence only. It does not prove a deployed ingress sanitizes forwarding headers correctly or blocks direct bypass traffic, and it does not close real multi-replica HTTP load/soak, ranked anti-cheat, deployed observability/SLO, HA/DR, backup/restore, or production deployment gates.
+This is source/unit evidence only. It does not prove a deployed ingress sanitizes forwarding headers correctly or blocks direct bypass traffic.
 
 See [Runtime Trusted Ingress Identity v1.0](./docs/runtime-trusted-ingress-v1.0.md).
+
+### Multi-replica HTTP limiter evidence — v1.1
+
+Runtime Go integration now exercises the distributed limiter at the real HTTP middleware boundary:
+- two independent HTTP server replicas share one Redis limiter backend,
+- a trusted test ingress supplies one effective client identity,
+- 128 concurrent bootstrap requests are split evenly across both replicas,
+- the shared burst is fixed at 32 requests with refill disabled for the test window,
+- exactly 32 requests may reach the downstream handler across both replicas,
+- the remaining 96 requests must return HTTP 429,
+- transport failures or unexpected HTTP statuses fail the integration test.
+
+This is CI-scale concurrency evidence only. It does **not** close deployed ingress verification, deployment-scale load, long-duration soak, measured performance budgets, ranked anti-cheat, observability/SLO, HA/DR, backup/restore, or production deployment gates.
+
+See [Runtime Multi-Replica HTTP Load Evidence v1.1](./docs/runtime-multi-replica-load-v1.1.md).
 
 ## Present to a client now
 
@@ -221,6 +236,7 @@ Start with the complete [PROJECT: NEON DRIVE documentation index](./docs/README.
 - [Runtime Security Hardening v0.8](./docs/runtime-security-hardening-v0.8.md)
 - [Runtime Distributed Abuse Controls v0.9](./docs/runtime-distributed-abuse-controls-v0.9.md)
 - [Runtime Trusted Ingress Identity v1.0](./docs/runtime-trusted-ingress-v1.0.md)
+- [Runtime Multi-Replica HTTP Load Evidence v1.1](./docs/runtime-multi-replica-load-v1.1.md)
 - [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
 - [Gameplay Systems](./docs/gameplay-systems.md)
 - [Architecture](./docs/architecture.md)
@@ -260,7 +276,7 @@ Schemas live under `design/schemas/`.
 `src/zneondrive/` remains a dependency-free contract oracle for core authority invariants.
 
 ### Go durable runtime
-`services/game-api/` implements the persistent service-plane slice, including durable rebuild, authoritative race lifecycle state, bounded local rate limiting, Redis-coordinated distributed rate-limit state, trusted-ingress identity resolution, and credential-safe security events.
+`services/game-api/` implements the persistent service-plane slice, including durable rebuild, authoritative race lifecycle state, bounded local rate limiting, Redis-coordinated distributed rate-limit state, trusted-ingress identity resolution, concurrent two-replica HTTP limiter evidence, and credential-safe security events.
 
 ### Unreal runtime
 `game/` contains the first gameplay-plane source baseline. A successful self-hosted UE source build is still required before claiming Unreal build evidence.
@@ -298,9 +314,9 @@ Arrive in NOVA CITY
 
 ## Status
 
-**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, authoritative PostgreSQL race instances/checkpoints/results, bounded local HTTP rate limiting, Redis-coordinated shared limiter state with local fallback, trusted-proxy source identity resolution with explicit CIDR allowlisting, credential-safe rate-limit security events, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, Redis limiter integration evidence, local Compose stack, and CI/security validation.
+**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, authoritative PostgreSQL race instances/checkpoints/results, bounded local HTTP rate limiting, Redis-coordinated shared limiter state with local fallback, trusted-proxy source identity resolution with explicit CIDR allowlisting, credential-safe rate-limit security events, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, Redis limiter integration evidence, concurrent two-replica HTTP/Redis limiter CI evidence, local Compose stack, and CI/security validation.
 
-**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server and race E2E, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, deployed ingress header-sanitization/direct-bypass evidence, real multi-replica distributed-limiter load/soak, auth telemetry correlation, race anti-cheat/impossible-state detection, matchmaking, observability/SLO evidence, backup/restore, HA/DR, platform certification, and production deployment.
+**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server and race E2E, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, deployed ingress header-sanitization/direct-bypass evidence, deployment-scale multi-replica distributed-limiter load, long-duration soak, auth telemetry correlation, race anti-cheat/impossible-state detection, matchmaking, observability/SLO evidence, backup/restore, HA/DR, platform certification, and production deployment.
 
 ## License
 

@@ -55,6 +55,7 @@
 - [x] runtime security hardening v0.8 evidence boundary
 - [x] distributed abuse-controls v0.9 evidence boundary
 - [x] trusted-ingress identity v1.0 evidence boundary
+- [x] multi-replica HTTP load v1.1 CI evidence boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (measurement still open)
 - [x] deployment + backup/restore/DR plans (verification still open)
@@ -84,6 +85,7 @@
 - [x] Go unit tests
 - [x] PostgreSQL integration tests
 - [x] Redis distributed-limiter integration test
+- [x] concurrent two-replica HTTP integration test sharing one Redis limiter budget
 - [x] committed go.mod/go.sum module lock
 - [x] one-time gameplay-ticket persistence and atomic redemption
 - [x] server-only shared-key internal redemption endpoint
@@ -117,7 +119,10 @@
 - [x] direct/untrusted peers cannot spoof X-Forwarded-For identity
 - [x] multi-hop forwarding chain selects first untrusted hop from the right
 - [x] invalid proxy CIDRs fail startup; malformed XFF falls back to socket peer
+- [x] two HTTP replicas under concurrent CI traffic consume exactly one Redis-coordinated burst budget
 - [ ] deployed ingress sanitization/network-isolation evidence
+- [ ] deployment-scale distributed limiter load evidence
+- [ ] long-duration soak evidence
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 - [ ] live packaged Unreal ↔ Go race lifecycle evidence
@@ -155,9 +160,10 @@
 - [x] Redis coordination shares limiter state across independent instances
 - [x] Rate-limit rejection/fallback security log events
 - [x] Trusted ingress/proxy identity source handling unit tested
+- [x] Multi-replica HTTP CI load evidence for distributed limiter
 - [ ] Deployed proxy header sanitization + direct-bypass prevention verified
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
-- [ ] Multi-replica HTTP load evidence for distributed limiter
+- [ ] Deployment-scale HTTP load evidence for distributed limiter
 - [ ] Auth rejection telemetry/correlation
 - [ ] Cheat telemetry
 - [ ] Ranked impossible-state detection
@@ -165,8 +171,8 @@
 - [ ] Abuse/moderation runtime
 
 ## Reliability
-- [ ] Load test executed against agreed target
-- [ ] Soak test
+- [ ] Load test executed against agreed deployment target
+- [ ] Long-duration soak test
 - [ ] Backup verification
 - [ ] Restore drill
 - [ ] RPO/RTO accepted and demonstrated
@@ -179,11 +185,12 @@
 - [x] Go HTTP/PostgreSQL runtime integration/e2e
 - [x] Redis shared limiter integration evidence
 - [x] Trusted-ingress identity source unit evidence
+- [x] Concurrent two-replica HTTP/Redis limiter CI evidence
 - [ ] Deployed ingress trust-boundary evidence
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
 - [ ] Security scans pass for complete runtime surface
-- [ ] Distributed abuse controls verified under multi-replica HTTP load
+- [ ] Distributed abuse controls verified under deployment-scale multi-replica HTTP load
 - [ ] Performance budgets measured/passed
 - [ ] Accessibility review
 - [ ] Privacy/data-retention review
