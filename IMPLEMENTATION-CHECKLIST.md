@@ -78,8 +78,15 @@
 - [x] build operation replay bound to exact validation hash
 - [x] reconnect persistence for inventory/blueprints/rebuild state
 - [x] Unreal snapshot source parses inventory/blueprints
+- [x] PostgreSQL race instance/checkpoint/result persistence
+- [x] race start bound to owned Roadworthy vehicle + exact active build revision/hash
+- [x] race lifecycle endpoints restricted to dedicated-server shared-key boundary
+- [x] ordered checkpoint cursor + monotonic elapsed-time enforcement
+- [x] idempotent race start/checkpoint/finish operation semantics
+- [x] deterministic final result hash bound to authoritative build evidence
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
+- [ ] live packaged Unreal ↔ Go race lifecycle evidence
 
 ## Content production
 - [ ] Full dialogue/script MQ001–MQ100
@@ -96,7 +103,7 @@
 - [ ] first vehicle rebuild playable (durable service contract implemented; Unreal interaction/evidence still open)
 - [ ] First Ignition end-to-end in Unreal
 - [ ] Foundry 9 traversal/jobs
-- [ ] legal + underground race playable
+- [ ] legal + underground race playable (service-plane race authority exists; live Unreal gameplay/evidence still open)
 - [ ] Maya relationship visible
 - [ ] Luna utility playable
 - [ ] durable Unreal save/reconnect verified
@@ -105,6 +112,8 @@
 - [ ] Threat model complete
 - [x] Client cannot self-assert durable snapshot in v0.5 source contract
 - [x] One-time ticket replay rejected by service E2E
+- [x] Durable race result/build identity cannot be submitted directly by player-facing endpoints
+- [x] Ordered/monotonic race checkpoint acceptance enforced in PostgreSQL runtime
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
 - [ ] Rate limiting
 - [ ] Redis replay/idempotency acceleration
@@ -127,6 +136,7 @@
 - [ ] Stack-specific Unreal + Go CI all green
 - [x] Go HTTP/PostgreSQL runtime integration/e2e
 - [ ] Live Unreal/Go packaged integration/e2e
+- [ ] Live Unreal/Go race lifecycle e2e
 - [ ] Security scans pass for runtime
 - [ ] Performance budgets
 - [ ] Accessibility review

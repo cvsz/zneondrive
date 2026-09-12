@@ -7,8 +7,8 @@
 [![Runtime Go](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml)
 [![Dependency Review](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml)
 
-![Phase](https://img.shields.io/badge/Phase-4.2%20Inventory%20%2B%20Rebuild-00D8FF?style=flat-square)
-![Runtime](https://img.shields.io/badge/Runtime-v0.6-8A2BE2?style=flat-square)
+![Phase](https://img.shields.io/badge/Phase-4.3%20Authoritative%20Race-00D8FF?style=flat-square)
+![Runtime](https://img.shields.io/badge/Runtime-v0.7-8A2BE2?style=flat-square)
 ![Production Readiness](https://img.shields.io/badge/Production%20Readiness-Evidence%20Gated-F59E0B?style=flat-square)
 ![UE Source Build](https://img.shields.io/badge/UE%20Source%20Build-Evidence%20Pending-EF4444?style=flat-square)
 
@@ -31,7 +31,6 @@
 
 </p>
 
-
 > **You don't own the road. You earn it.**
 
 zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE**, an 18+ persistent online open-world RPG centered on vehicle building, racing, adventure, factions, relationships, crews, pets, and a long-lived social world.
@@ -44,7 +43,7 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** **Phase 4.2 Inventory + Rebuild v0.6**
+- **Current phase:** **Phase 4.3 Authoritative Race v0.7**
 - **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
 
 ## Runtime prototype v0.4
@@ -68,7 +67,7 @@ See [game/README.md](./game/README.md).
 
 `services/game-api/` contains:
 - Go 1.27 modular service binary,
-- PostgreSQL account/session/character/vehicle/build/quest persistence,
+- PostgreSQL account/session/character/vehicle/build/quest/inventory/blueprint/race persistence,
 - hashed resume/session credentials,
 - one-character + starter-vehicle bootstrap,
 - immutable vehicle build revisions,
@@ -76,6 +75,7 @@ See [game/README.md](./game/README.md).
 - idempotent durable mutation operation IDs,
 - MQ001–MQ100 sequential quest gate,
 - MQ012 Roadworthy transition,
+- authoritative race instance/checkpoint/result state,
 - unit and PostgreSQL integration tests.
 
 Local stack:
@@ -122,6 +122,22 @@ The first Garage 17 rebuild state is now implemented in the durable service plan
 
 See [Runtime Inventory + Rebuild v0.6](./docs/runtime-inventory-rebuild-v0.6.md).
 
+### Server-authoritative race lifecycle — v0.7
+
+The first durable race authority slice is implemented in Go/PostgreSQL:
+- race start is restricted to the dedicated-server shared-key boundary,
+- the service derives account/character/vehicle ownership from PostgreSQL,
+- the vehicle must already be Roadworthy,
+- every race instance binds the exact active build revision and validation hash at start,
+- checkpoint indices must match the server-side cursor and elapsed time must increase monotonically,
+- finish must match the recorded checkpoint count and exceed the last checkpoint time,
+- start/checkpoint/finish writes are idempotent and reject operation-key payload reuse,
+- final result hashes bind race identity, account/character/vehicle, immutable build evidence, checkpoint count, and finish time.
+
+This is service-plane evidence only; live packaged Unreal race transport, physics anti-cheat, playable race content, load/soak, HA/DR, and production deployment remain open.
+
+See [Runtime Authoritative Race v0.7](./docs/runtime-authoritative-race-v0.7.md).
+
 ## Present to a client now
 
 Start with [client/README.md](./client/README.md).
@@ -145,6 +161,7 @@ The browser demo is presentation-only; the Unreal/Go code is the implementation 
 - [Runtime Prototype v0.4](./docs/runtime-prototype-v0.4.md)
 - [Runtime Integration v0.5](./docs/runtime-integration-v0.5.md)
 - [Runtime Inventory + Rebuild v0.6](./docs/runtime-inventory-rebuild-v0.6.md)
+- [Runtime Authoritative Race v0.7](./docs/runtime-authoritative-race-v0.7.md)
 - [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
 - [Gameplay Systems](./docs/gameplay-systems.md)
 - [Architecture](./docs/architecture.md)
@@ -181,7 +198,7 @@ Schemas live under `design/schemas/`.
 `src/zneondrive/` remains a dependency-free contract oracle for core authority invariants.
 
 ### Go durable runtime
-`services/game-api/` implements the first persistent service-plane slice.
+`services/game-api/` implements the persistent service-plane slice, including durable rebuild and authoritative race lifecycle state.
 
 ### Unreal runtime
 `game/` contains the first gameplay-plane source baseline. A successful self-hosted UE source build is still required before claiming Unreal build evidence.
@@ -219,9 +236,9 @@ Arrive in NOVA CITY
 
 ## Status
 
-**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, local Compose stack, and CI/security validation.
+**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, authoritative PostgreSQL race instances/checkpoints/results, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, local Compose stack, and CI/security validation.
 
-**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server E2E, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, authoritative race instances, anti-cheat, matchmaking, live operations, HA/DR, platform certification, and production deployment.
+**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server and race E2E, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, race anti-cheat/impossible-state detection, rate limiting, matchmaking, load/soak, observability/SLO evidence, backup/restore, HA/DR, platform certification, and production deployment.
 
 ## License
 
