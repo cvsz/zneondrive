@@ -111,6 +111,23 @@ deps_server() {
   note "Server host dependencies installed."
 }
 
+client_doctor() {
+  printf 'PROJECT: NEON DRIVE player-client doctor\n'
+  printf 'root: %s\n' "$ROOT"
+  printf 'os: %s\n' "$(uname -srm)"
+  have curl && printf '  [ok] curl       %s\n' "$(command -v curl)" || printf '  [--] curl missing\n'
+  have python3 && printf '  [ok] python3    %s\n' "$(command -v python3)" || printf '  [--] python3 missing (needed for archive fallback/tooling)\n'
+  local bin
+  bin="$(find_client || true)"
+  [[ -n "$bin" ]] && printf '  [ok] client     %s\n' "$bin" || printf '  [--] client package not installed\n'
+  if [[ -n "${UE_ROOT:-}" && -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" ]]; then
+    printf '  [ok] UE_ROOT    %s\n' "$UE_ROOT"
+  else
+    printf '  [--] UE_ROOT not set (only required for source build/package)\n'
+  fi
+  printf '  [ok] secret boundary: player tooling does not require the game-server shared key\n'
+}
+
 deps_client() {
   [[ "$(uname -s)" == Linux ]] || die "Use tools/install-client.ps1 on Windows."
   have apt-get || die "An apt-based host is required for automatic dependency installation."
@@ -327,7 +344,7 @@ usage() {
   cat <<'EOF'
 Usage: bash tools/zneondrive-control.sh <command> [args]
 
-doctor | env-init | deps-server | deps-client | control-panel
+doctor | client-doctor | env-init | deps-server | deps-client | control-panel
 server-install | server-up | server-down | server-restart | server-status
 server-health | server-logs [service] | server-reset | db-shell | redis-cli
 client-generate | client-build | client-package-linux | editor-build | client-install [package] | client-play
@@ -338,7 +355,7 @@ EOF
 
 cmd="${1:-help}"; shift || true
 case "$cmd" in
-  doctor) doctor;; env-init) env_init;; deps-server) deps_server;; deps-client) deps_client;;
+  doctor) doctor;; client-doctor) client_doctor;; env-init) env_init;; deps-server) deps_server;; deps-client) deps_client;;
   server-install) server_install;; server-up) server_up;; server-down) server_down;; server-restart) server_restart;;
   server-status) server_status;; server-health) server_health;; server-logs) server_logs "$@";; server-reset) server_reset;;
   db-shell) db_shell;; redis-cli) redis_cli;; client-generate) client_generate;; client-build) client_build;; editor-build) editor_build;;
