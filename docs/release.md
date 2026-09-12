@@ -2,37 +2,54 @@
 
 ## Version classes
 
-Until runtime implementation begins, releases represent **design/content contract versions**.
+The repository now contains both design/content contracts and runtime prototype implementation.
 
-Suggested tags:
-- `design-v0.1.0` — Game Design Bible/content contracts
-- future runtime tags should adopt an explicit version policy after stack selection
+Recommended version classes:
+- `design-vX.Y.Z` — design/content contract milestones,
+- `runtime-vX.Y.Z` — prototype/runtime implementation milestones,
+- future playable/alpha/beta/release tags only when their defined evidence gates are satisfied.
 
-## Design release checklist
+A tag name must not imply production readiness by itself.
 
-1. CI and security checks pass.
-2. `python3 tools/validate_design.py` passes.
-3. Stable IDs were not accidentally renamed.
-4. `CHANGELOG.md` is updated.
-5. Canonical prose and machine-readable catalogs agree.
-6. New authority/fairness decisions have ADR coverage.
+## Repository release checks
+
+1. CI and applicable runtime workflows pass.
+2. Design/runtime validators pass.
+3. Go tests and integration tests pass where affected.
+4. Unreal source-build evidence exists when claiming an Unreal build.
+5. Stable IDs were not accidentally renamed.
+6. `CHANGELOG.md`, README, ROADMAP and checklist reflect reality.
+7. Canonical prose and machine-readable catalogs agree.
+8. New authority/fairness decisions have ADR coverage.
 
 ## Runtime release evidence
 
-A future playable/production release additionally requires:
-- executable unit/integration/end-to-end tests,
+A playable/production release additionally requires:
+- packaged Unreal client/server build evidence,
+- live Unreal↔Go integration/E2E,
 - authoritative persistence/race validation evidence,
 - security and anti-cheat review,
-- load/soak evidence,
+- performance/load/soak evidence,
 - backup and restore drill,
-- rollback procedure,
-- production deployment verification,
-- privacy/data-retention review.
+- accepted RPO/RTO,
+- rollback procedure and exercise,
+- observability/alert validation,
+- privacy/data-retention review,
+- support/moderation/live-ops readiness where applicable,
+- production deployment verification.
 
-A Git tag or successful build alone is not production-readiness evidence.
+See [Release Readiness Checklist](./release-readiness-checklist.md).
 
 ## Rollback
 
-Design releases can be reverted through version control while preserving published ID compatibility where possible.
+Rollback planning must cover:
+- executable code,
+- content/configuration,
+- schema/migrations,
+- player-state compatibility,
+- event/reward idempotency,
+- live-ops communication.
 
-Future runtime rollback documentation must cover code, content, schema/migration state, player-state compatibility, event/reward idempotency, and live-ops communication.
+Destructive database rollback should not be assumed safe. Prefer forward fixes or restore strategies supported by tested backups and migration evidence.
+
+A successful build alone is not production-readiness evidence.
