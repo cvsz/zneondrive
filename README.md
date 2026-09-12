@@ -12,14 +12,60 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** Game Design Bible v0.2 + vertical-slice contract + executable authority proof + **client-presentation package v0.3**
-- **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go service plane + PostgreSQL + Redis
+- **Current phase:** **Phase 4 Runtime Prototype v0.4**
+- **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
+
+## Runtime prototype v0.4
+
+The repository now contains executable implementation scaffolding for both planes.
+
+### Gameplay plane — Unreal
+
+`game/` contains:
+- UE 5.8 C++ project,
+- Game / Editor / dedicated Server targets,
+- default GameMode,
+- prototype vehicle pawn,
+- client input → server RPC → authoritative movement,
+- replicated movement back to clients,
+- source-build workflow baseline for a self-hosted UE 5.8 Linux runner.
+
+See [game/README.md](./game/README.md).
+
+### Durable service plane — Go
+
+`services/game-api/` contains:
+- Go 1.27 modular service binary,
+- PostgreSQL account/session/character/vehicle/build/quest persistence,
+- hashed resume/session credentials,
+- one-character + starter-vehicle bootstrap,
+- immutable vehicle build revisions,
+- optimistic revision checks,
+- idempotent durable mutation operation IDs,
+- MQ001–MQ100 sequential quest gate,
+- MQ012 Roadworthy transition,
+- unit and PostgreSQL integration tests.
+
+Local stack:
+
+```bash
+cp .env.example .env
+docker compose up --build
+curl http://127.0.0.1:18080/healthz
+```
+
+Host defaults intentionally avoid common 5432/6379 conflicts:
+- PostgreSQL: `55432`
+- Redis: `56379`
+- Game API: `18080`
+
+See [Runtime Prototype v0.4](./docs/runtime-prototype-v0.4.md).
 
 ## Present to a client now
 
 Start with [client/README.md](./client/README.md).
 
-Run the interactive offline demo:
+Run the interactive offline presentation demo:
 
 ```bash
 python3 -m http.server 8080 --directory demo
@@ -27,16 +73,7 @@ python3 -m http.server 8080 --directory demo
 
 Open `http://localhost:8080`.
 
-The presentation package includes:
-- Thai/English interactive browser demo,
-- executive brief,
-- Thai talk track,
-- demo runbook,
-- commercial scope options,
-- prepared client Q&A,
-- explicit evidence/status language.
-
-The browser demo is intentionally presentation-only and makes no claim that the production MMORPG client is finished.
+The browser demo is presentation-only; the Unreal/Go code is the implementation baseline. Neither is a claim that the full MMORPG is production-ready.
 
 ## Canonical design
 
@@ -44,6 +81,7 @@ The browser demo is intentionally presentation-only and makes no claim that the 
 - [Game Design Bible v0.2](./docs/game-design-bible-v0.2.md)
 - [Game Design Bible v0.1](./docs/game-design-bible-v0.1.md)
 - [Vertical Slice v0.2](./docs/vertical-slice-v0.2.md)
+- [Runtime Prototype v0.4](./docs/runtime-prototype-v0.4.md)
 - [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
 - [Gameplay Systems](./docs/gameplay-systems.md)
 - [Architecture](./docs/architecture.md)
@@ -63,7 +101,6 @@ The browser demo is intentionally presentation-only and makes no claim that the 
 ## Machine-readable design catalogs
 
 Content under `design/catalog/` provides stable IDs and implementation contracts:
-
 - 25 named launch characters
 - 5 primary factions
 - 10 launch districts
@@ -75,25 +112,22 @@ Content under `design/catalog/` provides stable IDs and implementation contracts
 
 Schemas live under `design/schemas/`.
 
-## Executable reference contracts
+## Evidence layers
 
-`src/zneondrive/` is a dependency-free Python reference model used to make core authoritative invariants executable before the production Unreal/Go runtime is implemented.
+### Python reference oracle
+`src/zneondrive/` remains a dependency-free contract oracle for core authority invariants.
 
-It proves:
-- one-character ownership boundary,
-- free vs VIP garage capacity without competitive stat advantage,
-- append-only vehicle build revisions,
-- idempotent quest rewards,
-- race results bound to an accepted build revision and ordered checkpoints,
-- starter vehicle deletion protection.
+### Go durable runtime
+`services/game-api/` implements the first persistent service-plane slice.
 
-Run locally:
+### Unreal runtime
+`game/` contains the first gameplay-plane source baseline. A successful self-hosted UE source build is still required before claiming Unreal build evidence.
+
+Run repository checks:
 
 ```bash
 make ci
 ```
-
-CI also validates the presentation demo is offline-first and free of unfinished placeholder markers.
 
 ## Core loop
 
@@ -122,11 +156,9 @@ Arrive in NOVA CITY
 
 ## Status
 
-**Ready now:** pre-production story/world/content contracts, vertical-slice specification, authority reference tests, implementation architecture direction, CI/security gates, and client presentation package.
+**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source baseline, Go durable service-plane prototype, PostgreSQL schema/integration tests, local Compose stack, and CI validation.
 
-**Not yet claimed complete:** playable Unreal MMORPG client, durable Go/PostgreSQL runtime, production networking, anti-cheat, matchmaking, live operations, HA/DR, platform certification, or production deployment.
-
-Those remain evidence-gated roadmap phases.
+**Still evidence-gated:** successful UE source-build artifact, Garage 17 playable content, final vehicle physics, Unreal↔Go authenticated integration, inventory/blueprints, relationships/factions, authoritative race instances, anti-cheat, matchmaking, live operations, HA/DR, platform certification, and production deployment.
 
 ## License
 
