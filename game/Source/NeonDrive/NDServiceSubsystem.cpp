@@ -428,6 +428,42 @@ bool UNDServiceSubsystem::ParseSnapshotObject(
         }
     }
 
+    const TArray<TSharedPtr<FJsonValue>>* InventoryValues = nullptr;
+    if (Object->TryGetArrayField(TEXT("inventory"), InventoryValues) && InventoryValues)
+    {
+        for (const TSharedPtr<FJsonValue>& Value : *InventoryValues)
+        {
+            if (!Value.IsValid() || Value->Type != EJson::Object)
+            {
+                continue;
+            }
+            const TSharedPtr<FJsonObject> ItemObject = Value->AsObject();
+            if (!ItemObject.IsValid())
+            {
+                continue;
+            }
+            FNDInventoryItem Item;
+            if (ItemObject->TryGetStringField(TEXT("item_id"), Item.ItemID))
+            {
+                Item.Quantity = ItemObject->GetIntegerField(TEXT("quantity"));
+                Parsed.Inventory.Add(MoveTemp(Item));
+            }
+        }
+    }
+
+    const TArray<TSharedPtr<FJsonValue>>* BlueprintValues = nullptr;
+    if (Object->TryGetArrayField(TEXT("blueprints"), BlueprintValues) && BlueprintValues)
+    {
+        for (const TSharedPtr<FJsonValue>& Value : *BlueprintValues)
+        {
+            FString BlueprintID;
+            if (Value.IsValid() && Value->TryGetString(BlueprintID))
+            {
+                Parsed.Blueprints.Add(BlueprintID);
+            }
+        }
+    }
+
     const TArray<TSharedPtr<FJsonValue>>* QuestValues = nullptr;
     if (Object->TryGetArrayField(TEXT("completed_quests"), QuestValues) && QuestValues)
     {
