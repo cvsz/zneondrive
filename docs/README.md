@@ -47,6 +47,7 @@ Every engineering document should distinguish:
 - [Runtime Distributed Abuse Controls v0.9](./runtime-distributed-abuse-controls-v0.9.md)
 - [Runtime Trusted Ingress Identity v1.0](./runtime-trusted-ingress-v1.0.md)
 - [Runtime Multi-Replica HTTP Evidence v1.1](./runtime-multi-replica-load-v1.1.md)
+- [Runtime Race Integrity Telemetry v1.2](./runtime-race-integrity-telemetry-v1.2.md)
 - [Content Contracts](./content-contracts.md)
 - [ADR Index](./adr/README.md)
 
@@ -78,4 +79,4 @@ Every engineering document should distinguish:
 
 ## Evidence boundary
 
-The repository currently has implementation evidence for the Python authority oracle, Go/PostgreSQL service-plane slices, bounded local HTTP abuse controls, Redis-coordinated shared limiter state, trusted-ingress client-identity source handling, CI-scale concurrent HTTP traffic across two independent limiter instances sharing Redis, content/design validators, and source-level Unreal integration. It does not yet claim deployed ingress/header-sanitization evidence, production-scale or long-duration load/soak performance, packaged Unreal↔Go production E2E, final vehicle physics, ranked anti-cheat, HA/DR, or production deployment.
+The repository currently has implementation evidence for the Python authority oracle, Go/PostgreSQL service-plane slices, bounded local HTTP abuse controls, Redis-coordinated shared limiter state, trusted-ingress client-identity source handling, CI-scale concurrent HTTP traffic across two independent limiter instances sharing Redis, credential-safe authoritative race/auth rejection telemetry, content/design validators, and source-level Unreal integration. It does not yet claim deployed ingress/header-sanitization evidence, production-scale or long-duration load/soak performance, packaged Unreal↔Go production E2E, final vehicle physics, physics-derived ranked anti-cheat, HA/DR, or production deployment.
