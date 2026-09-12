@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v0.6
+## Phase 4 — Runtime prototype / integration v0.7
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -61,7 +61,9 @@
 - [x] Implement optimistic/idempotent durable mutation semantics
 - [x] Implement inventory/blueprint prototype
 - [x] Implement sequential quest-state persistence
-- [ ] Implement authoritative race instance/result runtime
+- [x] Implement authoritative race instance/result runtime in Go/PostgreSQL
+- [x] Bind race instances to the exact active build revision + validation hash
+- [x] Enforce ordered/monotonic checkpoint acceptance and idempotent race writes
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -76,6 +78,7 @@
 - [x] Make rebuild inventory consume/return atomic with immutable build revision
 - [ ] Complete Python-reference parity tests in Go
 - [ ] Produce live Unreal ↔ Go packaged/session E2E evidence
+- [ ] Produce live Unreal ↔ Go race lifecycle evidence
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
