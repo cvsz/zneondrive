@@ -56,6 +56,7 @@
 - [x] distributed abuse-controls v0.9 evidence boundary
 - [x] trusted-ingress identity v1.0 evidence boundary
 - [x] multi-replica HTTP load v1.1 CI evidence boundary
+- [x] race-integrity telemetry v1.2 evidence boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (measurement still open)
 - [x] deployment + backup/restore/DR plans (verification still open)
@@ -86,6 +87,7 @@
 - [x] PostgreSQL integration tests
 - [x] Redis distributed-limiter integration test
 - [x] concurrent two-replica HTTP integration test sharing one Redis limiter budget
+- [x] credential-safe race-integrity/auth rejection telemetry middleware
 - [x] committed go.mod/go.sum module lock
 - [x] one-time gameplay-ticket persistence and atomic redemption
 - [x] server-only shared-key internal redemption endpoint
@@ -120,6 +122,7 @@
 - [x] multi-hop forwarding chain selects first untrusted hop from the right
 - [x] invalid proxy CIDRs fail startup; malformed XFF falls back to socket peer
 - [x] two HTTP replicas under concurrent CI traffic consume exactly one Redis-coordinated burst budget
+- [x] race rejection/auth telemetry hashes race-instance and peer identifiers before logging
 - [ ] deployed ingress sanitization/network-isolation evidence
 - [ ] deployment-scale distributed limiter load evidence
 - [ ] long-duration soak evidence
@@ -161,11 +164,12 @@
 - [x] Rate-limit rejection/fallback security log events
 - [x] Trusted ingress/proxy identity source handling unit tested
 - [x] Multi-replica HTTP CI load evidence for distributed limiter
+- [x] Dedicated-server auth rejection telemetry/correlation baseline
+- [x] Authoritative race rejection telemetry baseline
 - [ ] Deployed proxy header sanitization + direct-bypass prevention verified
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
 - [ ] Deployment-scale HTTP load evidence for distributed limiter
-- [ ] Auth rejection telemetry/correlation
-- [ ] Cheat telemetry
+- [ ] Physics-derived cheat telemetry from Unreal dedicated-server samples
 - [ ] Ranked impossible-state detection
 - [ ] Admin/live-ops audit trail
 - [ ] Abuse/moderation runtime
@@ -186,6 +190,7 @@
 - [x] Redis shared limiter integration evidence
 - [x] Trusted-ingress identity source unit evidence
 - [x] Concurrent two-replica HTTP/Redis limiter CI evidence
+- [x] Race-integrity/auth telemetry source + unit evidence
 - [ ] Deployed ingress trust-boundary evidence
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
