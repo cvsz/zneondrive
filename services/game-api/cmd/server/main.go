@@ -33,6 +33,9 @@ func main() {
 	if err = db.EnsureSchema(ctx); err != nil {
 		log.Fatalf("ensure schema: %v", err)
 	}
+	if err = db.EnsureRaceSchema(ctx); err != nil {
+		log.Fatalf("ensure race schema: %v", err)
+	}
 
 	server := &http.Server{
 		Addr:              listenAddr,
