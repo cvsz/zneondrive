@@ -29,8 +29,10 @@ assert runtime_ids == design_ids, (
 assert 'StarterRebuildBlueprint = "bp_starter_rebuild"' in go_catalog
 
 core = (ROOT / "services/game-api/internal/core/core.go").read_text(encoding="utf-8")
-for token in ("Inventory []InventoryItem", "Blueprints", "!IsCatalogPart(partID)"):
+for token in ('json:"inventory"', 'json:"blueprints"', "!IsCatalogPart(partID)"):
     assert token in core, f"missing v0.6 core invariant: {token}"
+assert re.search(r"Inventory\s+\[\]InventoryItem", core), "missing typed inventory snapshot field"
+assert re.search(r"Blueprints\s+\[\]string", core), "missing typed blueprint snapshot field"
 
 migration = (ROOT / "services/game-api/internal/store/migrations/003_inventory_blueprints.sql").read_text(encoding="utf-8")
 for token in (
