@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype v0.4
+## Phase 4 — Runtime prototype / integration v0.5
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -65,8 +65,14 @@
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
+- [x] Commit deterministic Go module lock and enforce tidy-clean CI
+- [x] Add one-time gameplay ticket issue/redeem protocol
+- [x] Add server-only shared-key redemption boundary
+- [x] Add HTTP/PostgreSQL reconnect + gameplay-ticket E2E
+- [x] Add Unreal session subsystem + dedicated-server ticket redemption source
+- [x] Bind durable vehicle/build/Roadworthy state only on authority
 - [ ] Complete Python-reference parity tests in Go
-- [ ] Unreal ↔ Go authenticated integration/e2e tests
+- [ ] Produce live Unreal ↔ Go packaged/session E2E evidence
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
