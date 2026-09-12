@@ -15,6 +15,7 @@ import (
 type fakeStore struct {
 	accountID string
 	tokenHash string
+	ticketHash string
 }
 
 func (f *fakeStore) Ping(context.Context) error { return nil }
@@ -38,10 +39,21 @@ func (f *fakeStore) CreateSession(_ context.Context, accountID, tokenHash string
 }
 
 func (f *fakeStore) SnapshotBySession(_ context.Context, tokenHash string) (core.Snapshot, error) {
-	if tokenHash != f.tokenHash {
-		return core.Snapshot{}, errUnauthorized
-	}
 	return core.Snapshot{AccountID: f.accountID, CharacterID: "char_test", VehicleID: "veh_test"}, nil
+}
+
+func (f *fakeStore) IssueGameTicket(_ context.Context, _ string, ticketHash string, _ time.Time) error {
+	f.ticketHash = ticketHash
+	return nil
+}
+
+func (f *fakeStore) RedeemGameTicket(_ context.Context, ticketHash string) (core.Snapshot, error) {
+	return core.Snapshot{
+		AccountID:           f.accountID,
+		CharacterID:         "char_test",
+		VehicleID:           "veh_test",
+		ActiveBuildRevision: 1,
+	}, nil
 }
 
 func (f *fakeStore) CompleteQuest(context.Context, string, string, string) (core.Snapshot, core.RewardReceipt, error) {
@@ -52,15 +64,9 @@ func (f *fakeStore) ReviseBuild(context.Context, string, string, int, []string, 
 	return core.Snapshot{}, nil
 }
 
-var errUnauthorized = &fakeUnauthorized{}
-
-type fakeUnauthorized struct{}
-
-func (*fakeUnauthorized) Error() string { return "unauthorized" }
-
 func TestBootstrapCreatesOpaqueSessionAndResumeKey(t *testing.T) {
 	s := &fakeStore{}
-	handler := New(s)
+	handler := New(s, "test-game-server-key-32-characters-minimum")
 	req := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", strings.NewReader(`{}`))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
@@ -83,9 +89,26 @@ func TestBootstrapCreatesOpaqueSessionAndResumeKey(t *testing.T) {
 }
 
 func TestStateRejectsMissingBearer(t *testing.T) {
-	handler := New(&fakeStore{})
+	handler := New(&fakeStore{}, "test-game-server-key-32-characters-minimum")
 	req := httptest.NewRequest(http.MethodGet, "/v1/state", nil)
 	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+	if rec.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401, got %d", rec.Code)
+	}
+}
+
+func TestGameplayTicketRequiresServerKey(t *testing.T) {
+	handler := New(&fakeStore{}, "test-game-server-key-32-characters-minimum")
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/v1/internal/game-tickets/redeem",
+		strings.NewReader(`{"ticket":"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"}`),
+	)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Game-Server-Key", "wrong-key")
+	rec := httptest.NewRecorder()
+
 	handler.ServeHTTP(rec, req)
 	if rec.Code != http.StatusUnauthorized {
 		t.Fatalf("expected 401, got %d", rec.Code)

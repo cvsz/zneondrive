@@ -21,6 +21,8 @@ type Store interface {
 	Bootstrap(context.Context, string) (core.Snapshot, bool, error)
 	CreateSession(context.Context, string, string, time.Time) error
 	SnapshotBySession(context.Context, string) (core.Snapshot, error)
+	IssueGameTicket(context.Context, string, string, time.Time) error
+	RedeemGameTicket(context.Context, string) (core.Snapshot, error)
 	CompleteQuest(context.Context, string, string, string) (core.Snapshot, core.RewardReceipt, error)
 	ReviseBuild(context.Context, string, string, int, []string, string) (core.Snapshot, error)
 	Close()

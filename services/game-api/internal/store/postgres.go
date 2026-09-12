@@ -51,8 +51,31 @@ func (p *Postgres) Ping(ctx context.Context) error {
 }
 
 func (p *Postgres) EnsureSchema(ctx context.Context) error {
-	if _, err := p.pool.Exec(ctx, migrationSQL); err != nil {
-		return fmt.Errorf("apply schema: %w", err)
+	conn, err := p.pool.Acquire(ctx)
+	if err != nil {
+		return fmt.Errorf("acquire migration connection: %w", err)
+	}
+	defer conn.Release()
+
+	const migrationLockKey int64 = 7386590142501
+	if _, err = conn.Exec(ctx, "SELECT pg_advisory_lock($1)", migrationLockKey); err != nil {
+		return fmt.Errorf("acquire migration advisory lock: %w", err)
+	}
+	defer func() {
+		_, _ = conn.Exec(context.Background(), "SELECT pg_advisory_unlock($1)", migrationLockKey)
+	}()
+
+	migrations := []struct {
+		name string
+		sql  string
+	}{
+		{name: "001_init", sql: migrationSQL},
+		{name: "002_game_tickets", sql: ticketMigrationSQL},
+	}
+	for _, migration := range migrations {
+		if _, err = conn.Exec(ctx, migration.sql); err != nil {
+			return fmt.Errorf("apply schema %s: %w", migration.name, err)
+		}
 	}
 	return nil
 }

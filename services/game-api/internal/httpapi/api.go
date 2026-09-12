@@ -1,6 +1,8 @@
 package httpapi
 
 import (
+	"crypto/sha256"
+	"crypto/subtle"
 	"encoding/json"
 	"errors"
 	"io"
@@ -12,16 +14,21 @@ import (
 	"github.com/cvsz/zneondrive/services/game-api/internal/store"
 )
 
+const gameplayTicketTTL = 60 * time.Second
+
 type API struct {
-	store store.Store
+	store         store.Store
+	gameServerKey string
 }
 
-func New(s store.Store) http.Handler {
-	api := &API{store: s}
+func New(s store.Store, gameServerKey string) http.Handler {
+	api := &API{store: s, gameServerKey: gameServerKey}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", api.health)
 	mux.HandleFunc("POST /v1/sessions/bootstrap", api.bootstrap)
 	mux.HandleFunc("GET /v1/state", api.state)
+	mux.HandleFunc("POST /v1/game-tickets", api.issueGameTicket)
+	mux.HandleFunc("POST /v1/internal/game-tickets/redeem", api.redeemGameTicket)
 	mux.HandleFunc("POST /v1/quests/{questID}/complete", api.completeQuest)
 	mux.HandleFunc("POST /v1/vehicles/{vehicleID}/builds", api.reviseBuild)
 	return mux
@@ -103,6 +110,68 @@ func (a *API) state(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	snapshot, err := a.store.SnapshotBySession(r.Context(), core.HashSecret(token))
+	if err != nil {
+		writeStoreError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, snapshot)
+}
+
+type gameplayTicketResponse struct {
+	Ticket           string `json:"ticket"`
+	ExpiresInSeconds int    `json:"expires_in_seconds"`
+}
+
+func (a *API) issueGameTicket(w http.ResponseWriter, r *http.Request) {
+	token, ok := bearerToken(r)
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "missing_session")
+		return
+	}
+
+	ticket, err := core.NewSecret()
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "secret_generation_failed")
+		return
+	}
+	if err = a.store.IssueGameTicket(
+		r.Context(),
+		core.HashSecret(token),
+		core.HashSecret(ticket),
+		time.Now().UTC().Add(gameplayTicketTTL),
+	); err != nil {
+		writeStoreError(w, err)
+		return
+	}
+
+	writeJSON(w, http.StatusCreated, gameplayTicketResponse{
+		Ticket:           ticket,
+		ExpiresInSeconds: int(gameplayTicketTTL / time.Second),
+	})
+}
+
+type redeemTicketRequest struct {
+	Ticket string `json:"ticket"`
+}
+
+func (a *API) redeemGameTicket(w http.ResponseWriter, r *http.Request) {
+	if !constantTimeSecretEqual(r.Header.Get("X-Game-Server-Key"), a.gameServerKey) {
+		writeError(w, http.StatusUnauthorized, "unauthorized_game_server")
+		return
+	}
+
+	var req redeemTicketRequest
+	if err := decodeJSON(r, &req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid_json")
+		return
+	}
+	ticket := strings.TrimSpace(req.Ticket)
+	if len(ticket) != 64 {
+		writeError(w, http.StatusBadRequest, "invalid_game_ticket")
+		return
+	}
+
+	snapshot, err := a.store.RedeemGameTicket(r.Context(), core.HashSecret(ticket))
 	if err != nil {
 		writeStoreError(w, err)
 		return
@@ -192,6 +261,12 @@ func bearerToken(r *http.Request) (string, bool) {
 	}
 	token := strings.TrimSpace(strings.TrimPrefix(value, prefix))
 	return token, token != ""
+}
+
+func constantTimeSecretEqual(provided, expected string) bool {
+	providedHash := sha256.Sum256([]byte(strings.TrimSpace(provided)))
+	expectedHash := sha256.Sum256([]byte(expected))
+	return subtle.ConstantTimeCompare(providedHash[:], expectedHash[:]) == 1
 }
 
 func decodeJSON(r *http.Request, target any) error {

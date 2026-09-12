@@ -12,7 +12,7 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** **Phase 4 Runtime Prototype v0.4**
+- **Current phase:** **Phase 4.1 Runtime Integration v0.5**
 - **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
 
 ## Runtime prototype v0.4
@@ -61,6 +61,20 @@ Host defaults intentionally avoid common 5432/6379 conflicts:
 
 See [Runtime Prototype v0.4](./docs/runtime-prototype-v0.4.md).
 
+### Authenticated runtime integration — v0.5
+
+The gameplay/service boundary now has an implemented source contract:
+- Unreal client bootstraps/resumes durable identity through the Go API,
+- session credentials stay client-side; dedicated servers receive only short-lived one-time gameplay tickets,
+- Go stores gameplay tickets only as hashes and atomically consumes them once,
+- the internal redemption endpoint requires a server-only shared key,
+- the dedicated server obtains the authoritative PostgreSQL snapshot directly from Go,
+- durable VehicleID, build revision, active parts, and Roadworthy state are bound on the authority and replicated to clients,
+- networked prototype movement remains blocked until durable identity is server-bound,
+- HTTP/PostgreSQL E2E proves ticket issuance, single-use redemption, MQ001 persistence, and resume-key reconnect.
+
+See [Runtime Integration v0.5](./docs/runtime-integration-v0.5.md).
+
 ## Present to a client now
 
 Start with [client/README.md](./client/README.md).
@@ -82,6 +96,7 @@ The browser demo is presentation-only; the Unreal/Go code is the implementation 
 - [Game Design Bible v0.1](./docs/game-design-bible-v0.1.md)
 - [Vertical Slice v0.2](./docs/vertical-slice-v0.2.md)
 - [Runtime Prototype v0.4](./docs/runtime-prototype-v0.4.md)
+- [Runtime Integration v0.5](./docs/runtime-integration-v0.5.md)
 - [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
 - [Gameplay Systems](./docs/gameplay-systems.md)
 - [Architecture](./docs/architecture.md)
@@ -156,9 +171,9 @@ Arrive in NOVA CITY
 
 ## Status
 
-**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source baseline, Go durable service-plane prototype, PostgreSQL schema/integration tests, local Compose stack, and CI validation.
+**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, local Compose stack, and CI/security validation.
 
-**Still evidence-gated:** successful UE source-build artifact, Garage 17 playable content, final vehicle physics, Unreal↔Go authenticated integration, inventory/blueprints, relationships/factions, authoritative race instances, anti-cheat, matchmaking, live operations, HA/DR, platform certification, and production deployment.
+**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server E2E, Garage 17 playable content, final vehicle physics, inventory/blueprints, relationships/factions, authoritative race instances, anti-cheat, matchmaking, live operations, HA/DR, platform certification, and production deployment.
 
 ## License
 
