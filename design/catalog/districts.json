@@ -1,0 +1,106 @@
+{
+  "version": "0.1",
+  "count": 10,
+  "districts": [
+    {
+      "id": "district_central_arcology",
+      "name": "Central Arcology",
+      "primary_influence": "faction_nova_authority",
+      "activities": [
+        "story",
+        "legal-race",
+        "social"
+      ]
+    },
+    {
+      "id": "district_glass_crown",
+      "name": "Glass Crown",
+      "primary_influence": "faction_vantex",
+      "activities": [
+        "story",
+        "luxury-jobs",
+        "social"
+      ]
+    },
+    {
+      "id": "district_foundry_9",
+      "name": "Foundry 9",
+      "primary_influence": "faction_mechanist_guild",
+      "activities": [
+        "build",
+        "salvage",
+        "story"
+      ]
+    },
+    {
+      "id": "district_docklands",
+      "name": "Docklands",
+      "primary_influence": "independent",
+      "activities": [
+        "delivery",
+        "convoy",
+        "story"
+      ]
+    },
+    {
+      "id": "district_neon_mile",
+      "name": "Neon Mile",
+      "primary_influence": "faction_iron_wolves",
+      "activities": [
+        "street-race",
+        "social",
+        "nightlife"
+      ]
+    },
+    {
+      "id": "district_dust_verge",
+      "name": "Dust Verge",
+      "primary_influence": "faction_free_roads",
+      "activities": [
+        "off-road",
+        "exploration",
+        "convoy"
+      ]
+    },
+    {
+      "id": "district_greenbelt",
+      "name": "Greenbelt",
+      "primary_influence": "faction_nova_authority",
+      "activities": [
+        "exploration",
+        "pet-utility",
+        "time-attack"
+      ]
+    },
+    {
+      "id": "district_old_grid",
+      "name": "Old Grid",
+      "primary_influence": "contested",
+      "activities": [
+        "story",
+        "archives",
+        "salvage"
+      ]
+    },
+    {
+      "id": "district_skyway",
+      "name": "Skyway",
+      "primary_influence": "faction_nova_authority",
+      "activities": [
+        "circuit",
+        "time-attack",
+        "championship"
+      ]
+    },
+    {
+      "id": "district_black_circuit",
+      "name": "Black Circuit",
+      "primary_influence": "faction_iron_wolves",
+      "activities": [
+        "underground-race",
+        "high-risk-jobs",
+        "story"
+      ]
+    }
+  ]
+}
