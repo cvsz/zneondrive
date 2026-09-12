@@ -35,6 +35,19 @@ Service plane:
 - inventory/blueprints,
 - durable race/reward result when implemented.
 
+## Current service-plane race evidence
+
+Runtime v0.7 already implements:
+- dedicated-server-only race start/checkpoint/finish APIs,
+- Roadworthy vehicle prerequisite,
+- exact active build revision + validation-hash binding,
+- ordered checkpoint cursor,
+- monotonic elapsed-time enforcement,
+- idempotent start/checkpoint/finish operation IDs,
+- deterministic final result hash persisted in PostgreSQL.
+
+This proves durable service-plane integrity rules, not live Unreal physics anti-cheat.
+
 ## Race integrity requirements
 
 Before ranked play:
