@@ -55,6 +55,16 @@ jobs:
       - name: Resolve module graph
         run: go mod tidy
 
+      - name: Capture resolved module lock
+        shell: bash
+        run: |
+          echo '---BEGIN-GO-MOD---'
+          cat go.mod
+          echo '---END-GO-MOD---'
+          echo '---BEGIN-GO-SUM---'
+          cat go.sum
+          echo '---END-GO-SUM---'
+
       - name: Unit tests
         run: go test ./...
 
