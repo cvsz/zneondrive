@@ -57,6 +57,13 @@ All notable changes to zNeonDrive are documented here.
 - Inventory-authoritative rebuild transaction with atomic consume/return accounting
 - Unreal inventory/blueprint snapshot parsing
 - PostgreSQL integration proof for duplicate-grant prevention, rebuild replay safety, unowned-part rejection, swap accounting, and reconnect persistence
+- Runtime Authoritative Race v0.7 contract and evidence documentation
+- PostgreSQL race-instance, ordered-checkpoint, and final-result persistence
+- Server-only race start/checkpoint/finish endpoints behind the dedicated-server shared-key boundary
+- Race start binding to the exact authoritative active vehicle build revision and validation hash
+- Strict checkpoint cursor + monotonic elapsed-time enforcement
+- Idempotent race start/checkpoint/finish operations and deterministic build-bound result hashes
+- PostgreSQL integration proof for Roadworthy gating, immutable race/build binding, out-of-order rejection, replay safety, finish persistence, and post-finish mutation rejection
 
 ### Changed
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
@@ -67,6 +74,7 @@ All notable changes to zNeonDrive are documented here.
 - Local runtime ports default to 55432/56379/18080 to reduce collisions with common PostgreSQL/Redis/dev ports
 - Advanced Phase 4.1 to source-level Unreal↔Go integration while keeping live Unreal build/session evidence open
 - Advanced Phase 4.2 to durable inventory/blueprint and rebuild-state integration without claiming playable Garage 17 evidence
+- Advanced Phase 4.3 to durable server-authoritative race lifecycle persistence without claiming live Unreal race or anti-cheat evidence
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -80,4 +88,7 @@ All notable changes to zNeonDrive are documented here.
 - Vehicle builds reject unknown catalog IDs, locked blueprints, and parts not owned in inventory
 - Inventory consumption/returns and build revision activation commit atomically
 - Replayed build operation IDs must match the original vehicle and build validation hash
+- Race lifecycle writes are internal-only, dedicated-server authenticated, and derive build identity from PostgreSQL rather than client input
+- Race checkpoints reject skipped/out-of-order indices and elapsed-time regression before durable acceptance
+- Final race result hashes bind the exact accepted build revision/hash and authoritative checkpoint cursor
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
