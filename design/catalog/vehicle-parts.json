@@ -1,0 +1,136 @@
+{
+  "version": "0.1",
+  "categories": [
+    "chassis",
+    "engine_or_motor",
+    "transmission_or_drive_unit",
+    "suspension",
+    "brakes",
+    "wheels_tires",
+    "ecu_control",
+    "body_aero",
+    "interior_interface",
+    "electronics_sensors",
+    "special_modules"
+  ],
+  "build_roles": [
+    "street",
+    "drift",
+    "circuit",
+    "drag",
+    "off-road",
+    "delivery",
+    "hybrid"
+  ],
+  "rarity": [
+    "common",
+    "tuned",
+    "prototype",
+    "legendary"
+  ],
+  "part_families": [
+    {
+      "id": "part_chassis_starter_prototype",
+      "category": "chassis",
+      "role": "all",
+      "note": "Unique starter lineage; never routine-destroyable."
+    },
+    {
+      "id": "part_engine_ice_street_i",
+      "category": "engine_or_motor",
+      "role": "street"
+    },
+    {
+      "id": "part_engine_torque_offroad_i",
+      "category": "engine_or_motor",
+      "role": "off-road"
+    },
+    {
+      "id": "part_drive_close_ratio_i",
+      "category": "transmission_or_drive_unit",
+      "role": "circuit"
+    },
+    {
+      "id": "part_drive_launch_i",
+      "category": "transmission_or_drive_unit",
+      "role": "drag"
+    },
+    {
+      "id": "part_suspension_angle_i",
+      "category": "suspension",
+      "role": "drift"
+    },
+    {
+      "id": "part_suspension_travel_i",
+      "category": "suspension",
+      "role": "off-road"
+    },
+    {
+      "id": "part_brakes_track_i",
+      "category": "brakes",
+      "role": "circuit"
+    },
+    {
+      "id": "part_tires_street_i",
+      "category": "wheels_tires",
+      "role": "street"
+    },
+    {
+      "id": "part_tires_gravel_i",
+      "category": "wheels_tires",
+      "role": "off-road"
+    },
+    {
+      "id": "part_ecu_standard_i",
+      "category": "ecu_control",
+      "role": "all"
+    },
+    {
+      "id": "part_ecu_legacy_zero",
+      "category": "ecu_control",
+      "role": "story",
+      "rarity": "prototype"
+    },
+    {
+      "id": "part_aero_low_drag_i",
+      "category": "body_aero",
+      "role": "drag"
+    },
+    {
+      "id": "part_aero_downforce_i",
+      "category": "body_aero",
+      "role": "circuit"
+    },
+    {
+      "id": "part_interface_delivery_i",
+      "category": "interior_interface",
+      "role": "delivery"
+    },
+    {
+      "id": "part_sensor_salvage_i",
+      "category": "electronics_sensors",
+      "role": "exploration"
+    },
+    {
+      "id": "part_sensor_race_telemetry_i",
+      "category": "electronics_sensors",
+      "role": "circuit"
+    },
+    {
+      "id": "part_module_recovery_winch_i",
+      "category": "special_modules",
+      "role": "off-road"
+    },
+    {
+      "id": "part_module_cargo_lock_i",
+      "category": "special_modules",
+      "role": "delivery"
+    },
+    {
+      "id": "part_module_story_zero_bridge",
+      "category": "special_modules",
+      "role": "story",
+      "rarity": "prototype"
+    }
+  ]
+}
