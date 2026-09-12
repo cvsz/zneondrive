@@ -46,6 +46,23 @@
 - [x] Go + PostgreSQL + Redis service-plane ADR
 - [x] phase-gated deployment ADR
 
+## Documentation / governance baseline
+- [x] complete documentation index
+- [x] product requirements
+- [x] API + durable data model docs through authoritative race v0.7
+- [x] multiplayer/networking authority spec
+- [x] threat-model baseline (production abuse testing still open)
+- [x] testing strategy + performance-budget targets
+- [x] observability/SLO target contract (measurement still open)
+- [x] deployment + backup/restore/DR plans (verification still open)
+- [x] incident-response runbook (exercise still open)
+- [x] accessibility + localization baselines
+- [x] content/quest/world/vehicle/faction/crew/companion authoring specs
+- [x] economy/fairness + moderation + privacy + live-ops policies
+- [x] governance + support + maintainers
+- [x] release-readiness + asset/IP + brand guidance
+- [x] documentation completeness + relative-link validator
+
 ## Phase 4 runtime source
 - [x] Unreal .uproject baseline
 - [x] Unreal Game / Editor / dedicated Server targets
@@ -109,7 +126,8 @@
 - [ ] durable Unreal save/reconnect verified
 
 ## Multiplayer and security
-- [ ] Threat model complete
+- [ ] Threat model complete and exercised
+- [x] Threat-model baseline documented
 - [x] Client cannot self-assert durable snapshot in v0.5 source contract
 - [x] One-time ticket replay rejected by service E2E
 - [x] Durable race result/build identity cannot be submitted directly by player-facing endpoints
@@ -120,14 +138,14 @@
 - [ ] Cheat telemetry
 - [ ] Ranked impossible-state detection
 - [ ] Admin/live-ops audit trail
-- [ ] Abuse/moderation model
+- [ ] Abuse/moderation runtime
 
 ## Reliability
-- [ ] Load test target
+- [ ] Load test executed against agreed target
 - [ ] Soak test
 - [ ] Backup verification
 - [ ] Restore drill
-- [ ] RPO/RTO
+- [ ] RPO/RTO accepted and demonstrated
 - [ ] process/node reconnect recovery
 - [ ] duplicate-reward prevention under failover
 - [ ] content rollback
@@ -137,10 +155,10 @@
 - [x] Go HTTP/PostgreSQL runtime integration/e2e
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
-- [ ] Security scans pass for runtime
-- [ ] Performance budgets
+- [ ] Security scans pass for complete runtime surface
+- [ ] Performance budgets measured/passed
 - [ ] Accessibility review
-- [ ] Privacy/data retention
+- [ ] Privacy/data-retention review
 - [ ] Production deployment evidence
 - [ ] DR evidence
 - [ ] Go/no-go approval
