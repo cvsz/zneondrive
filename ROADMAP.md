@@ -27,27 +27,32 @@
 - [x] ADR: server-authoritative persistent/competitive state
 - [x] ADR: preserve starter-vehicle identity
 
-## Phase 3 — Vertical-slice specification
-- [ ] Lock Garage 17 + Foundry 9 + first race route
-- [ ] Expand MQ001–MQ012 to full acceptance criteria/dialogue beats
-- [ ] Define starter vehicle handling/physical target
-- [ ] Define player movement and interaction specification
-- [ ] Define first-session UX from login to First Ignition
-- [ ] Define reconnect/save semantics
-- [ ] Define accessibility baseline
-- [ ] Create graybox/content production checklist
+## Phase 3 — Vertical-slice specification v0.2
+- [x] Lock Garage 17 + Foundry 9 vertical-slice spaces and race proof targets
+- [x] Expand MQ001–MQ012 to implementation acceptance criteria
+- [x] Define starter vehicle handling/physical target envelope
+- [x] Define player movement and interaction specification
+- [x] Define first-session UX from identity to First Ignition/Roadworthy
+- [x] Define reconnect/save semantics
+- [x] Define accessibility baseline
+- [x] Create graybox/content production checklist
+- [x] Add machine-readable vertical-slice proof catalog/schema
+- [x] Add executable reference contract model and tests
 
 ## Phase 4 — Runtime prototype
 - [ ] Select engine/client technology by ADR
-- [ ] Select server/runtime technology by ADR
-- [ ] Implement identity/session prototype
+- [ ] Select production server/runtime technology by ADR
+- [ ] Implement identity/session prototype against durable persistence
 - [ ] Implement one-character persistence
 - [ ] Implement one-vehicle persistence and build revisions
 - [ ] Implement inventory/blueprint prototype
 - [ ] Implement quest-state prototype
 - [ ] Implement authoritative race prototype
 - [ ] Implement relationship/faction-state prototype
-- [ ] Automated contract/integration tests
+- [ ] Port reference contract tests to selected runtime
+- [ ] Automated integration/e2e tests
+
+> The stdlib Python model is executable design evidence only; it does not complete Phase 4 production runtime selection or durable networking/persistence work.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -60,7 +65,7 @@
 - [ ] Backup/restore drill
 
 ## Phase 6 — Content alpha
-- [ ] Chapter 1 fully playable
+- [ ] Chapter 1 fully playable in selected runtime
 - [ ] Street jobs and early side quests
 - [ ] Luna companion questline
 - [ ] Foundry 9 and Neon Mile content
@@ -77,7 +82,7 @@
 - [ ] Restore evidence
 - [ ] Security review
 - [ ] Privacy/data-retention review
-- [ ] VIP fairness test suite
+- [ ] VIP fairness test suite in production runtime
 - [ ] Ranked race integrity test suite
 
 ## Phase 8 — Launch readiness
@@ -91,4 +96,4 @@
 - [ ] Disaster-recovery evidence
 - [ ] Go/no-go release review
 
-**Rule:** do not mark runtime, production, HA, DR, anti-cheat, or live-ops items complete without executable evidence.
+**Rule:** do not mark playable runtime, production, HA, DR, anti-cheat, or live-ops items complete without executable evidence.

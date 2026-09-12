@@ -31,6 +31,7 @@ def main() -> int:
     side_doc = load("quests-side.json")
     parts_doc = load("vehicle-parts.json")
     pets_doc = load("pets.json")
+    slice_doc = load("vertical-slice.json")
 
     characters = characters_doc["characters"]
     factions = factions_doc["factions"]
@@ -78,9 +79,23 @@ def main() -> int:
     for pet in pets:
         assert pet["competitive_buff"] is False, f"{pet['id']}: pets may not grant competitive buffs"
 
+    slice_quest_ids = [entry["quest_id"] for entry in slice_doc["quests"]]
+    assert slice_doc["version"] == "0.2"
+    assert slice_doc["district"] == "district_foundry_9"
+    assert slice_quest_ids == [f"MQ{i:03d}" for i in range(1, 13)], (
+        "vertical slice must cover MQ001..MQ012 in order"
+    )
+    assert len(slice_quest_ids) == len(set(slice_quest_ids))
+    assert all(entry["proof"] for entry in slice_doc["quests"])
+    assert len(slice_doc["race_proofs"]) >= 2
+    assert all(race["requires_build_binding"] for race in slice_doc["race_proofs"])
+    assert all(race["ordered_checkpoints"] for race in slice_doc["race_proofs"])
+    assert slice_doc["vip_competitive_boost"] is False
+
     required_schemas = [
         ROOT / "design" / "schemas" / "quest.schema.json",
         ROOT / "design" / "schemas" / "vehicle.schema.json",
+        ROOT / "design" / "schemas" / "vertical-slice.schema.json",
     ]
     for path in required_schemas:
         assert path.is_file(), f"missing schema: {path.relative_to(ROOT)}"
@@ -95,7 +110,8 @@ def main() -> int:
         f"{len(quests)} main quests,",
         f"{len(side)} side quests,",
         f"{len(parts)} part families,",
-        f"{len(pets)} pets",
+        f"{len(pets)} pets,",
+        f"{len(slice_quest_ids)} vertical-slice quests",
     )
     return 0
 

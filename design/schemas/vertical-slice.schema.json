@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zneondrive.local/schemas/vertical-slice.schema.json",
+  "title": "PROJECT NEON DRIVE Vertical Slice",
+  "type": "object",
+  "required": ["version", "id", "district", "quests", "race_proofs", "reconnect_invariants", "vip_competitive_boost"],
+  "properties": {
+    "version": {"type": "string"},
+    "id": {"type": "string", "pattern": "^vertical_slice_[a-z0-9_]+$"},
+    "district": {"type": "string", "pattern": "^district_[a-z0-9_]+$"},
+    "quests": {
+      "type": "array",
+      "minItems": 12,
+      "items": {
+        "type": "object",
+        "required": ["quest_id", "proof"],
+        "properties": {
+          "quest_id": {"type": "string", "pattern": "^MQ[0-9]{3}$"},
+          "proof": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "race_proofs": {"type": "array", "minItems": 2},
+    "reconnect_invariants": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "vip_competitive_boost": {"const": false}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,31 @@
+{
+  "version": "0.2",
+  "id": "vertical_slice_garage17_foundry9",
+  "district": "district_foundry_9",
+  "quests": [
+    {"quest_id":"MQ001","proof":["message_ack_once","garage17_objective_active"]},
+    {"quest_id":"MQ002","proof":["maya_introduced","garage_checkpoint_persisted"]},
+    {"quest_id":"MQ003","proof":["starter_vehicle_unique","starter_vehicle_owned"]},
+    {"quest_id":"MQ004","proof":["salvage_grant_idempotent"]},
+    {"quest_id":"MQ005","proof":["build_revision_created","stale_revision_rejected"]},
+    {"quest_id":"MQ006","proof":["traversal_progress_reconnect_safe"]},
+    {"quest_id":"MQ007","proof":["choice_persisted_once"]},
+    {"quest_id":"MQ008","proof":["legacy_ecu_discovered","client_cannot_forge_reward"]},
+    {"quest_id":"MQ009","proof":["recovery_grant_idempotent"]},
+    {"quest_id":"MQ010","proof":["ignition_requires_valid_build"]},
+    {"quest_id":"MQ011","proof":["ignition_bound_to_build_revision"]},
+    {"quest_id":"MQ012","proof":["chapter_completion_idempotent","roadworthy_persisted"]}
+  ],
+  "race_proofs": [
+    {"id":"raceproof_foundry_time_trial","kind":"legal-time-trial","requires_build_binding":true,"ordered_checkpoints":true},
+    {"id":"raceproof_foundry_underground","kind":"underground","requires_build_binding":true,"ordered_checkpoints":true}
+  ],
+  "reconnect_invariants": [
+    "same_primary_character",
+    "same_starter_vehicle_owner",
+    "latest_committed_build_revision",
+    "no_duplicate_quest_rewards",
+    "safe_objective_resume"
+  ],
+  "vip_competitive_boost": false
+}
