@@ -1,0 +1,36 @@
+name: Documentation improvement
+description: Report missing, stale, conflicting, or unclear documentation
+title: "[Docs]: "
+labels: []
+body:
+  - type: input
+    id: document
+    attributes:
+      label: Document / area
+      placeholder: docs/api-contract.md
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: Problem type
+      options:
+        - Missing documentation
+        - Stale status
+        - Conflict between documents
+        - Unclear instructions
+        - Broken link/reference
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: What should change?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence / related code
+      description: Link the implementation, issue, ADR, or test that should be reflected.
