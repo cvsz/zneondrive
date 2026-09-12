@@ -30,6 +30,12 @@ All notable changes to zNeonDrive are documented here.
 - Manual GitHub Pages deployment workflow
 - Runtime Prototype v0.4 documentation
 - Unreal Engine 5.8 C++ project with Game, Editor, and dedicated Server targets
+- Explicit NeonDriveClient Unreal target for player-only builds
+- Full-stack Makefile control surface for server/client/dedicated-server lifecycle
+- Interactive Linux operator control panel with guarded local reset
+- Windows packaged-player installer/launcher with optional desktop shortcut
+- Player-safe runtime Go API endpoint override via ZNEON_GAME_API_URL / -ZNeonApi
+- Static control-surface validator enforcing the client/server secret boundary
 - Server-authoritative replicated prototype vehicle pawn
 - Manual self-hosted Unreal source-build workflow
 - Go 1.27 service-plane module and HTTP API
