@@ -63,6 +63,7 @@ Every engineering document should distinguish:
 ## Project management and contribution
 
 - [Development](./development.md)
+- [Full-Stack Install & Control Panel](./control-panel.md)
 - [Roadmap](../ROADMAP.md)
 - [Implementation Checklist](../IMPLEMENTATION-CHECKLIST.md)
 - [Changelog](../CHANGELOG.md)
