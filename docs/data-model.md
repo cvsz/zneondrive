@@ -91,6 +91,39 @@ Primary key: `(character_id, item_id)`.
 
 Primary key: `(character_id, blueprint_id)`.
 
+### race_instances
+
+Authoritative race session binding:
+- race instance ID / race ID,
+- account / character / vehicle,
+- exact build revision + validation hash,
+- active/finished/abandoned state,
+- idempotency operation ID,
+- next checkpoint cursor,
+- last accepted elapsed time,
+- start/finish timestamps.
+
+### race_checkpoints
+
+Ordered durable evidence:
+- race instance,
+- checkpoint index,
+- elapsed milliseconds,
+- unique operation ID,
+- recorded time.
+
+Primary key prevents duplicate checkpoint index per race instance.
+
+### race_results
+
+Final durable result:
+- one result per race instance,
+- accepted checkpoint count,
+- finish elapsed time,
+- deterministic result hash,
+- unique operation ID,
+- creation time.
+
 ## Invariants
 
 - monetary and XP balances are non-negative,
@@ -100,6 +133,9 @@ Primary key: `(character_id, blueprint_id)`.
 - quest operation IDs are unique,
 - inventory quantities cannot be negative,
 - ticket consumption is single-use,
+- race instances bind to the exact authoritative build revision/hash at start,
+- race checkpoints are ordered and elapsed time is monotonic,
+- race finish/result is one-per-instance and idempotent,
 - foreign keys cascade with account/character deletion where currently defined.
 
 ## Migration policy
@@ -116,7 +152,6 @@ Future migrations must:
 - faction standing,
 - NPC relationships,
 - crews/roles,
-- race registrations/results,
 - entitlement/VIP grants,
 - social presence,
 - moderation actions,
