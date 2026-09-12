@@ -317,6 +317,7 @@ MENU
       11) read -r -p "Server package: " p; game_server_install "$p";; 12) game_server_start;; 13) game_server_stop;;
       14) status_all;; 15) make ci;;
       16) read -r -p "Type YES to destroy LOCAL DB/Redis volumes: " a; [[ "$a" == YES ]] && CONFIRM_RESET=YES server_reset || warn "Reset cancelled.";;
+      17) client_package_linux;; 18) game_server_package_linux;; 19) package_all_linux;;
       0) return;; *) warn "Unknown selection.";;
     esac
   done
