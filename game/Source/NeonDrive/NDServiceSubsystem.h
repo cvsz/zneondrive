@@ -9,6 +9,18 @@
 class FJsonObject;
 
 USTRUCT(BlueprintType)
+struct FNDInventoryItem
+{
+    GENERATED_BODY()
+
+    UPROPERTY(BlueprintReadOnly)
+    FString ItemID;
+
+    UPROPERTY(BlueprintReadOnly)
+    int64 Quantity = 0;
+};
+
+USTRUCT(BlueprintType)
 struct FNDPlayerSnapshot
 {
     GENERATED_BODY()
@@ -36,6 +48,12 @@ struct FNDPlayerSnapshot
 
     UPROPERTY(BlueprintReadOnly)
     TArray<FString> ActivePartIDs;
+
+    UPROPERTY(BlueprintReadOnly)
+    TArray<FNDInventoryItem> Inventory;
+
+    UPROPERTY(BlueprintReadOnly)
+    TArray<FString> Blueprints;
 
     UPROPERTY(BlueprintReadOnly)
     bool bStarterLineage = false;

@@ -42,3 +42,12 @@ func TestSecretGeneration(t *testing.T) {
 		t.Fatal("expected unique 256-bit hex secrets")
 	}
 }
+
+func TestNormalizePartsRejectsUnknownCatalogPart(t *testing.T) {
+	if _, err := NormalizeParts([]string{"part_not_in_catalog"}); err == nil {
+		t.Fatal("expected unknown catalog part to be rejected")
+	}
+	if _, err := NormalizeParts([]string{"part_brakes_track_i"}); err != nil {
+		t.Fatalf("expected known catalog part to be accepted: %v", err)
+	}
+}

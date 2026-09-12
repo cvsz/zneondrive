@@ -50,6 +50,13 @@ All notable changes to zNeonDrive are documented here.
 - HTTP/PostgreSQL reconnect + single-use-ticket E2E test
 - Committed go.mod/go.sum dependency lock with tidy-clean CI enforcement
 - PostgreSQL advisory lock around concurrent schema setup
+- Runtime Inventory + Rebuild v0.6 contract and evidence documentation
+- PostgreSQL inventory item and character blueprint persistence
+- Canonical runtime vehicle-part allowlist checked against the design catalog
+- MQ004 idempotent salvage grant, MQ005 rebuild-blueprint unlock, and MQ009 idempotent recovered-part grant
+- Inventory-authoritative rebuild transaction with atomic consume/return accounting
+- Unreal inventory/blueprint snapshot parsing
+- PostgreSQL integration proof for duplicate-grant prevention, rebuild replay safety, unowned-part rejection, swap accounting, and reconnect persistence
 
 ### Changed
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
@@ -59,6 +66,7 @@ All notable changes to zNeonDrive are documented here.
 - Reframed repository status around evidence-gated design, presentation, runtime prototype, alpha, and production milestones
 - Local runtime ports default to 55432/56379/18080 to reduce collisions with common PostgreSQL/Redis/dev ports
 - Advanced Phase 4.1 to source-level Unreal↔Go integration while keeping live Unreal build/session evidence open
+- Advanced Phase 4.2 to durable inventory/blueprint and rebuild-state integration without claiming playable Garage 17 evidence
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -69,4 +77,7 @@ All notable changes to zNeonDrive are documented here.
 - Clients never receive or read the gameplay-server shared key
 - Durable snapshots are redeemed by the dedicated server rather than accepted from a client RPC
 - Gameplay tickets are hashed, short-lived, and single-use
+- Vehicle builds reject unknown catalog IDs, locked blueprints, and parts not owned in inventory
+- Inventory consumption/returns and build revision activation commit atomically
+- Replayed build operation IDs must match the original vehicle and build validation hash
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

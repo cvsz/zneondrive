@@ -288,6 +288,10 @@ func writeStoreError(w http.ResponseWriter, err error) {
 		writeError(w, http.StatusConflict, "quest_prerequisite_incomplete")
 	case errors.Is(err, store.ErrOperationKey):
 		writeError(w, http.StatusConflict, "operation_id_conflict")
+	case errors.Is(err, store.ErrInsufficientInventory):
+		writeError(w, http.StatusConflict, "insufficient_inventory")
+	case errors.Is(err, store.ErrBlueprintRequired):
+		writeError(w, http.StatusConflict, "blueprint_required")
 	case errors.Is(err, core.ErrInvalidQuest), errors.Is(err, core.ErrInvalidParts):
 		writeError(w, http.StatusBadRequest, "invalid_domain_input")
 	default:
