@@ -13,7 +13,9 @@ var (
 	ErrConflict     = errors.New("state conflict")
 	ErrNotFound     = errors.New("not found")
 	ErrOutOfOrder   = errors.New("quest prerequisite not complete")
-	ErrOperationKey = errors.New("operation id reused for different mutation")
+	ErrOperationKey          = errors.New("operation id reused for different mutation")
+	ErrInsufficientInventory = errors.New("insufficient inventory")
+	ErrBlueprintRequired     = errors.New("required blueprint not unlocked")
 )
 
 type Store interface {
