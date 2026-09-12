@@ -34,7 +34,7 @@ def main() -> int:
     cpp = (ROOT / "game/Source/NeonDrive/NDServiceSubsystem.cpp").read_text(encoding="utf-8")
 
     for token in [
-        "control-panel:", "server-install:", "server-up:", "server-down:",
+        "control-panel:", "ue-detect:", "server-install:", "server-up:", "server-down:",
         "client-install:", "client-build:", "client-package-linux:", "client-play:",
         "game-server-package-linux:", "package-all-linux:",
         "game-server-install:", "game-server-start:", "game-server-stop:",
@@ -43,9 +43,10 @@ def main() -> int:
         require(make, token, "Makefile", errors)
 
     for token in [
-        "server_install()", "client_install()", "client_package_linux()", "client_play()",
+        "ue_detect()", "server_install()", "client_install()", "client_package_linux()", "client_play()",
         "game_server_package_linux()", "package_all_linux()",
         "game_server_install()", "game_server_start()", "control_panel()",
+        "CLIENT_PACKAGE is required for full-install", "SERVER_PACKAGE is required for full-install",
         "CONFIRM_RESET", "ZNEON_GAME_API_URL", "ZNEON_GAME_SERVER_KEY",
     ]:
         require(shell, token, "Linux control panel", errors)
