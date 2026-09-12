@@ -11,6 +11,7 @@ validate-design:
 validate-runtime:
 	python3 tools/validate_runtime_v0_4.py
 	python3 tools/validate_runtime_v0_5.py
+	python3 tools/validate_runtime_v0_6.py
 
 check-json:
 	python3 -c 'import json,pathlib; [json.loads(p.read_text(encoding="utf-8")) for p in pathlib.Path("design").rglob("*.json")]; print("JSON OK")'
