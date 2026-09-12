@@ -16,6 +16,9 @@ import (
 //go:embed migrations/001_init.sql
 var migrationSQL string
 
+//go:embed migrations/003_inventory_blueprints.sql
+var inventoryBlueprintMigrationSQL string
+
 var starterParts = []string{
 	"part_chassis_starter_prototype",
 	"part_engine_ice_street_i",
@@ -71,6 +74,7 @@ func (p *Postgres) EnsureSchema(ctx context.Context) error {
 	}{
 		{name: "001_init", sql: migrationSQL},
 		{name: "002_game_tickets", sql: ticketMigrationSQL},
+		{name: "003_inventory_blueprints", sql: inventoryBlueprintMigrationSQL},
 	}
 	for _, migration := range migrations {
 		if _, err = conn.Exec(ctx, migration.sql); err != nil {
@@ -265,7 +269,34 @@ func (p *Postgres) CompleteQuest(ctx context.Context, tokenHash, questID, operat
 		`, characterID, money, xp, reputation); err != nil {
 			return core.Snapshot{}, core.RewardReceipt{}, fmt.Errorf("apply quest reward: %w", err)
 		}
-		if questID == "MQ012" {
+		switch questID {
+		case "MQ004":
+			if _, err = tx.Exec(ctx, `
+				INSERT INTO inventory_items(character_id,item_id,quantity)
+				VALUES($1,'part_brakes_track_i',1)
+				ON CONFLICT(character_id,item_id)
+				DO UPDATE SET quantity=inventory_items.quantity+1, updated_at=now()
+			`, characterID); err != nil {
+				return core.Snapshot{}, core.RewardReceipt{}, fmt.Errorf("grant MQ004 salvage part: %w", err)
+			}
+		case "MQ005":
+			if _, err = tx.Exec(ctx, `
+				INSERT INTO character_blueprints(character_id,blueprint_id)
+				VALUES($1,$2)
+				ON CONFLICT(character_id,blueprint_id) DO NOTHING
+			`, characterID, core.StarterRebuildBlueprint); err != nil {
+				return core.Snapshot{}, core.RewardReceipt{}, fmt.Errorf("unlock MQ005 rebuild blueprint: %w", err)
+			}
+		case "MQ009":
+			if _, err = tx.Exec(ctx, `
+				INSERT INTO inventory_items(character_id,item_id,quantity)
+				VALUES($1,'part_tires_street_i',1)
+				ON CONFLICT(character_id,item_id)
+				DO UPDATE SET quantity=inventory_items.quantity+1, updated_at=now()
+			`, characterID); err != nil {
+				return core.Snapshot{}, core.RewardReceipt{}, fmt.Errorf("grant MQ009 recovered part: %w", err)
+			}
+		case "MQ012":
 			if _, err = tx.Exec(ctx, "UPDATE vehicles SET roadworthy=true WHERE owner_character_id=$1 AND starter_lineage=true", characterID); err != nil {
 				return core.Snapshot{}, core.RewardReceipt{}, fmt.Errorf("mark starter roadworthy: %w", err)
 			}
@@ -321,11 +352,12 @@ func (p *Postgres) ReviseBuild(ctx context.Context, tokenHash, vehicleID string,
 		return core.Snapshot{}, fmt.Errorf("authorize build mutation: %w", err)
 	}
 
-	var existingVehicle string
+	var existingVehicle, existingHash string
 	var existingRevision int
-	err = tx.QueryRow(ctx, "SELECT vehicle_id,revision FROM vehicle_builds WHERE operation_id=$1", operationID).Scan(&existingVehicle, &existingRevision)
+	err = tx.QueryRow(ctx, "SELECT vehicle_id,revision,validation_hash FROM vehicle_builds WHERE operation_id=$1", operationID).
+		Scan(&existingVehicle, &existingRevision, &existingHash)
 	if err == nil {
-		if existingVehicle != vehicleID {
+		if existingVehicle != vehicleID || existingHash != buildHash {
 			return core.Snapshot{}, ErrOperationKey
 		}
 		if err := tx.Commit(ctx); err != nil {
@@ -352,6 +384,75 @@ func (p *Postgres) ReviseBuild(ctx context.Context, tokenHash, vehicleID string,
 	}
 	if currentRevision != expectedRevision {
 		return core.Snapshot{}, ErrConflict
+	}
+
+	var blueprintUnlocked bool
+	if err = tx.QueryRow(ctx, `
+		SELECT EXISTS(
+			SELECT 1
+			FROM character_blueprints
+			WHERE character_id=$1 AND blueprint_id=$2
+		)
+	`, characterID, core.StarterRebuildBlueprint).Scan(&blueprintUnlocked); err != nil {
+		return core.Snapshot{}, fmt.Errorf("check rebuild blueprint: %w", err)
+	}
+	if !blueprintUnlocked {
+		return core.Snapshot{}, ErrBlueprintRequired
+	}
+
+	var currentPartJSON []byte
+	if err = tx.QueryRow(ctx, `
+		SELECT part_ids
+		FROM vehicle_builds
+		WHERE vehicle_id=$1 AND revision=$2
+	`, vehicleID, currentRevision).Scan(&currentPartJSON); err != nil {
+		return core.Snapshot{}, fmt.Errorf("load current build for inventory delta: %w", err)
+	}
+	var currentParts []string
+	if err = json.Unmarshal(currentPartJSON, &currentParts); err != nil {
+		return core.Snapshot{}, fmt.Errorf("decode current build for inventory delta: %w", err)
+	}
+
+	currentSet := make(map[string]struct{}, len(currentParts))
+	nextSet := make(map[string]struct{}, len(normalized))
+	for _, partID := range currentParts {
+		currentSet[partID] = struct{}{}
+	}
+	for _, partID := range normalized {
+		nextSet[partID] = struct{}{}
+	}
+
+	for _, partID := range normalized {
+		if _, alreadyEquipped := currentSet[partID]; alreadyEquipped {
+			continue
+		}
+		var remaining int64
+		err = tx.QueryRow(ctx, `
+			UPDATE inventory_items
+			SET quantity=quantity-1, updated_at=now()
+			WHERE character_id=$1 AND item_id=$2 AND quantity > 0
+			RETURNING quantity
+		`, characterID, partID).Scan(&remaining)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return core.Snapshot{}, ErrInsufficientInventory
+		}
+		if err != nil {
+			return core.Snapshot{}, fmt.Errorf("consume inventory part %s: %w", partID, err)
+		}
+	}
+
+	for _, partID := range currentParts {
+		if _, stillEquipped := nextSet[partID]; stillEquipped {
+			continue
+		}
+		if _, err = tx.Exec(ctx, `
+			INSERT INTO inventory_items(character_id,item_id,quantity)
+			VALUES($1,$2,1)
+			ON CONFLICT(character_id,item_id)
+			DO UPDATE SET quantity=inventory_items.quantity+1, updated_at=now()
+		`, characterID, partID); err != nil {
+			return core.Snapshot{}, fmt.Errorf("return removed part %s to inventory: %w", partID, err)
+		}
 	}
 
 	nextRevision := currentRevision + 1
@@ -432,6 +533,48 @@ func (p *Postgres) snapshotByAccount(ctx context.Context, accountID string) (cor
 	}
 	if err = rows.Err(); err != nil {
 		return core.Snapshot{}, fmt.Errorf("iterate quest completions: %w", err)
+	}
+
+	inventoryRows, err := p.pool.Query(ctx, `
+		SELECT item_id, quantity
+		FROM inventory_items
+		WHERE character_id=$1 AND quantity > 0
+		ORDER BY item_id
+	`, snapshot.CharacterID)
+	if err != nil {
+		return core.Snapshot{}, fmt.Errorf("load inventory: %w", err)
+	}
+	defer inventoryRows.Close()
+	for inventoryRows.Next() {
+		var item core.InventoryItem
+		if err = inventoryRows.Scan(&item.ItemID, &item.Quantity); err != nil {
+			return core.Snapshot{}, fmt.Errorf("scan inventory: %w", err)
+		}
+		snapshot.Inventory = append(snapshot.Inventory, item)
+	}
+	if err = inventoryRows.Err(); err != nil {
+		return core.Snapshot{}, fmt.Errorf("iterate inventory: %w", err)
+	}
+
+	blueprintRows, err := p.pool.Query(ctx, `
+		SELECT blueprint_id
+		FROM character_blueprints
+		WHERE character_id=$1
+		ORDER BY blueprint_id
+	`, snapshot.CharacterID)
+	if err != nil {
+		return core.Snapshot{}, fmt.Errorf("load blueprints: %w", err)
+	}
+	defer blueprintRows.Close()
+	for blueprintRows.Next() {
+		var blueprintID string
+		if err = blueprintRows.Scan(&blueprintID); err != nil {
+			return core.Snapshot{}, fmt.Errorf("scan blueprint: %w", err)
+		}
+		snapshot.Blueprints = append(snapshot.Blueprints, blueprintID)
+	}
+	if err = blueprintRows.Err(); err != nil {
+		return core.Snapshot{}, fmt.Errorf("iterate blueprints: %w", err)
 	}
 
 	return snapshot, nil
