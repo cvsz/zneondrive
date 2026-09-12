@@ -42,6 +42,7 @@ Every engineering document should distinguish:
 - [Runtime Prototype v0.4](./runtime-prototype-v0.4.md)
 - [Runtime Integration v0.5](./runtime-integration-v0.5.md)
 - [Inventory + Rebuild v0.6](./runtime-inventory-rebuild-v0.6.md)
+- [Authoritative Race Runtime v0.7](./runtime-authoritative-race-v0.7.md)
 - [Content Contracts](./content-contracts.md)
 - [ADR Index](./adr/README.md)
 
