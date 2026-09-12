@@ -13,8 +13,8 @@ import (
 )
 
 type rateLimitPolicy struct {
-	Burst        int
-	RefillEvery  time.Duration
+	Burst       int
+	RefillEvery time.Duration
 }
 
 type rateBucket struct {
@@ -30,6 +30,15 @@ type rateLimiter struct {
 	now        func() time.Time
 }
 
+type rateLimitMiddleware struct {
+	next    http.Handler
+	limiter *rateLimiter
+}
+
+func NewRateLimitedHandler(next http.Handler) http.Handler {
+	return &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000)}
+}
+
 func newRateLimiter(maxEntries int) *rateLimiter {
 	if maxEntries < 1 {
 		maxEntries = 1
@@ -39,6 +48,58 @@ func newRateLimiter(maxEntries int) *rateLimiter {
 		maxEntries: maxEntries,
 		now:        time.Now,
 	}
+}
+
+func (m *rateLimitMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	policy, scope, identity, limited := rateLimitRule(r)
+	if limited {
+		allowed, retryAfter := m.limiter.allow(rateLimitKey(scope, identity), policy)
+		if !allowed {
+			seconds := int(math.Ceil(retryAfter.Seconds()))
+			if seconds < 1 {
+				seconds = 1
+			}
+			w.Header().Set("Retry-After", strconv.Itoa(seconds))
+			writeError(w, http.StatusTooManyRequests, "rate_limited")
+			return
+		}
+	}
+	m.next.ServeHTTP(w, r)
+}
+
+func rateLimitRule(r *http.Request) (rateLimitPolicy, string, string, bool) {
+	path := r.URL.Path
+	remote := remoteIdentity(r)
+
+	switch {
+	case r.Method == http.MethodPost && path == "/v1/sessions/bootstrap":
+		return bootstrapRatePolicy, "bootstrap", remote, true
+	case r.Method == http.MethodGet && path == "/v1/state":
+		return stateRatePolicy, "state", bearerIdentity(r, remote), true
+	case r.Method == http.MethodPost && path == "/v1/game-tickets":
+		return gameTicketRatePolicy, "game-ticket", bearerIdentity(r, remote), true
+	case r.Method == http.MethodPost && strings.HasPrefix(path, "/v1/quests/") && strings.HasSuffix(path, "/complete"):
+		return mutationRatePolicy, "quest", bearerIdentity(r, remote), true
+	case r.Method == http.MethodPost && strings.HasPrefix(path, "/v1/vehicles/") && strings.HasSuffix(path, "/builds"):
+		return mutationRatePolicy, "build", bearerIdentity(r, remote), true
+	case r.Method == http.MethodPost && path == "/v1/internal/game-tickets/redeem":
+		return internalAuthRatePolicy, "internal-ticket-redeem", remote, true
+	case r.Method == http.MethodPost && path == "/v1/internal/races/start":
+		return raceStartRatePolicy, "race-start", remote, true
+	case r.Method == http.MethodPost && strings.HasPrefix(path, "/v1/internal/races/") && strings.HasSuffix(path, "/checkpoints"):
+		return raceCheckpointRatePolicy, "race-checkpoint", remote, true
+	case r.Method == http.MethodPost && strings.HasPrefix(path, "/v1/internal/races/") && strings.HasSuffix(path, "/finish"):
+		return raceFinishRatePolicy, "race-finish", remote, true
+	default:
+		return rateLimitPolicy{}, "", "", false
+	}
+}
+
+func bearerIdentity(r *http.Request, fallback string) string {
+	if token, ok := bearerToken(r); ok {
+		return token
+	}
+	return fallback
 }
 
 func (l *rateLimiter) allow(key string, policy rateLimitPolicy) (bool, time.Duration) {
@@ -70,7 +131,7 @@ func (l *rateLimiter) allow(key string, policy rateLimitPolicy) (bool, time.Dura
 	}
 
 	missing := 1 - bucket.tokens
-	retryAfter := time.Duration(math.Ceil(missing*float64(policy.RefillEvery)))
+	retryAfter := time.Duration(math.Ceil(missing * float64(policy.RefillEvery)))
 	if retryAfter < time.Second {
 		retryAfter = time.Second
 	}
@@ -105,20 +166,6 @@ func (l *rateLimiter) makeRoom(now time.Time) {
 	}
 }
 
-func (a *API) enforceRateLimit(w http.ResponseWriter, r *http.Request, scope, identity string, policy rateLimitPolicy) bool {
-	allowed, retryAfter := a.limiter.allow(rateLimitKey(scope, identity), policy)
-	if allowed {
-		return true
-	}
-	seconds := int(math.Ceil(retryAfter.Seconds()))
-	if seconds < 1 {
-		seconds = 1
-	}
-	w.Header().Set("Retry-After", strconv.Itoa(seconds))
-	writeError(w, http.StatusTooManyRequests, "rate_limited")
-	return false
-}
-
 func rateLimitKey(scope, identity string) string {
 	digest := sha256.Sum256([]byte(strings.TrimSpace(identity)))
 	return scope + ":" + hex.EncodeToString(digest[:16])
@@ -136,12 +183,12 @@ func remoteIdentity(r *http.Request) string {
 }
 
 var (
-	bootstrapRatePolicy      = rateLimitPolicy{Burst: 8, RefillEvery: 8 * time.Second}
-	stateRatePolicy          = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
-	gameTicketRatePolicy     = rateLimitPolicy{Burst: 12, RefillEvery: 5 * time.Second}
-	mutationRatePolicy       = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
-	internalAuthRatePolicy   = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
-	raceStartRatePolicy      = rateLimitPolicy{Burst: 20, RefillEvery: 3 * time.Second}
-	raceCheckpointRatePolicy = rateLimitPolicy{Burst: 120, RefillEvery: 500 * time.Millisecond}
-	raceFinishRatePolicy     = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	bootstrapRatePolicy       = rateLimitPolicy{Burst: 8, RefillEvery: 8 * time.Second}
+	stateRatePolicy           = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	gameTicketRatePolicy      = rateLimitPolicy{Burst: 12, RefillEvery: 5 * time.Second}
+	mutationRatePolicy        = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	internalAuthRatePolicy    = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
+	raceStartRatePolicy       = rateLimitPolicy{Burst: 20, RefillEvery: 3 * time.Second}
+	raceCheckpointRatePolicy  = rateLimitPolicy{Burst: 120, RefillEvery: 500 * time.Millisecond}
+	raceFinishRatePolicy      = rateLimitPolicy{Burst: 30, RefillEvery: 2 * time.Second}
 )
