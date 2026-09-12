@@ -63,8 +63,15 @@
 - [x] MQ012 Roadworthy transition
 - [x] Go unit tests
 - [x] PostgreSQL integration tests
+- [x] committed go.mod/go.sum module lock
+- [x] one-time gameplay-ticket persistence and atomic redemption
+- [x] server-only shared-key internal redemption endpoint
+- [x] HTTP/PostgreSQL reconnect + ticket E2E
+- [x] Unreal session/resume subsystem source
+- [x] dedicated-server ticket redemption source
+- [x] authority-only durable VehicleID/build/parts/Roadworthy binding
 - [ ] full reference-oracle parity in Go
-- [ ] Unreal ↔ Go authenticated integration
+- [ ] live packaged Unreal ↔ Go integration evidence
 
 ## Content production
 - [ ] Full dialogue/script MQ001–MQ100
@@ -88,7 +95,9 @@
 
 ## Multiplayer and security
 - [ ] Threat model complete
-- [ ] Client trust boundaries tested over Unreal↔Go transport
+- [x] Client cannot self-assert durable snapshot in v0.5 source contract
+- [x] One-time ticket replay rejected by service E2E
+- [ ] Client trust boundaries tested over live Unreal↔Go transport
 - [ ] Rate limiting
 - [ ] Redis replay/idempotency acceleration
 - [ ] Cheat telemetry
@@ -108,7 +117,8 @@
 
 ## Release evidence
 - [ ] Stack-specific Unreal + Go CI all green
-- [ ] Unreal/Go integration/e2e
+- [x] Go HTTP/PostgreSQL runtime integration/e2e
+- [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Security scans pass for runtime
 - [ ] Performance budgets
 - [ ] Accessibility review
