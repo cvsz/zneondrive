@@ -1,5 +1,37 @@
 # zNeonDrive — PROJECT: NEON DRIVE
 
+<p align="center">
+
+[![CI](https://github.com/cvsz/zneondrive/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/cvsz/zneondrive/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/codeql.yml)
+[![Runtime Go](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml)
+[![Dependency Review](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml)
+
+![Phase](https://img.shields.io/badge/Phase-4.2%20Inventory%20%2B%20Rebuild-00D8FF?style=flat-square)
+![Runtime](https://img.shields.io/badge/Runtime-v0.6-8A2BE2?style=flat-square)
+![Production Readiness](https://img.shields.io/badge/Production%20Readiness-Evidence%20Gated-F59E0B?style=flat-square)
+![UE Source Build](https://img.shields.io/badge/UE%20Source%20Build-Evidence%20Pending-EF4444?style=flat-square)
+
+![Unreal Engine](https://img.shields.io/badge/Unreal%20Engine-5.8-0E1128?style=flat-square&logo=unrealengine&logoColor=white)
+![Go](https://img.shields.io/badge/Go-1.27-00ADD8?style=flat-square&logo=go&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Durable%20State-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-Ephemeral%20State-DC382D?style=flat-square&logo=redis&logoColor=white)
+![Python](https://img.shields.io/badge/Python-Reference%20Oracle-3776AB?style=flat-square&logo=python&logoColor=white)
+
+![Main Quests](https://img.shields.io/badge/Main%20Quests-100-FF4FD8?style=flat-square)
+![Districts](https://img.shields.io/badge/Districts-10-00D8FF?style=flat-square)
+![Characters](https://img.shields.io/badge/Characters-25-A7FF4F?style=flat-square)
+![Factions](https://img.shields.io/badge/Factions-5-FFC857?style=flat-square)
+
+[![License](https://img.shields.io/github/license/cvsz/zneondrive?style=flat-square)](./LICENSE)
+[![Stars](https://img.shields.io/github/stars/cvsz/zneondrive?style=flat-square)](https://github.com/cvsz/zneondrive/stargazers)
+[![Forks](https://img.shields.io/github/forks/cvsz/zneondrive?style=flat-square)](https://github.com/cvsz/zneondrive/forks)
+[![Open Issues](https://img.shields.io/github/issues/cvsz/zneondrive?style=flat-square)](https://github.com/cvsz/zneondrive/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/cvsz/zneondrive/main?style=flat-square)](https://github.com/cvsz/zneondrive/commits/main)
+
+</p>
+
+
 > **You don't own the road. You earn it.**
 
 zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE**, an 18+ persistent online open-world RPG centered on vehicle building, racing, adventure, factions, relationships, crews, pets, and a long-lived social world.
