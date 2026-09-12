@@ -15,7 +15,7 @@ Current Unreal source proves:
 - client sends a one-time gameplay ticket rather than a long-lived service credential,
 - dedicated server redeems the ticket with the Go service and receives the durable snapshot.
 
-This is source-level implementation evidence. A successful packaged live Unreal↔Go run remains a separate evidence gate.
+This is source-level implementation evidence. Runtime v0.7 also implements a server-only PostgreSQL race start/checkpoint/finish lifecycle that binds results to the exact authoritative active build. A successful packaged live Unreal↔Go run and live race transport remain separate evidence gates.
 
 ## Target session lifecycle
 
