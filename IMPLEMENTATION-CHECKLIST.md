@@ -66,6 +66,10 @@
 ## Phase 4 runtime source
 - [x] Unreal .uproject baseline
 - [x] Unreal Game / Editor / dedicated Server targets
+- [x] explicit Unreal Client target for player-only builds
+- [x] full-stack Makefile + interactive Linux operator control panel
+- [x] Windows packaged-player installer/launcher
+- [x] player-safe runtime public API URL override without server shared-key exposure
 - [x] server-authoritative replicated prototype pawn
 - [x] manual self-hosted UE source-build workflow
 - [ ] successful UE 5.8 source-build artifact
