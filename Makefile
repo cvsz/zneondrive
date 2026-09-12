@@ -8,6 +8,9 @@ help:
 validate-design:
 	python3 tools/validate_design.py
 
+validate-docs:
+	python3 tools/validate_docs.py
+
 validate-runtime:
 	python3 tools/validate_runtime_v0_4.py
 	python3 tools/validate_runtime_v0_5.py
