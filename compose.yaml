@@ -33,6 +33,7 @@ services:
       context: ./services/game-api
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-zneondrive}:${POSTGRES_PASSWORD:-zneondrive-local}@postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable
+      REDIS_ADDR: redis:6379
       LISTEN_ADDR: :8080
       GAME_SERVER_SHARED_KEY: ${GAME_SERVER_SHARED_KEY:-zneondrive-local-server-key-change-me-0001}
     ports:

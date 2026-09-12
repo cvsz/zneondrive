@@ -19,6 +19,7 @@ func main() {
 	ctx := context.Background()
 	databaseURL := env("DATABASE_URL", "postgres://zneondrive:zneondrive@127.0.0.1:55432/zneondrive?sslmode=disable")
 	listenAddr := env("LISTEN_ADDR", ":8080")
+	redisAddr := strings.TrimSpace(os.Getenv("REDIS_ADDR"))
 	gameServerKey := strings.TrimSpace(os.Getenv("GAME_SERVER_SHARED_KEY"))
 	if len(gameServerKey) < 32 {
 		log.Fatal("GAME_SERVER_SHARED_KEY must be configured with at least 32 characters")
@@ -38,9 +39,16 @@ func main() {
 	}
 
 	apiHandler := httpapi.New(db, gameServerKey)
+	rateLimitedHandler := httpapi.NewRateLimitedHandler(apiHandler)
+	if redisAddr != "" {
+		rateLimitedHandler = httpapi.NewDistributedRateLimitedHandler(apiHandler, redisAddr)
+		log.Printf("distributed rate limiting enabled via Redis")
+	} else {
+		log.Printf("WARN: REDIS_ADDR is not configured; rate limiting is process-local only")
+	}
 	server := &http.Server{
 		Addr:              listenAddr,
-		Handler:           httpapi.NewRateLimitedHandler(apiHandler),
+		Handler:           rateLimitedHandler,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      15 * time.Second,
