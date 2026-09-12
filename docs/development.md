@@ -16,6 +16,7 @@ Requirements: Python 3.x and standard shell tooling.
 
 ```bash
 make validate-design
+make validate-docs
 make validate-runtime
 make ci
 ```
@@ -79,3 +80,12 @@ The repository contains Game, Editor, and Server targets plus a minimal authorit
 - Prefer deterministic/reproducible tooling.
 - Never commit credentials or player/user data.
 - Never weaken CI/security gates to make a change pass.
+
+
+## Documentation rules
+
+- Start navigation from [docs/README.md](./README.md).
+- Distinguish **Implemented**, **Verified**, **Target**, and **Planned** claims.
+- Update API/data/security/operations docs when the corresponding runtime contract changes.
+- Relative Markdown/HTML links must pass `python3 tools/validate_docs.py`.
+- Do not mark a production gate complete because a policy/runbook exists; operational gates require exercises or measured evidence.
