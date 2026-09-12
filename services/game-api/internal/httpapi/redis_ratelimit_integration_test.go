@@ -43,9 +43,10 @@ func TestRedisRateLimiterSharesBudgetAcrossInstances(t *testing.T) {
 }
 
 type httpLoadResult struct {
-	replica int
-	status  int
-	err     error
+	replica    int
+	status     int
+	retryAfter string
+	err        error
 }
 
 func TestDistributedRateLimiterConcurrentHTTPAcrossReplicas(t *testing.T) {
@@ -103,7 +104,7 @@ func TestDistributedRateLimiterConcurrentHTTPAcrossReplicas(t *testing.T) {
 				return
 			}
 			_ = resp.Body.Close()
-			results <- httpLoadResult{replica: replica, status: resp.StatusCode}
+			results <- httpLoadResult{replica: replica, status: resp.StatusCode, retryAfter: resp.Header.Get("Retry-After")}
 		}(i)
 	}
 	close(start)
@@ -122,6 +123,9 @@ func TestDistributedRateLimiterConcurrentHTTPAcrossReplicas(t *testing.T) {
 		case http.StatusNoContent:
 			allowed++
 		case http.StatusTooManyRequests:
+			if result.retryAfter == "" {
+				t.Fatalf("rate-limited response from replica %d omitted Retry-After", result.replica)
+			}
 			limited++
 		default:
 			t.Fatalf("unexpected HTTP status from replica %d: %d", result.replica, result.status)
