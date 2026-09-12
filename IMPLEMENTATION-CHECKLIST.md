@@ -70,6 +70,14 @@
 - [x] Unreal session/resume subsystem source
 - [x] dedicated-server ticket redemption source
 - [x] authority-only durable VehicleID/build/parts/Roadworthy binding
+- [x] PostgreSQL inventory + blueprint persistence
+- [x] canonical vehicle-part catalog validation in Go runtime
+- [x] MQ004/MQ009 idempotent item grants
+- [x] MQ005 durable starter-rebuild blueprint unlock
+- [x] atomic inventory consume/return + immutable rebuild revision
+- [x] build operation replay bound to exact validation hash
+- [x] reconnect persistence for inventory/blueprints/rebuild state
+- [x] Unreal snapshot source parses inventory/blueprints
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 
@@ -85,7 +93,7 @@
 - [x] selected client/server ADRs
 - [x] Unreal source project baseline
 - [ ] Garage 17 environment playable
-- [ ] first vehicle rebuild playable
+- [ ] first vehicle rebuild playable (durable service contract implemented; Unreal interaction/evidence still open)
 - [ ] First Ignition end-to-end in Unreal
 - [ ] Foundry 9 traversal/jobs
 - [ ] legal + underground race playable
