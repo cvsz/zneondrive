@@ -1,12 +1,15 @@
 SHELL := /bin/sh
 
-.PHONY: help validate-design validate-runtime check-json lint test test-reference build security ci runtime-up runtime-down go-test
+.PHONY: help validate-design validate-docs validate-runtime check-json lint test test-reference build security ci runtime-up runtime-down go-test
 
 help:
-	@printf '%s\n' 'Targets: validate-design validate-runtime check-json lint test-reference go-test test build security ci runtime-up runtime-down'
+	@printf '%s\n' 'Targets: validate-design validate-docs validate-runtime check-json lint test-reference go-test test build security ci runtime-up runtime-down'
 
 validate-design:
 	python3 tools/validate_design.py
+
+validate-docs:
+	python3 tools/validate_docs.py
 
 validate-runtime:
 	python3 tools/validate_runtime_v0_4.py
@@ -16,7 +19,7 @@ validate-runtime:
 check-json:
 	python3 -c 'import json,pathlib; [json.loads(p.read_text(encoding="utf-8")) for p in pathlib.Path("design").rglob("*.json")]; print("JSON OK")'
 
-lint: check-json validate-design validate-runtime
+lint: check-json validate-design validate-docs validate-runtime
 
 test-reference:
 	PYTHONPATH=src python3 -m unittest discover -s tests -v
