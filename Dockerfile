@@ -1,7 +1,10 @@
-# Generic placeholder Dockerfile.
-# Replace with the runtime-specific build for the generated project.
-FROM alpine:3.20
+# Design-validation image only.
+# This is NOT the future game client/server runtime image.
+FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /workspace
 
-CMD ["sh", "-c", "echo 'Replace Dockerfile with your project runtime image and command.'"]
+COPY design ./design
+COPY tools ./tools
+
+CMD ["python3", "tools/validate_design.py"]

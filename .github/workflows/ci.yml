@@ -13,13 +13,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  repository-baseline:
+  repository-and-design:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate required template files
+      - name: Validate required project files
         shell: bash
         run: |
           set -euo pipefail
@@ -32,8 +32,18 @@ jobs:
             CHANGELOG.md
             ROADMAP.md
             IMPLEMENTATION-CHECKLIST.md
-            .github/PULL_REQUEST_TEMPLATE.md
-            .github/dependabot.yml
+            zNeonDrive-concept.md
+            docs/game-design-bible-v0.1.md
+            docs/architecture.md
+            docs/content-contracts.md
+            design/catalog/characters.json
+            design/catalog/factions.json
+            design/catalog/districts.json
+            design/catalog/quests-main.json
+            design/catalog/vehicle-parts.json
+            design/schemas/quest.schema.json
+            design/schemas/vehicle.schema.json
+            tools/validate_design.py
           )
           for path in "${required[@]}"; do
             test -f "$path" || { echo "Missing required file: $path"; exit 1; }
@@ -52,3 +62,17 @@ jobs:
         shell: bash
         run: |
           ruby -e 'require "yaml"; Dir.glob(".github/**/*.{yml,yaml}").each { |f| YAML.load_file(f); puts "ok #{f}" }'
+
+      - name: Validate JSON syntax
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for path in Path("design").rglob("*.json"):
+              json.loads(path.read_text(encoding="utf-8"))
+              print(f"ok {path}")
+          PY
+
+      - name: Validate design invariants
+        run: python3 tools/validate_design.py

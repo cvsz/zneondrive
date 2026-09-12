@@ -1,29 +1,48 @@
 # Security Policy
 
-Security is part of the default delivery baseline for repositories created from this template.
+Security is a first-class requirement for zNeonDrive, especially because the future product is a persistent online game with ownership, inventory/economy, ranked competition, crews, social systems, and privileged live operations.
 
 ## Reporting a vulnerability
 
-Do not disclose exploitable vulnerabilities in public issues, pull requests, discussions, or commit messages. Use GitHub's private vulnerability reporting/security advisory capability when enabled for the repository, or contact the repository owner through an agreed private channel.
+Do not disclose exploitable vulnerabilities in public issues, pull requests, discussions, or commit messages.
 
-Include affected versions or commits, reproduction details, impact, prerequisites, and suggested remediation when available.
+Use GitHub private vulnerability reporting/security advisories when available, or an agreed private channel with the repository owner.
 
-## Supported versions
+Useful reports include affected commit/version, reproduction steps, prerequisites, impact, exploitability, and suggested remediation.
 
-Each generated project should replace this section with its real support policy before its first production release.
+## Current supported surface
 
-## Security expectations
+The current public repository primarily contains design documents, content catalogs, schemas, CI, and design-validation tooling.
 
-- Keep dependencies patched and review Dependabot alerts.
-- Keep CodeQL and dependency-review workflows enabled when supported.
-- Use least-privilege GitHub Actions permissions.
-- Never commit credentials, tokens, private keys, production secrets, or sensitive personal data.
-- Validate untrusted input and enforce authorization at trust boundaries.
-- Prefer fail-closed behavior for security-sensitive paths.
-- Preserve tenant and data isolation where applicable.
-- Review third-party actions and pin or constrain them according to project policy.
-- Do not disable security gates merely to obtain a passing build.
+When runtime code is added, the supported-version table must be expanded to cover client/server and deployed release channels.
+
+## Mandatory security expectations
+
+- Player clients, client clocks, client-computed rewards, build legality, and race results are untrusted.
+- Ownership, inventory/economy, quest completion, crew authorization, VIP entitlements, and ranked results must be authoritative.
+- Rewardable state transitions require replay/idempotency protection.
+- Privileged administration/live-ops actions require auditability.
+- Never commit credentials, tokens, private keys, production secrets, personal player data, or sensitive telemetry.
+- Validate untrusted input and authorize every state-changing action.
+- Use least-privilege GitHub Actions permissions and service permissions.
+- Keep dependency/security scanning enabled when relevant.
+- Do not weaken security gates merely to obtain a passing build.
+
+## Online-game threat model backlog
+
+Before multiplayer production release, explicitly test:
+- fabricated inventory/reward requests,
+- replay/duplicate grants,
+- impossible vehicle builds,
+- timing/checkpoint manipulation,
+- speed/teleport impossible states,
+- disconnect/reconnect abuse,
+- crew/role privilege escalation,
+- entitlement/VIP spoofing,
+- leaderboard/result tampering,
+- admin/live-ops misuse,
+- denial-of-service and rate-limit behavior.
 
 ## Incident handling
 
-Projects generated from this template should document containment, remediation, validation, disclosure, and rollback procedures appropriate to their risk profile.
+Future production operations must document containment, player-impact assessment, credential/secret rotation where applicable, rollback, economy/result correction, evidence preservation, disclosure, and recovery validation.

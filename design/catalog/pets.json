@@ -1,0 +1,47 @@
+{
+  "version": "0.1",
+  "count": 4,
+  "pets": [
+    {
+      "id": "pet_luna",
+      "name": "Luna",
+      "type": "dog",
+      "utility": [
+        "track salvage",
+        "find route clues",
+        "story discovery"
+      ],
+      "competitive_buff": false
+    },
+    {
+      "id": "pet_cat_scout",
+      "name": "Workshop Cat",
+      "type": "cat",
+      "utility": [
+        "small-space item hint",
+        "social/garage ambience"
+      ],
+      "competitive_buff": false
+    },
+    {
+      "id": "pet_hawk_scout",
+      "name": "Kestrel Hawk",
+      "type": "hawk",
+      "utility": [
+        "mark distant exploration points",
+        "route scouting"
+      ],
+      "competitive_buff": false
+    },
+    {
+      "id": "pet_cyber_companion",
+      "name": "Cyber Companion",
+      "type": "cybernetic",
+      "utility": [
+        "hazard warning",
+        "sensor-assisted exploration"
+      ],
+      "competitive_buff": false
+    }
+  ]
+}

@@ -1,70 +1,77 @@
-# Implementation Checklist
+# Implementation Checklist — PROJECT: NEON DRIVE
 
-Use this checklist after creating a repository from `ztemplate`.
+## Design baseline
+- [x] Story premise and NOVA CITY 2097
+- [x] Garage 17 opening and starter prototype
+- [x] Maya Voss / Adrian Cross / Victor Kane / Luna anchors
+- [x] PROJECT DRIVE ZERO conflict
+- [x] Seven campaign chapters
+- [x] Five endgame governance paths
+- [x] VIP fairness principle
+- [x] Social/crew and pet design
+- [x] 25-character launch catalog
+- [x] 100-main-quest graph
+- [x] World, faction, district, and part catalogs
+- [x] Automated catalog integrity checks
 
-## Repository identity
+## Content production
+- [ ] Full dialogue/script for MQ001–MQ100
+- [ ] Side-quest narratives beyond seed records
+- [ ] Cinematic list and storyboard requirements
+- [ ] Environment storytelling asset list
+- [ ] Voice/localization style guides
+- [ ] Content sensitivity and age-rating review
 
-- [ ] Replace `ztemplate` references with the real project name.
-- [ ] Replace template descriptions and badges.
-- [ ] Confirm license ownership and year.
-- [ ] Configure repository topics, description, homepage, and template status.
+## Vertical slice
+- [ ] Garage 17 environment playable
+- [ ] First vehicle rebuild from broken state
+- [ ] First Ignition end-to-end
+- [ ] Foundry 9 traversal and jobs
+- [ ] One legal and one underground race
+- [ ] Maya relationship state transition
+- [ ] Luna discovery utility
+- [ ] Save/reconnect verified
 
-## Ownership and governance
+## Runtime authority
+- [ ] Account/session authoritative
+- [ ] Character ownership authoritative
+- [ ] Vehicle ownership authoritative
+- [ ] Build revisions immutable/auditable
+- [ ] Inventory/economy mutation idempotent
+- [ ] Quest completion idempotent
+- [ ] Race results server-validated
+- [ ] Crew roles authorized
+- [ ] VIP entitlement separated from competitive stats
 
-- [ ] Update `.github/CODEOWNERS`.
-- [ ] Review `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
-- [ ] Configure branch protection or repository rulesets.
-- [ ] Require pull request review where appropriate.
-- [ ] Require passing status checks before merge.
+## Multiplayer and security
+- [ ] Threat model complete
+- [ ] Client trust boundaries tested
+- [ ] Rate limiting
+- [ ] Replay/idempotency protection
+- [ ] Cheat telemetry
+- [ ] Ranked impossible-state detection
+- [ ] Privileged admin/live-ops audit trail
+- [ ] Abuse/moderation model
 
-## Security
+## Reliability
+- [ ] Load test target defined
+- [ ] Soak test passed
+- [ ] Backup verified
+- [ ] Restore drill passed
+- [ ] RPO/RTO defined
+- [ ] Reconnect/recovery tested
+- [ ] Duplicate rewards prevented on retry/failover
+- [ ] Content rollback tested
 
-- [ ] Review `SECURITY.md` and configure private vulnerability reporting.
-- [ ] Enable Dependabot alerts and security updates.
-- [ ] Review CodeQL language detection/support for the actual stack.
-- [ ] Keep dependency review enabled for pull requests where supported.
-- [ ] Configure secret scanning and push protection where available.
-- [ ] Add stack-specific SAST, container, IaC, and SBOM checks as needed.
-- [ ] Confirm Actions permissions follow least privilege.
+## Release evidence
+- [ ] Stack-specific CI green
+- [ ] Unit/integration/e2e suites
+- [ ] Security scans pass
+- [ ] Performance budgets pass
+- [ ] Accessibility review
+- [ ] Privacy/data-retention review
+- [ ] Production deployment evidence
+- [ ] DR evidence
+- [ ] Go/no-go approval
 
-## Development
-
-- [ ] Select the language/runtime and package manager.
-- [ ] Add formatter and linter configuration.
-- [ ] Add unit, integration, and end-to-end tests as appropriate.
-- [ ] Replace placeholder Makefile targets with real commands.
-- [ ] Replace or remove the placeholder Dockerfile.
-- [ ] Populate `.env.example` with safe non-secret keys only.
-
-## CI/CD
-
-- [ ] Customize CI for the selected stack.
-- [ ] Pin runtime versions and define supported-version matrices.
-- [ ] Add build and package validation.
-- [ ] Add artifact retention settings where needed.
-- [ ] Configure environments, approvals, and deployment protections.
-- [ ] Verify workflows from forks do not receive unsafe credentials.
-
-## Release
-
-- [ ] Decide on Semantic Versioning or another explicit versioning policy.
-- [ ] Configure changelog and release-note generation.
-- [ ] Configure package/container publishing only when needed.
-- [ ] Add provenance, signing, and attestations for production artifacts where appropriate.
-- [ ] Document rollback procedures.
-
-## Documentation
-
-- [ ] Complete `docs/architecture.md`.
-- [ ] Complete `docs/development.md`.
-- [ ] Complete `docs/release.md`.
-- [ ] Add ADRs for material architectural decisions.
-- [ ] Document operational ownership and support expectations.
-
-## Final verification
-
-- [ ] Fresh clone works with documented bootstrap steps.
-- [ ] CI passes on `main` and pull requests.
-- [ ] No secrets or private information are committed.
-- [ ] Security checks are enabled and passing.
-- [ ] A release can be created and rolled back according to documentation.
+Unchecked production claims must not be represented as complete without evidence.

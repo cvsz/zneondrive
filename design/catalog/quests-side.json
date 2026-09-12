@@ -1,0 +1,276 @@
+{
+  "version": "0.1",
+  "count": 30,
+  "quests": [
+    {
+      "id": "SQ001",
+      "title": "Foundry salvage 1",
+      "district": "district_foundry_9",
+      "primary_npc": "char_nia_serrano",
+      "category": "job",
+      "summary": "Optional foundry salvage content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ002",
+      "title": "Courier shift 1",
+      "district": "district_docklands",
+      "primary_npc": "char_jun_park",
+      "category": "exploration",
+      "summary": "Optional courier shift content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ003",
+      "title": "Car meet favor 1",
+      "district": "district_neon_mile",
+      "primary_npc": "char_juno_rae",
+      "category": "relationship",
+      "summary": "Optional car meet favor content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ004",
+      "title": "Greenbelt search 1",
+      "district": "district_greenbelt",
+      "primary_npc": "char_ivy_chen",
+      "category": "crew",
+      "summary": "Optional greenbelt search content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ005",
+      "title": "Dust convoy 1",
+      "district": "district_dust_verge",
+      "primary_npc": "char_omar_veyr",
+      "category": "recovery",
+      "summary": "Optional dust convoy content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ006",
+      "title": "Old Grid archive 1",
+      "district": "district_old_grid",
+      "primary_npc": "char_naomi_vale",
+      "category": "job",
+      "summary": "Optional old grid archive content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ007",
+      "title": "Foundry salvage 2",
+      "district": "district_foundry_9",
+      "primary_npc": "char_nia_serrano",
+      "category": "exploration",
+      "summary": "Optional foundry salvage content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ008",
+      "title": "Courier shift 2",
+      "district": "district_docklands",
+      "primary_npc": "char_jun_park",
+      "category": "relationship",
+      "summary": "Optional courier shift content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ009",
+      "title": "Car meet favor 2",
+      "district": "district_neon_mile",
+      "primary_npc": "char_juno_rae",
+      "category": "crew",
+      "summary": "Optional car meet favor content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ010",
+      "title": "Greenbelt search 2",
+      "district": "district_greenbelt",
+      "primary_npc": "char_ivy_chen",
+      "category": "recovery",
+      "summary": "Optional greenbelt search content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ011",
+      "title": "Dust convoy 2",
+      "district": "district_dust_verge",
+      "primary_npc": "char_omar_veyr",
+      "category": "job",
+      "summary": "Optional dust convoy content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ012",
+      "title": "Old Grid archive 2",
+      "district": "district_old_grid",
+      "primary_npc": "char_naomi_vale",
+      "category": "exploration",
+      "summary": "Optional old grid archive content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ013",
+      "title": "Foundry salvage 3",
+      "district": "district_foundry_9",
+      "primary_npc": "char_nia_serrano",
+      "category": "relationship",
+      "summary": "Optional foundry salvage content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ014",
+      "title": "Courier shift 3",
+      "district": "district_docklands",
+      "primary_npc": "char_jun_park",
+      "category": "crew",
+      "summary": "Optional courier shift content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ015",
+      "title": "Car meet favor 3",
+      "district": "district_neon_mile",
+      "primary_npc": "char_juno_rae",
+      "category": "recovery",
+      "summary": "Optional car meet favor content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ016",
+      "title": "Greenbelt search 3",
+      "district": "district_greenbelt",
+      "primary_npc": "char_ivy_chen",
+      "category": "job",
+      "summary": "Optional greenbelt search content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ017",
+      "title": "Dust convoy 3",
+      "district": "district_dust_verge",
+      "primary_npc": "char_omar_veyr",
+      "category": "exploration",
+      "summary": "Optional dust convoy content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ018",
+      "title": "Old Grid archive 3",
+      "district": "district_old_grid",
+      "primary_npc": "char_naomi_vale",
+      "category": "relationship",
+      "summary": "Optional old grid archive content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ019",
+      "title": "Foundry salvage 4",
+      "district": "district_foundry_9",
+      "primary_npc": "char_nia_serrano",
+      "category": "crew",
+      "summary": "Optional foundry salvage content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ020",
+      "title": "Courier shift 4",
+      "district": "district_docklands",
+      "primary_npc": "char_jun_park",
+      "category": "recovery",
+      "summary": "Optional courier shift content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ021",
+      "title": "Car meet favor 4",
+      "district": "district_neon_mile",
+      "primary_npc": "char_juno_rae",
+      "category": "job",
+      "summary": "Optional car meet favor content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ022",
+      "title": "Greenbelt search 4",
+      "district": "district_greenbelt",
+      "primary_npc": "char_ivy_chen",
+      "category": "exploration",
+      "summary": "Optional greenbelt search content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ023",
+      "title": "Dust convoy 4",
+      "district": "district_dust_verge",
+      "primary_npc": "char_omar_veyr",
+      "category": "relationship",
+      "summary": "Optional dust convoy content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ024",
+      "title": "Old Grid archive 4",
+      "district": "district_old_grid",
+      "primary_npc": "char_naomi_vale",
+      "category": "crew",
+      "summary": "Optional old grid archive content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ025",
+      "title": "Foundry salvage 5",
+      "district": "district_foundry_9",
+      "primary_npc": "char_nia_serrano",
+      "category": "recovery",
+      "summary": "Optional foundry salvage content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ026",
+      "title": "Courier shift 5",
+      "district": "district_docklands",
+      "primary_npc": "char_jun_park",
+      "category": "job",
+      "summary": "Optional courier shift content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ027",
+      "title": "Car meet favor 5",
+      "district": "district_neon_mile",
+      "primary_npc": "char_juno_rae",
+      "category": "exploration",
+      "summary": "Optional car meet favor content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ028",
+      "title": "Greenbelt search 5",
+      "district": "district_greenbelt",
+      "primary_npc": "char_ivy_chen",
+      "category": "relationship",
+      "summary": "Optional greenbelt search content with bounded rewards and world flavor.",
+      "replay_policy": "repeatable-with-cooldown"
+    },
+    {
+      "id": "SQ029",
+      "title": "Dust convoy 5",
+      "district": "district_dust_verge",
+      "primary_npc": "char_omar_veyr",
+      "category": "crew",
+      "summary": "Optional dust convoy content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    },
+    {
+      "id": "SQ030",
+      "title": "Old Grid archive 5",
+      "district": "district_old_grid",
+      "primary_npc": "char_naomi_vale",
+      "category": "recovery",
+      "summary": "Optional old grid archive content with bounded rewards and world flavor.",
+      "replay_policy": "authored-once"
+    }
+  ]
+}

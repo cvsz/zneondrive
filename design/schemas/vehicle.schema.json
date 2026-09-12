@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zneondrive.example/schemas/vehicle.schema.json",
+  "title": "zNeonDrive Persistent Vehicle",
+  "type": "object",
+  "required": [
+    "vehicle_id",
+    "owner_character_id",
+    "active_build_revision",
+    "provenance"
+  ],
+  "properties": {
+    "vehicle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner_character_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "active_build_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "garage_slot": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "condition": {
+      "type": "object"
+    },
+    "reputation": {
+      "type": "number",
+      "minimum": 0
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "history_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

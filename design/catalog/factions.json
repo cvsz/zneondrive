@@ -1,0 +1,76 @@
+{
+  "version": "0.1",
+  "count": 5,
+  "factions": [
+    {
+      "id": "faction_nova_authority",
+      "name": "NOVA Authority",
+      "values": [
+        "order",
+        "continuity",
+        "public safety"
+      ],
+      "conflicts": [
+        "privacy",
+        "corporate influence"
+      ],
+      "launch_role": "law and civic infrastructure"
+    },
+    {
+      "id": "faction_iron_wolves",
+      "name": "Iron Wolves",
+      "values": [
+        "skill",
+        "loyalty",
+        "street reputation"
+      ],
+      "conflicts": [
+        "authority",
+        "betrayal"
+      ],
+      "launch_role": "underground racing network"
+    },
+    {
+      "id": "faction_mechanist_guild",
+      "name": "Mechanist Guild",
+      "values": [
+        "craft",
+        "repair",
+        "provenance"
+      ],
+      "conflicts": [
+        "planned obsolescence",
+        "stolen blueprints"
+      ],
+      "launch_role": "builders and inventors"
+    },
+    {
+      "id": "faction_vantex",
+      "name": "VANTEX Corporation",
+      "values": [
+        "scale",
+        "efficiency",
+        "control"
+      ],
+      "conflicts": [
+        "decentralization",
+        "leaks"
+      ],
+      "launch_role": "technology and primary antagonist institution"
+    },
+    {
+      "id": "faction_free_roads",
+      "name": "Free Roads",
+      "values": [
+        "autonomy",
+        "access",
+        "mutual aid"
+      ],
+      "conflicts": [
+        "centralized control",
+        "mobility monopolies"
+      ],
+      "launch_role": "anti-monopoly movement"
+    }
+  ]
+}

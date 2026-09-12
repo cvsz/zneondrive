@@ -1,78 +1,72 @@
-# ztemplate
+# zNeonDrive — PROJECT: NEON DRIVE
 
-A production-ready, reusable GitHub repository template for starting new projects with consistent engineering, security, documentation, automation, and release practices.
+> **You don't own the road. You earn it.**
 
-## Included
+zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE**, an 18+ persistent online open-world RPG centered on vehicle building, racing, adventure, factions, relationships, crews, pets, and a long-lived social world.
 
-- Issue and pull request templates
-- CODEOWNERS and repository contribution guidance
-- Security policy and support policy
-- CI workflow baseline
-- CodeQL security scanning
-- Dependency Review for pull requests
-- Dependabot configuration
-- Release workflow and release notes configuration
-- Conventional commit / PR guidance
-- EditorConfig, Git attributes, and Git ignore baseline
-- Community health files
-- Documentation structure
-- Changelog and roadmap templates
-- Implementation checklist
-- Architecture Decision Record (ADR) template
-- Environment example
-- Docker baseline
-- Makefile task entrypoints
+## Product direction
 
-## Start from this template
+- **World:** NOVA CITY, 2097
+- **Genre:** Online Open World / RPG / Vehicle Building / Racing / Adventure / Social
+- **World model:** Persistent online world, server-authoritative by design
+- **Player identity:** 1 account → 1 primary character → 1 starter vehicle
+- **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
+- **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
+- **Current phase:** Game Design Bible v0.1 + implementation contracts. Runtime technology is intentionally not locked yet.
 
-1. Use this repository as a GitHub template repository.
-2. Create a new repository from the template.
-3. Replace placeholder project metadata.
-4. Review and customize `.github/CODEOWNERS`, `SECURITY.md`, CI matrices, and release settings.
-5. Add language/framework-specific workflows only when the project needs them.
+## Canonical design
 
-## Repository structure
+- [Original Story Bible / Master Plot](./zNeonDrive-concept.md)
+- [Game Design Bible v0.1](./docs/game-design-bible-v0.1.md)
+- [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
+- [Gameplay Systems](./docs/gameplay-systems.md)
+- [Architecture](./docs/architecture.md)
+- [Content Contracts](./docs/content-contracts.md)
+- [Roadmap](./ROADMAP.md)
+- [Implementation Checklist](./IMPLEMENTATION-CHECKLIST.md)
+
+## Machine-readable design catalogs
+
+Content under `design/catalog/` is intended to become the stable source of content IDs for future clients/services:
+
+- 25 named launch characters
+- 5 primary factions
+- 10 launch districts
+- 100 main-story quest records across 7 chapters
+- side-content seeds
+- vehicle part taxonomy
+- functional pet archetypes
+
+Schemas live under `design/schemas/`.
+
+## Core loop
 
 ```text
-.github/
-  ISSUE_TEMPLATE/
-  workflows/
-  CODEOWNERS
-  CONTRIBUTING.md
-  PULL_REQUEST_TEMPLATE.md
-  dependabot.yml
-  release.yml
-  SUPPORT.md
-docs/
-  adr/
-  architecture.md
-  development.md
-  release.md
-.env.example
-.editorconfig
-.gitattributes
-.gitignore
-CHANGELOG.md
-CODE_OF_CONDUCT.md
-Dockerfile
-IMPLEMENTATION-CHECKLIST.md
-LICENSE
-Makefile
-README.md
-ROADMAP.md
-SECURITY.md
+Arrive in NOVA CITY
+→ receive the broken prototype
+→ rebuild the first vehicle
+→ take jobs / discover districts / earn reputation
+→ tune and reconfigure the same vehicle
+→ build relationships and faction standing
+→ enter underground and sanctioned competition
+→ qualify for NOVA GRAND PRIX
+→ expose PROJECT DRIVE ZERO
+→ choose the future governance of mobility
+→ continue into seasons, crews, world events, and expansions
 ```
 
-## Principles
+## Fairness rules
 
-- Secure by default
-- Least privilege for GitHub Actions
-- Reproducible automation
-- Small, reviewable pull requests
-- Documentation as part of delivery
-- No weakening of security gates to make CI green
-- Explicit release and rollback practices
+1. Ranked outcomes are based on skill, earned/configured performance, event rules, and validated state.
+2. VIP cannot add hidden horsepower, grip, durability, matchmaking priority, or race-stat multipliers.
+3. Competitive vehicle builds must be server-validatable.
+4. Reputation and relationship consequences are persistent gameplay state.
+5. Endgame choices may alter a player's world state without breaking shared-world consistency.
+
+## Status
+
+The repository contains an implementation-ready **design foundation**. It does **not** claim that the full MMORPG runtime, networking, persistence, anti-cheat, matchmaking, live operations, HA/DR, or production deployment are implemented. Those remain evidence-gated roadmap phases.
 
 ## License
 
-MIT. See `LICENSE`.
+MIT. See [LICENSE](./LICENSE).

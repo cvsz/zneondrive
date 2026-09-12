@@ -1,0 +1,206 @@
+{
+  "version": "0.1",
+  "count": 25,
+  "characters": [
+    {
+      "id": "char_maya_voss",
+      "name": "Maya Voss",
+      "faction": "faction_mechanist_guild",
+      "role": "Engineer / former racer",
+      "relationship_arc": "mentor",
+      "story_hook": "Former VANTEX DRIVE ZERO engineer; gives the starter vehicle."
+    },
+    {
+      "id": "char_adrian_cross",
+      "name": "Adrian Cross",
+      "faction": "faction_iron_wolves",
+      "role": "Former champion / garage owner",
+      "relationship_arc": "rival",
+      "story_hook": "Can become ally, friend, trusted partner, or long-term enemy."
+    },
+    {
+      "id": "char_victor_kane",
+      "name": "Victor Kane",
+      "faction": "faction_vantex",
+      "role": "CEO",
+      "relationship_arc": "antagonist",
+      "story_hook": "Public technology patron; privately seeks total mobility control."
+    },
+    {
+      "id": "char_mara_chen",
+      "name": "Mara Chen",
+      "faction": "faction_nova_authority",
+      "role": "District commander",
+      "relationship_arc": "authority",
+      "story_hook": "Believes controlled infrastructure prevents another information war."
+    },
+    {
+      "id": "char_rook_maddox",
+      "name": "Rook Maddox",
+      "faction": "faction_iron_wolves",
+      "role": "Crew leader",
+      "relationship_arc": "gatekeeper",
+      "story_hook": "Controls early underground introductions."
+    },
+    {
+      "id": "char_nia_serrano",
+      "name": "Nia Serrano",
+      "faction": "faction_mechanist_guild",
+      "role": "Master fabricator",
+      "relationship_arc": "mentor",
+      "story_hook": "Teaches blueprint provenance and ethical craft."
+    },
+    {
+      "id": "char_sol_reyes",
+      "name": "Sol Reyes",
+      "faction": "faction_free_roads",
+      "role": "Organizer",
+      "relationship_arc": "ally",
+      "story_hook": "Advocates decentralized mobility and mutual-aid road networks."
+    },
+    {
+      "id": "char_selene_ward",
+      "name": "Selene Ward",
+      "faction": "faction_vantex",
+      "role": "Public relations director",
+      "relationship_arc": "ambiguous",
+      "story_hook": "Can protect or destroy reputations through corporate media."
+    },
+    {
+      "id": "char_ilya_orlov",
+      "name": "Dr. Ilya Orlov",
+      "faction": "faction_vantex",
+      "role": "AI systems architect",
+      "relationship_arc": "ambiguous",
+      "story_hook": "Designed parts of DRIVE ZERO and fears its governance layer."
+    },
+    {
+      "id": "char_kade_mercer",
+      "name": "Kade Mercer",
+      "faction": "independent",
+      "role": "Tracker / bounty specialist",
+      "relationship_arc": "rival",
+      "story_hook": "Hired to locate the prototype vehicle."
+    },
+    {
+      "id": "char_jun_park",
+      "name": "Jun Park",
+      "faction": "independent",
+      "role": "Courier",
+      "relationship_arc": "friend",
+      "story_hook": "Introduces delivery work and hidden routes."
+    },
+    {
+      "id": "char_tessa_quinn",
+      "name": "Tessa Quinn",
+      "faction": "independent",
+      "role": "Café owner / scene connector",
+      "relationship_arc": "social",
+      "story_hook": "Runs a neutral social hub and rumor network."
+    },
+    {
+      "id": "char_omar_veyr",
+      "name": "Omar Veyr",
+      "faction": "faction_free_roads",
+      "role": "Off-road guide",
+      "relationship_arc": "mentor",
+      "story_hook": "Unlocks Dust Verge exploration and convoy routes."
+    },
+    {
+      "id": "char_yara_kestrel",
+      "name": "Yara Kestrel",
+      "faction": "faction_mechanist_guild",
+      "role": "Sensor/drone engineer",
+      "relationship_arc": "ally",
+      "story_hook": "Supports telemetry and pet/scout systems."
+    },
+    {
+      "id": "char_bishop_crane",
+      "name": "Bishop Crane",
+      "faction": "independent",
+      "role": "Black-market broker",
+      "relationship_arc": "ambiguous",
+      "story_hook": "Trades rare parts, information, and dangerous favors."
+    },
+    {
+      "id": "char_naomi_vale",
+      "name": "Naomi Vale",
+      "faction": "independent",
+      "role": "Data broker",
+      "relationship_arc": "ambiguous",
+      "story_hook": "Maintains archives linking old telemetry to the player's past."
+    },
+    {
+      "id": "char_dax_hollow",
+      "name": "Dax Hollow",
+      "faction": "faction_iron_wolves",
+      "role": "Current street champion",
+      "relationship_arc": "rival",
+      "story_hook": "A skill benchmark before the Grand Prix."
+    },
+    {
+      "id": "char_ivy_chen",
+      "name": "Ivy Chen",
+      "faction": "faction_mechanist_guild",
+      "role": "Cybernetic animal specialist",
+      "relationship_arc": "friend",
+      "story_hook": "Expands functional companion options."
+    },
+    {
+      "id": "char_mateo_cruz",
+      "name": "Mateo Cruz",
+      "faction": "independent",
+      "role": "Dock foreman",
+      "relationship_arc": "ally",
+      "story_hook": "Anchors freight, towing, and Docklands labor stories."
+    },
+    {
+      "id": "char_soren_pike",
+      "name": "Soren Pike",
+      "faction": "faction_iron_wolves",
+      "role": "Smuggler / route racer",
+      "relationship_arc": "rival",
+      "story_hook": "Knows Black Circuit access routes."
+    },
+    {
+      "id": "char_aria_knox",
+      "name": "Aria Knox",
+      "faction": "independent",
+      "role": "Investigative journalist",
+      "relationship_arc": "ally",
+      "story_hook": "Can expose VANTEX evidence if trust is earned."
+    },
+    {
+      "id": "char_juno_rae",
+      "name": "Juno Rae",
+      "faction": "independent",
+      "role": "DJ / event promoter",
+      "relationship_arc": "social",
+      "story_hook": "Connects nightlife, car meets, and public reputation."
+    },
+    {
+      "id": "char_elias_voss",
+      "name": "Elias Voss",
+      "faction": "independent",
+      "role": "Retired systems mechanic",
+      "relationship_arc": "ambiguous",
+      "story_hook": "Knows more about Maya's departure from VANTEX than he admits."
+    },
+    {
+      "id": "char_cassian_dreke",
+      "name": "Cassian Dreke",
+      "faction": "faction_vantex",
+      "role": "Security director",
+      "relationship_arc": "antagonist",
+      "story_hook": "Runs corporate recovery operations and escalating pursuit."
+    },
+    {
+      "id": "char_rowan_gray",
+      "name": "Rowan Gray",
+      "faction": "unknown",
+      "role": "Encrypted messenger",
+      "relationship_arc": "mystery",
+      "story_hook": "Sends the message that leads the player to Garage 17."
+    }
+  ]
+}
