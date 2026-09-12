@@ -2,11 +2,14 @@
 
 #include "Dom/JsonObject.h"
 #include "HAL/FileManager.h"
+#include "HAL/PlatformMisc.h"
 #include "HttpModule.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/CommandLine.h"
 #include "Misc/ConfigCacheIni.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Guid.h"
+#include "Misc/Parse.h"
 #include "Misc/Paths.h"
 #include "NDPlayerController.h"
 #include "Serialization/JsonReader.h"
@@ -56,6 +59,24 @@ void UNDServiceSubsystem::Initialize(FSubsystemCollectionBase& Collection)
             ServiceBaseUrl = ConfiguredUrl;
         }
     }
+
+    FString EnvironmentUrl = FPlatformMisc::GetEnvironmentVariable(TEXT("ZNEON_GAME_API_URL"));
+    EnvironmentUrl.TrimStartAndEndInline();
+    if (!EnvironmentUrl.IsEmpty())
+    {
+        ServiceBaseUrl = EnvironmentUrl;
+    }
+
+    FString CommandLineUrl;
+    if (FParse::Value(FCommandLine::Get(), TEXT("ZNeonApi="), CommandLineUrl))
+    {
+        CommandLineUrl.TrimStartAndEndInline();
+        if (!CommandLineUrl.IsEmpty())
+        {
+            ServiceBaseUrl = CommandLineUrl;
+        }
+    }
+
     ServiceBaseUrl.RemoveFromEnd(TEXT("/"));
 
     LoadResumeKey();
