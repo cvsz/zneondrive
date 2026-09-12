@@ -12,7 +12,7 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** **Phase 4.1 Runtime Integration v0.5**
+- **Current phase:** **Phase 4.2 Inventory + Rebuild v0.6**
 - **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
 
 ## Runtime prototype v0.4
@@ -75,6 +75,21 @@ The gameplay/service boundary now has an implemented source contract:
 
 See [Runtime Integration v0.5](./docs/runtime-integration-v0.5.md).
 
+### Inventory-authoritative rebuild — v0.6
+
+The first Garage 17 rebuild state is now implemented in the durable service plane:
+- PostgreSQL inventory quantities and blueprint unlocks,
+- MQ004 idempotent salvage grant,
+- MQ005 starter-rebuild blueprint unlock,
+- MQ009 idempotent recovered-part grant,
+- exact catalog validation against the canonical vehicle-part catalog,
+- atomic consume/return inventory accounting when a build revision changes,
+- operation-ID replay binding to the exact build hash,
+- reconnect persistence for inventory, blueprints, and the active build,
+- Unreal snapshot parsing for inventory and blueprint state.
+
+See [Runtime Inventory + Rebuild v0.6](./docs/runtime-inventory-rebuild-v0.6.md).
+
 ## Present to a client now
 
 Start with [client/README.md](./client/README.md).
@@ -97,6 +112,7 @@ The browser demo is presentation-only; the Unreal/Go code is the implementation 
 - [Vertical Slice v0.2](./docs/vertical-slice-v0.2.md)
 - [Runtime Prototype v0.4](./docs/runtime-prototype-v0.4.md)
 - [Runtime Integration v0.5](./docs/runtime-integration-v0.5.md)
+- [Runtime Inventory + Rebuild v0.6](./docs/runtime-inventory-rebuild-v0.6.md)
 - [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
 - [Gameplay Systems](./docs/gameplay-systems.md)
 - [Architecture](./docs/architecture.md)
@@ -171,9 +187,9 @@ Arrive in NOVA CITY
 
 ## Status
 
-**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, local Compose stack, and CI/security validation.
+**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, local Compose stack, and CI/security validation.
 
-**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server E2E, Garage 17 playable content, final vehicle physics, inventory/blueprints, relationships/factions, authoritative race instances, anti-cheat, matchmaking, live operations, HA/DR, platform certification, and production deployment.
+**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server E2E, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, authoritative race instances, anti-cheat, matchmaking, live operations, HA/DR, platform certification, and production deployment.
 
 ## License
 
