@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.8",
+  "Category": "Games",
+  "Description": "PROJECT: NEON DRIVE playable vertical-slice runtime",
+  "Modules": [
+    {
+      "Name": "NeonDrive",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
