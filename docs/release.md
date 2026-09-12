@@ -1,19 +1,38 @@
 # Release
 
-## Versioning
+## Version classes
 
-Use an explicit versioning policy. Semantic Versioning is recommended for reusable software unless the project has a better-defined scheme.
+Until runtime implementation begins, releases represent **design/content contract versions**.
 
-## Release checklist
+Suggested tags:
+- `design-v0.1.0` — Game Design Bible/content contracts
+- future runtime tags should adopt an explicit version policy after stack selection
 
-1. Ensure required CI and security checks pass.
-2. Update `CHANGELOG.md`.
-3. Confirm migrations and compatibility notes.
-4. Verify deployment and rollback procedures.
-5. Create and push the release tag according to project policy.
-6. Publish artifacts only from trusted workflows.
-7. Verify the release after publication.
+## Design release checklist
+
+1. CI and security checks pass.
+2. `python3 tools/validate_design.py` passes.
+3. Stable IDs were not accidentally renamed.
+4. `CHANGELOG.md` is updated.
+5. Canonical prose and machine-readable catalogs agree.
+6. New authority/fairness decisions have ADR coverage.
+
+## Runtime release evidence
+
+A future playable/production release additionally requires:
+- executable unit/integration/end-to-end tests,
+- authoritative persistence/race validation evidence,
+- security and anti-cheat review,
+- load/soak evidence,
+- backup and restore drill,
+- rollback procedure,
+- production deployment verification,
+- privacy/data-retention review.
+
+A Git tag or successful build alone is not production-readiness evidence.
 
 ## Rollback
 
-Document how to restore the last known-good version, revert migrations safely, invalidate compromised artifacts, and communicate operational impact.
+Design releases can be reverted through version control while preserving published ID compatibility where possible.
+
+Future runtime rollback documentation must cover code, content, schema/migration state, player-state compatibility, event/reward idempotency, and live-ops communication.
