@@ -81,6 +81,10 @@ All notable changes to zNeonDrive are documented here.
 - Runtime Multi-Replica HTTP Load Evidence v1.1 documentation
 - Concurrent HTTP integration test with two independent service replicas sharing one Redis limiter budget
 - CI assertion that a 32-request shared burst allows exactly 32 of 128 concurrent requests across both replicas and rejects the remainder with HTTP 429
+- Runtime Race Integrity Telemetry v1.2 evidence/non-claim documentation
+- Credential-safe `race_integrity_rejected` telemetry for authoritative checkpoint/finish HTTP 400/409 outcomes
+- Credential-safe `game_server_auth_rejected` telemetry for unauthorized internal game-server calls
+- Unit coverage proving raw race-instance IDs and peer addresses are absent from security telemetry
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -113,6 +117,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the service-plane source baseline to v0.9 with Redis-coordinated limiter state and credential-safe security events while keeping trusted-ingress, real multi-replica load, anti-cheat and production evidence open
 - Advanced the service-plane source baseline to v1.0 with explicit trusted-ingress client identity resolution while keeping deployed ingress verification, real multi-replica load, anti-cheat and production evidence open
 - Advanced the evidence baseline to v1.1 with concurrent two-replica HTTP/Redis limiter verification while keeping deployment-scale load, long-duration soak, deployed ingress verification, anti-cheat and production evidence open
+- Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -139,6 +144,8 @@ All notable changes to zNeonDrive are documented here.
 - Malformed forwarding chains fail closed to the socket peer and log no supplied header value
 - Invalid trusted-proxy CIDR configuration fails startup rather than silently widening trust
 - Concurrent two-replica HTTP integration evidence verifies Redis prevents per-process burst multiplication for one trusted-ingress-derived identity
+- Race-integrity and game-server-auth rejection telemetry uses hashed race/peer correlation buckets and bounded static route scopes
+- Security telemetry observes existing authoritative outcomes and does not override or weaken race acceptance decisions
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployment-scale multi-replica load, long-duration soak and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
