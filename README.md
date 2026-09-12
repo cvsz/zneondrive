@@ -12,7 +12,31 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** Game Design Bible v0.2 + executable reference contracts + vertical-slice specification. Production runtime technology is intentionally not locked yet.
+- **Current phase:** Game Design Bible v0.2 + vertical-slice contract + executable authority proof + **client-presentation package v0.3**
+- **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go service plane + PostgreSQL + Redis
+
+## Present to a client now
+
+Start with [client/README.md](./client/README.md).
+
+Run the interactive offline demo:
+
+```bash
+python3 -m http.server 8080 --directory demo
+```
+
+Open `http://localhost:8080`.
+
+The presentation package includes:
+- Thai/English interactive browser demo,
+- executive brief,
+- Thai talk track,
+- demo runbook,
+- commercial scope options,
+- prepared client Q&A,
+- explicit evidence/status language.
+
+The browser demo is intentionally presentation-only and makes no claim that the production MMORPG client is finished.
 
 ## Canonical design
 
@@ -27,6 +51,15 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - [Roadmap](./ROADMAP.md)
 - [Implementation Checklist](./IMPLEMENTATION-CHECKLIST.md)
 
+## Production-direction ADRs
+
+- [ADR-0001 — Server-authoritative state](./docs/adr/0001-server-authoritative-state.md)
+- [ADR-0002 — Starter vehicle identity](./docs/adr/0002-starter-vehicle-identity.md)
+- [ADR-0003 — Executable reference runtime](./docs/adr/0003-executable-reference-runtime.md)
+- [ADR-0004 — Unreal Engine 5.8 playable client + dedicated gameplay server](./docs/adr/0004-unreal-engine-client-and-gameplay-server.md)
+- [ADR-0005 — Go/PostgreSQL/Redis durable service plane](./docs/adr/0005-durable-service-plane.md)
+- [ADR-0006 — Phase-gated deployment](./docs/adr/0006-phase-gated-deployment.md)
+
 ## Machine-readable design catalogs
 
 Content under `design/catalog/` provides stable IDs and implementation contracts:
@@ -35,7 +68,7 @@ Content under `design/catalog/` provides stable IDs and implementation contracts
 - 5 primary factions
 - 10 launch districts
 - 100 main-story quest records across 7 chapters
-- side-content seeds
+- 30 side-content seeds
 - vehicle part taxonomy
 - functional pet archetypes
 - Garage 17 / Foundry 9 vertical-slice proof catalog
@@ -44,9 +77,9 @@ Schemas live under `design/schemas/`.
 
 ## Executable reference contracts
 
-`src/zneondrive/` is a dependency-free Python reference model used to make core authoritative invariants executable **before** a production stack is selected. It is deliberately not a claim that Python is the final game server.
+`src/zneondrive/` is a dependency-free Python reference model used to make core authoritative invariants executable before the production Unreal/Go runtime is implemented.
 
-It currently proves:
+It proves:
 - one-character ownership boundary,
 - free vs VIP garage capacity without competitive stat advantage,
 - append-only vehicle build revisions,
@@ -59,6 +92,8 @@ Run locally:
 ```bash
 make ci
 ```
+
+CI also validates the presentation demo is offline-first and free of unfinished placeholder markers.
 
 ## Core loop
 
@@ -87,7 +122,11 @@ Arrive in NOVA CITY
 
 ## Status
 
-The repository now contains an implementation-ready **design foundation, vertical-slice contract, and executable domain reference**. It does **not** claim that the playable MMORPG client, production networking, durable database, anti-cheat, matchmaking, live operations, HA/DR, or production deployment are complete. Those remain evidence-gated roadmap phases.
+**Ready now:** pre-production story/world/content contracts, vertical-slice specification, authority reference tests, implementation architecture direction, CI/security gates, and client presentation package.
+
+**Not yet claimed complete:** playable Unreal MMORPG client, durable Go/PostgreSQL runtime, production networking, anti-cheat, matchmaking, live operations, HA/DR, platform certification, or production deployment.
+
+Those remain evidence-gated roadmap phases.
 
 ## License
 

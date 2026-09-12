@@ -39,9 +39,23 @@
 - [x] Add machine-readable vertical-slice proof catalog/schema
 - [x] Add executable reference contract model and tests
 
+## Client presentation readiness v0.3
+- [x] Executive brief and Thai talk track
+- [x] Offline interactive browser demo
+- [x] NOVA CITY / story / vehicle / vertical-slice presentation flow
+- [x] Thai/English presentation toggle
+- [x] VIP fairness and authoritative architecture visuals
+- [x] Commercial scope options and prepared Q&A
+- [x] Demo runbook and meeting checklist
+- [x] Automated client-demo smoke validation
+- [x] Manual GitHub Pages deployment workflow
+- [x] Production technology ADRs for playable-client implementation
+
 ## Phase 4 — Runtime prototype
-- [ ] Select engine/client technology by ADR
-- [ ] Select production server/runtime technology by ADR
+- [x] Select engine/client technology by ADR — Unreal Engine 5.8
+- [x] Select production gameplay/service-plane direction by ADR — UE dedicated servers + Go service plane
+- [x] Select phase-gated deployment strategy
+- [ ] Create Unreal project/source-build CI baseline
 - [ ] Implement identity/session prototype against durable persistence
 - [ ] Implement one-character persistence
 - [ ] Implement one-vehicle persistence and build revisions
@@ -52,7 +66,7 @@
 - [ ] Port reference contract tests to selected runtime
 - [ ] Automated integration/e2e tests
 
-> The stdlib Python model is executable design evidence only; it does not complete Phase 4 production runtime selection or durable networking/persistence work.
+> The stdlib Python model is executable design evidence only; the browser client demo is presentation evidence only. Neither completes the production runtime.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard

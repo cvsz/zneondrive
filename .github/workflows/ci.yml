@@ -44,6 +44,9 @@ jobs:
             docs/architecture.md
             docs/content-contracts.md
             docs/adr/0003-executable-reference-runtime.md
+            docs/adr/0004-unreal-engine-client-and-gameplay-server.md
+            docs/adr/0005-durable-service-plane.md
+            docs/adr/0006-phase-gated-deployment.md
             design/catalog/characters.json
             design/catalog/factions.json
             design/catalog/districts.json
@@ -56,6 +59,16 @@ jobs:
             src/zneondrive/domain.py
             tests/test_reference_runtime.py
             tools/validate_design.py
+            tools/validate_client_demo.py
+            demo/index.html
+            demo/styles.css
+            demo/app.js
+            client/README.md
+            client/EXECUTIVE-BRIEF-TH.md
+            client/PRESENTATION-TALK-TRACK-TH.md
+            client/DEMO-RUNBOOK-TH.md
+            client/COMMERCIAL-SCOPE-TH.md
+            client/CLIENT-QA-TH.md
           )
           for path in "${required[@]}"; do
             test -f "$path" || { echo "Missing required file: $path"; exit 1; }
@@ -88,6 +101,9 @@ jobs:
 
       - name: Validate design invariants
         run: python3 tools/validate_design.py
+
+      - name: Validate client presentation package
+        run: python3 tools/validate_client_demo.py
 
       - name: Run executable reference contract tests
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v

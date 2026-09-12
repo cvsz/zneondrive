@@ -37,6 +37,23 @@
 - [x] Starter vehicle routine-deletion protection
 - [x] Unit tests for reference invariants
 
+## Client meeting package
+- [x] Executive brief
+- [x] Thai presentation talk track
+- [x] Interactive offline demo
+- [x] Demo runbook
+- [x] Commercial scope options
+- [x] Prepared Q&A
+- [x] Thai/English toggle
+- [x] Client-demo CI validation
+- [x] Manual GitHub Pages workflow
+- [x] Explicit “not a production build” status language
+
+## Production technology decisions
+- [x] Unreal Engine 5.8 client/dedicated gameplay server ADR
+- [x] Go + PostgreSQL + Redis service-plane ADR
+- [x] Phase-gated deployment/observability ADR
+
 ## Content production
 - [ ] Full dialogue/script for MQ001–MQ100
 - [ ] Side-quest narratives beyond seed records
@@ -46,8 +63,9 @@
 - [ ] Content sensitivity and age-rating review
 
 ## Playable runtime vertical slice
-- [ ] Selected client engine ADR
-- [ ] Selected production server/runtime ADR
+- [x] Selected client engine ADR
+- [x] Selected production server/runtime ADR
+- [ ] Unreal project/source-build baseline
 - [ ] Garage 17 environment playable
 - [ ] First vehicle rebuild playable from broken state
 - [ ] First Ignition end-to-end in selected runtime
@@ -78,7 +96,7 @@
 - [ ] Content rollback tested
 
 ## Release evidence
-- [ ] Stack-specific CI green
+- [ ] Stack-specific Unreal/Go CI green
 - [ ] Unit/integration/e2e suites for selected runtime
 - [ ] Security scans pass
 - [ ] Performance budgets pass
