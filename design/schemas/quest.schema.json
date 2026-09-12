@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zneondrive.example/schemas/quest.schema.json",
+  "title": "zNeonDrive Quest Definition",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "district",
+    "summary",
+    "replay_policy"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(MQ|SQ)[0-9]{3}$"
+    },
+    "chapter": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 7
+    },
+    "chapter_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "district": {
+      "type": "string",
+      "pattern": "^district_"
+    },
+    "primary_npc": {
+      "type": "string",
+      "pattern": "^char_"
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rewards": {
+      "type": "object"
+    },
+    "choice_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "replay_policy": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": true
+}
