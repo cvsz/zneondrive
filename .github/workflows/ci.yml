@@ -19,6 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
       - name: Validate required project files
         shell: bash
         run: |
@@ -34,15 +39,22 @@ jobs:
             IMPLEMENTATION-CHECKLIST.md
             zNeonDrive-concept.md
             docs/game-design-bible-v0.1.md
+            docs/game-design-bible-v0.2.md
+            docs/vertical-slice-v0.2.md
             docs/architecture.md
             docs/content-contracts.md
+            docs/adr/0003-executable-reference-runtime.md
             design/catalog/characters.json
             design/catalog/factions.json
             design/catalog/districts.json
             design/catalog/quests-main.json
+            design/catalog/vertical-slice.json
             design/catalog/vehicle-parts.json
             design/schemas/quest.schema.json
             design/schemas/vehicle.schema.json
+            design/schemas/vertical-slice.schema.json
+            src/zneondrive/domain.py
+            tests/test_reference_runtime.py
             tools/validate_design.py
           )
           for path in "${required[@]}"; do
@@ -76,3 +88,9 @@ jobs:
 
       - name: Validate design invariants
         run: python3 tools/validate_design.py
+
+      - name: Run executable reference contract tests
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+
+      - name: Compile reference package
+        run: python3 -m compileall -q src
