@@ -16,7 +16,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate runtime structure
-        run: python3 tools/validate_runtime_v0_4.py
+        run: |
+          python3 tools/validate_runtime_v0_4.py
+          python3 tools/validate_control_surface.py
+          bash -n tools/zneondrive-control.sh
 
       - name: Validate Unreal source tree
         shell: bash
@@ -29,6 +32,14 @@ jobs:
         shell: bash
         run: |
           "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"             NeonDriveEditor Linux Development             "$GITHUB_WORKSPACE/game/NeonDrive.uproject"             -WaitMutex
+
+      - name: Build player client target
+        shell: bash
+        run: |
+          "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" \
+            NeonDriveClient Linux Development \
+            "$GITHUB_WORKSPACE/game/NeonDrive.uproject" \
+            -WaitMutex
 
       - name: Build dedicated server target
         shell: bash

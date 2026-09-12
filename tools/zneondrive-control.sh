@@ -111,6 +111,23 @@ deps_server() {
   note "Server host dependencies installed."
 }
 
+client_doctor() {
+  printf 'PROJECT: NEON DRIVE player-client doctor\n'
+  printf 'root: %s\n' "$ROOT"
+  printf 'os: %s\n' "$(uname -srm)"
+  have curl && printf '  [ok] curl       %s\n' "$(command -v curl)" || printf '  [--] curl missing\n'
+  have python3 && printf '  [ok] python3    %s\n' "$(command -v python3)" || printf '  [--] python3 missing (needed for archive fallback/tooling)\n'
+  local bin
+  bin="$(find_client || true)"
+  [[ -n "$bin" ]] && printf '  [ok] client     %s\n' "$bin" || printf '  [--] client package not installed\n'
+  if [[ -n "${UE_ROOT:-}" && -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" ]]; then
+    printf '  [ok] UE_ROOT    %s\n' "$UE_ROOT"
+  else
+    printf '  [--] UE_ROOT not set (only required for source build/package)\n'
+  fi
+  printf '  [ok] secret boundary: player tooling does not require the game-server shared key\n'
+}
+
 deps_client() {
   [[ "$(uname -s)" == Linux ]] || die "Use tools/install-client.ps1 on Windows."
   have apt-get || die "An apt-based host is required for automatic dependency installation."
@@ -171,6 +188,33 @@ ue_build() { local target="$1"; require_ue; "$UE_ROOT/Engine/Build/BatchFiles/Li
 client_build() { ue_build NeonDriveClient; }
 editor_build() { ue_build NeonDriveEditor; }
 game_server_build() { ue_build NeonDriveServer; }
+
+require_uat() {
+  require_ue
+  [[ -x "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" ]] || die "RunUAT.sh is missing under UE_ROOT."
+}
+
+client_package_linux() {
+  require_uat
+  local out="$DIST_DIR/packages/client-linux"
+  rm -rf "$out"; mkdir -p "$out"
+  "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
+    -project="$ROOT/game/NeonDrive.uproject" -noP4 -build -cook -stage -pak -archive \
+    -archivedirectory="$out" -targetplatform=Linux -clientconfig=Development -client -utf8output
+  note "Linux player package archived under $out"
+}
+
+game_server_package_linux() {
+  require_uat
+  local out="$DIST_DIR/packages/server-linux"
+  rm -rf "$out"; mkdir -p "$out"
+  "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
+    -project="$ROOT/game/NeonDrive.uproject" -noP4 -build -cook -stage -pak -archive \
+    -archivedirectory="$out" -server -noclient -serverplatform=Linux -serverconfig=Development -utf8output
+  note "Linux dedicated-server package archived under $out"
+}
+
+package_all_linux() { client_package_linux; game_server_package_linux; }
 
 install_package() {
   local src="$1" dst="$2"
@@ -290,6 +334,7 @@ MENU
       11) read -r -p "Server package: " p; game_server_install "$p";; 12) game_server_start;; 13) game_server_stop;;
       14) status_all;; 15) make ci;;
       16) read -r -p "Type YES to destroy LOCAL DB/Redis volumes: " a; [[ "$a" == YES ]] && CONFIRM_RESET=YES server_reset || warn "Reset cancelled.";;
+      17) client_package_linux;; 18) game_server_package_linux;; 19) package_all_linux;;
       0) return;; *) warn "Unknown selection.";;
     esac
   done
@@ -299,23 +344,23 @@ usage() {
   cat <<'EOF'
 Usage: bash tools/zneondrive-control.sh <command> [args]
 
-doctor | env-init | deps-server | deps-client | control-panel
+doctor | client-doctor | env-init | deps-server | deps-client | control-panel
 server-install | server-up | server-down | server-restart | server-status
 server-health | server-logs [service] | server-reset | db-shell | redis-cli
-client-generate | client-build | editor-build | client-install [package] | client-play
-game-server-build | game-server-install [package] | game-server-start | game-server-stop
+client-generate | client-build | client-package-linux | editor-build | client-install [package] | client-play
+game-server-build | game-server-package-linux | package-all-linux | game-server-install [package] | game-server-start | game-server-stop
 game-server-status | game-server-logs | full-install [client-package] | full-up | full-down | status
 EOF
 }
 
 cmd="${1:-help}"; shift || true
 case "$cmd" in
-  doctor) doctor;; env-init) env_init;; deps-server) deps_server;; deps-client) deps_client;;
+  doctor) doctor;; client-doctor) client_doctor;; env-init) env_init;; deps-server) deps_server;; deps-client) deps_client;;
   server-install) server_install;; server-up) server_up;; server-down) server_down;; server-restart) server_restart;;
   server-status) server_status;; server-health) server_health;; server-logs) server_logs "$@";; server-reset) server_reset;;
   db-shell) db_shell;; redis-cli) redis_cli;; client-generate) client_generate;; client-build) client_build;; editor-build) editor_build;;
-  client-install) client_install "${1:-}";; client-play) client_play;; game-server-build) game_server_build;;
-  game-server-install) game_server_install "${1:-}";; game-server-start) game_server_start;; game-server-stop) game_server_stop;;
+  client-install) client_install "${1:-}";; client-play) client_play;; client-package-linux) client_package_linux;; game-server-build) game_server_build;;
+  game-server-package-linux) game_server_package_linux;; package-all-linux) package_all_linux;; game-server-install) game_server_install "${1:-}";; game-server-start) game_server_start;; game-server-stop) game_server_stop;;
   game-server-status) game_server_status;; game-server-logs) game_server_logs;; full-install) full_install "${1:-}";;
   full-up) full_up;; full-down) full_down;; status) status_all;; control-panel) control_panel;; help|-h|--help) usage;;
   *) usage; die "Unknown command: $cmd";;

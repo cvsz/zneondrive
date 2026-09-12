@@ -12,8 +12,8 @@ LOG_TAIL ?= 200
 	test-reference go-test go-integration go-vet go-build test build security ci \
 	server-install server-up server-down server-restart server-status server-health server-logs server-reset \
 	runtime-up runtime-down db-shell redis-cli \
-	client-generate client-build editor-build client-install client-play client-doctor \
-	game-server-build game-server-install game-server-start game-server-stop game-server-status game-server-logs \
+	client-generate client-build client-package-linux editor-build client-install client-play client-doctor \
+	game-server-build game-server-package-linux package-all-linux game-server-install game-server-start game-server-stop game-server-status game-server-logs \
 	full-install full-up full-down status clean
 
 help:
@@ -38,10 +38,13 @@ help:
 	  'Player client' \
 	  '  make client-install CLIENT_PACKAGE=/path/client.zip' \
 	  '  make client-build           Build NeonDriveClient with UE_ROOT on Linux' \
+	  '  make client-package-linux   Cook/stage/archive a Linux player package' \
 	  '  make client-play            Launch installed client; ZNEON_GAME_API_URL may override API' \
 	  '  make client-doctor          Windows/Linux client guidance and host check' \
 	  '' \
 	  'Dedicated gameplay server' \
+	  '  make game-server-package-linux  Cook/stage/archive Linux dedicated server' \
+	  '  make package-all-linux           Package Linux client + dedicated server' \
 	  '  make game-server-install SERVER_PACKAGE=/path/server.tar.gz' \
 	  '  make game-server-start|game-server-stop|game-server-status|game-server-logs' \
 	  '' \
@@ -154,6 +157,9 @@ client-generate:
 client-build:
 	@$(CONTROL) client-build
 
+client-package-linux:
+	@$(CONTROL) client-package-linux
+
 editor-build:
 	@$(CONTROL) editor-build
 
@@ -167,11 +173,17 @@ client-doctor:
 ifeq ($(OS),Windows_NT)
 	powershell -ExecutionPolicy Bypass -File tools/install-client.ps1 -Mode doctor
 else
-	@$(CONTROL) doctor
+	@$(CONTROL) client-doctor
 endif
 
 game-server-build:
 	@$(CONTROL) game-server-build
+
+game-server-package-linux:
+	@$(CONTROL) game-server-package-linux
+
+package-all-linux:
+	@$(CONTROL) package-all-linux
 
 game-server-install:
 	@SERVER_PACKAGE="$(SERVER_PACKAGE)" $(CONTROL) game-server-install "$(SERVER_PACKAGE)"
