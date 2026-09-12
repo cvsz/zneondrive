@@ -26,6 +26,12 @@ Every engineering document should distinguish:
 - [Moderation & Player Safety](./moderation-safety.md)
 - [Asset & IP Policy](./asset-ip-policy.md)
 - [Brand Guide](./brand-guide.md)
+- [Quest Authoring](./quest-authoring.md)
+- [Vehicle Physics & Race Integrity](./vehicle-physics-and-race-integrity.md)
+- [World Streaming & Districts](./world-streaming-and-districts.md)
+- [Factions & Relationships](./factions-relationships.md)
+- [Crew & Social Systems](./crew-social.md)
+- [Pets & Companions](./pets-companions.md)
 
 ## Architecture and runtime
 
