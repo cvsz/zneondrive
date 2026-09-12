@@ -142,6 +142,44 @@ This is service-plane evidence only; live packaged Unreal race transport, physic
 
 See [Runtime Authoritative Race v0.7](./docs/runtime-authoritative-race-v0.7.md).
 
+## Install and control the full stack
+
+The repository now exposes one Make-based control surface for the service plane, dedicated gameplay server packages, and player clients:
+
+```bash
+make help
+make doctor
+make env-init
+make control-panel
+```
+
+Server service plane:
+
+```bash
+make server-install
+make server-status
+make server-health
+```
+
+Linux player package:
+
+```bash
+make client-install CLIENT_PACKAGE=/path/to/NeonDrive-client.zip
+ZNEON_GAME_API_URL=https://api.example.com make client-play
+```
+
+Windows player package:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/install-client.ps1 -Mode package -Package C:\\packages\\NeonDrive-client.zip -ApiUrl https://api.example.com -CreateShortcut
+```
+
+A dedicated-server package can be installed and controlled separately with `game-server-*` targets. Client install/launch paths never accept the dedicated-server shared key.
+
+See [Full-Stack Install & Control Panel](./docs/control-panel.md).
+
+> These commands provide install/operation tooling. They do not turn the pending UE packaged-build/playability/production evidence gates green by themselves.
+
 ## Present to a client now
 
 Start with [client/README.md](./client/README.md).
