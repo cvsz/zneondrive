@@ -34,6 +34,7 @@ services:
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-zneondrive}:${POSTGRES_PASSWORD:-zneondrive-local}@postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable
       LISTEN_ADDR: :8080
+      GAME_SERVER_SHARED_KEY: ${GAME_SERVER_SHARED_KEY:-zneondrive-local-server-key-change-me-0001}
     ports:
       - "${GAME_API_PORT:-18080}:8080"
     depends_on:
