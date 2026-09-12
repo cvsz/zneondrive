@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-zneondrive}
+      POSTGRES_USER: ${POSTGRES_USER:-zneondrive}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zneondrive-local}
+    ports:
+      - "${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - zneondrive-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-zneondrive} -d ${POSTGRES_DB:-zneondrive}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-56379}:6379"
+    volumes:
+      - zneondrive-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  game-api:
+    build:
+      context: ./services/game-api
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-zneondrive}:${POSTGRES_PASSWORD:-zneondrive-local}@postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable
+      LISTEN_ADDR: :8080
+    ports:
+      - "${GAME_API_PORT:-18080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  zneondrive-postgres:
+  zneondrive-redis:
