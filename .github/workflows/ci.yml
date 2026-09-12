@@ -43,6 +43,7 @@ jobs:
             docs/vertical-slice-v0.2.md
             docs/runtime-prototype-v0.4.md
             docs/runtime-integration-v0.5.md
+            docs/runtime-inventory-rebuild-v0.6.md
             docs/architecture.md
             docs/content-contracts.md
             docs/adr/0003-executable-reference-runtime.md
@@ -64,6 +65,7 @@ jobs:
             tools/validate_client_demo.py
             tools/validate_runtime_v0_4.py
             tools/validate_runtime_v0_5.py
+            tools/validate_runtime_v0_6.py
             demo/index.html
             demo/styles.css
             demo/app.js
@@ -83,6 +85,8 @@ jobs:
             services/game-api/internal/store/postgres.go
             services/game-api/internal/store/tickets.go
             services/game-api/internal/store/migrations/002_game_tickets.sql
+            services/game-api/internal/store/migrations/003_inventory_blueprints.sql
+            services/game-api/internal/core/parts_catalog.go
             services/game-api/internal/store/migrations/001_init.sql
             compose.yaml
           )
@@ -128,6 +132,9 @@ jobs:
 
       - name: Validate runtime integration v0.5
         run: python3 tools/validate_runtime_v0_5.py
+
+      - name: Validate runtime inventory/rebuild v0.6
+        run: python3 tools/validate_runtime_v0_6.py
 
       - name: Run executable reference contract tests
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
