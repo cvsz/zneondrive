@@ -50,9 +50,10 @@ func main() {
 	}
 
 	apiHandler := httpapi.New(db, gameServerKey)
-	rateLimitedHandler := httpapi.NewRateLimitedHandlerWithTrustedProxies(apiHandler, proxyPolicy)
+	telemetryHandler := httpapi.NewSecurityTelemetryHandler(apiHandler)
+	rateLimitedHandler := httpapi.NewRateLimitedHandlerWithTrustedProxies(telemetryHandler, proxyPolicy)
 	if redisAddr != "" {
-		rateLimitedHandler = httpapi.NewDistributedRateLimitedHandlerWithTrustedProxies(apiHandler, redisAddr, proxyPolicy)
+		rateLimitedHandler = httpapi.NewDistributedRateLimitedHandlerWithTrustedProxies(telemetryHandler, redisAddr, proxyPolicy)
 		log.Printf("distributed rate limiting enabled via Redis")
 	} else {
 		log.Printf("WARN: REDIS_ADDR is not configured; rate limiting is process-local only")
