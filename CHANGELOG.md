@@ -58,6 +58,22 @@ All notable changes to zNeonDrive are documented here.
 - Unreal inventory/blueprint snapshot parsing
 - PostgreSQL integration proof for duplicate-grant prevention, rebuild replay safety, unowned-part rejection, swap accounting, and reconnect persistence
 
+- Repository documentation index and status-language contract
+- Product requirements and brand guide
+- API contract grounded in current Go HTTP routes
+- Durable PostgreSQL data-model documentation
+- Multiplayer/networking authority specification
+- Threat model and security-production exit criteria
+- Testing strategy and performance-budget targets
+- Observability/SLO target contract
+- Deployment, backup/restore/DR, and incident-response runbooks
+- Accessibility and localization baselines
+- Content pipeline, quest authoring, world-streaming, vehicle/race-integrity, faction/relationship, crew/social, and companion specs
+- Economy/monetization fairness, moderation/player-safety, privacy/data-retention, and live-ops policies
+- Release-readiness checklist, asset/IP policy, glossary, governance, support, and maintainers documents
+- GitHub bug-report and documentation issue templates
+- Repository 1280×640 SVG README banner asset
+
 ### Changed
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
 - Advanced Phase 3 vertical-slice specification to complete while keeping playable/runtime claims evidence-gated
