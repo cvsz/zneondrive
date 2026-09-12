@@ -13,6 +13,11 @@ __pycache__/
 *.py[cod]
 
 # Build output
+.runtime/
+game/Binaries/
+game/DerivedDataCache/
+game/Intermediate/
+game/Saved/
 dist/
 build/
 coverage/
