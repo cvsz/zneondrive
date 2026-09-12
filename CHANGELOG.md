@@ -68,6 +68,12 @@ All notable changes to zNeonDrive are documented here.
 - Bounded per-process token-bucket middleware for public and internal service-plane request classes
 - Credential-safe hashed rate-limit identities, bounded limiter bucket cardinality, and HTTP 429 + Retry-After behavior
 - Unit coverage for limiter refill, memory bounds, identity isolation, credential non-disclosure, rejection behavior, and health-probe exemption
+- Runtime Distributed Abuse Controls v0.9 evidence/non-claim documentation
+- Atomic Redis Lua token bucket for shared multi-process abuse budgets with expiring bucket state
+- Redis-unavailable bounded local fallback instead of unbounded fail-open behavior
+- Credential-safe rate-limit rejection/fallback security log events
+- Redis integration test proving independent limiter instances consume the same shared budget
+- Runtime Go CI Redis service alongside PostgreSQL integration coverage
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -97,6 +103,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced Phase 4.2 to durable inventory/blueprint and rebuild-state integration without claiming playable Garage 17 evidence
 - Advanced Phase 4.3 to durable server-authoritative race lifecycle persistence without claiming live Unreal race or anti-cheat evidence
 - Advanced the service-plane source baseline to v0.8 abuse resistance while keeping distributed Redis limiting, telemetry, anti-cheat and multi-replica evidence open
+- Advanced the service-plane source baseline to v0.9 with Redis-coordinated limiter state and credential-safe security events while keeping trusted-ingress, real multi-replica load, anti-cheat and production evidence open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -113,9 +120,11 @@ All notable changes to zNeonDrive are documented here.
 - Race lifecycle writes are internal-only, dedicated-server authenticated, and derive build identity from PostgreSQL rather than client input
 - Race checkpoints reject skipped/out-of-order indices and elapsed-time regression before durable acceptance
 - Final race result hashes bind the exact accepted build revision/hash and authoritative checkpoint cursor
-- Service-plane bootstrap/state/ticket/quest/build/race traffic is protected by bounded per-process token-bucket controls
+- Service-plane bootstrap/state/ticket/quest/build/race traffic is protected by bounded token-bucket controls
 - Rate-limit bucket identities hash bearer credentials rather than retaining raw secrets
-- Rate-limit state has bounded cardinality with stale/oldest eviction to resist attacker-controlled memory growth
+- Rate-limit state has bounded local cardinality with stale/oldest eviction to resist attacker-controlled memory growth
+- Redis coordinates shared token-bucket state across API instances using atomic Lua decisions and expiring keys
+- Redis failure retains the bounded process-local limiter and emits a fallback security event
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Distributed Redis-backed rate limiting, trusted-ingress identity handling, rejection telemetry and ranked anti-cheat remain explicit production gates
+- Trusted-ingress identity handling, multi-replica HTTP load/soak and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
