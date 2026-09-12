@@ -52,18 +52,11 @@ jobs:
           go-version: '1.27.1'
           cache: false
 
-      - name: Resolve module graph
-        run: go mod tidy
-
-      - name: Capture resolved module lock
+      - name: Verify module lock
         shell: bash
         run: |
-          echo '---BEGIN-GO-MOD---'
-          cat go.mod
-          echo '---END-GO-MOD---'
-          echo '---BEGIN-GO-SUM---'
-          cat go.sum
-          echo '---END-GO-SUM---'
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
 
       - name: Unit tests
         run: go test ./...
