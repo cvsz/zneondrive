@@ -57,8 +57,9 @@
 - [x] trusted-ingress identity v1.0 evidence boundary
 - [x] multi-replica HTTP load v1.1 CI evidence boundary
 - [x] race-integrity telemetry v1.2 evidence boundary
+- [x] observability metrics v1.3 source/unit evidence boundary
 - [x] testing strategy + performance-budget targets
-- [x] observability/SLO target contract (measurement still open)
+- [x] observability/SLO target contract (deployment measurement still open)
 - [x] deployment + backup/restore/DR plans (verification still open)
 - [x] incident-response runbook (exercise still open)
 - [x] accessibility + localization baselines
@@ -88,6 +89,9 @@
 - [x] Redis distributed-limiter integration test
 - [x] concurrent two-replica HTTP integration test sharing one Redis limiter budget
 - [x] credential-safe race-integrity/auth rejection telemetry middleware
+- [x] bounded HTTP request/status-class/latency/in-flight metrics
+- [x] separate metrics listener with loopback-only Compose publication
+- [x] metrics unit coverage for label cardinality and secret/dynamic-ID non-disclosure
 - [x] committed go.mod/go.sum module lock
 - [x] one-time gameplay-ticket persistence and atomic redemption
 - [x] server-only shared-key internal redemption endpoint
@@ -126,6 +130,9 @@
 - [ ] deployed ingress sanitization/network-isolation evidence
 - [ ] deployment-scale distributed limiter load evidence
 - [ ] long-duration soak evidence
+- [ ] PostgreSQL query/pool metrics
+- [ ] Redis server metrics
+- [ ] Unreal server tick/replication metrics
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 - [ ] live packaged Unreal ↔ Go race lifecycle evidence
@@ -175,6 +182,8 @@
 - [ ] Abuse/moderation runtime
 
 ## Reliability
+- [x] Go HTTP metrics source/unit instrumentation baseline
+- [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
 - [ ] Long-duration soak test
 - [ ] Backup verification
@@ -191,7 +200,9 @@
 - [x] Trusted-ingress identity source unit evidence
 - [x] Concurrent two-replica HTTP/Redis limiter CI evidence
 - [x] Race-integrity/auth telemetry source + unit evidence
+- [x] Go HTTP metrics source + unit evidence
 - [ ] Deployed ingress trust-boundary evidence
+- [ ] Deployed metrics/SLO evidence
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
 - [ ] Security scans pass for complete runtime surface
