@@ -7,7 +7,7 @@ SERVICE ?=
 CONFIRM_RESET ?=
 LOG_TAIL ?= 200
 
-.PHONY: help doctor env-init deps-server deps-client control-panel \
+.PHONY: help doctor ue-detect env-init deps-server deps-client control-panel \
 	validate-design validate-docs validate-runtime validate-control check-json lint \
 	test-reference go-test go-integration go-vet go-build test build security ci \
 	server-install server-up server-down server-restart server-status server-health server-logs server-reset \
@@ -22,6 +22,7 @@ help:
 	  '' \
 	  'Bootstrap / control' \
 	  '  make doctor                 Check host/runtime prerequisites' \
+	  '  make ue-detect              Search common paths for UE source root' \
 	  '  make env-init               Create .env + unique local server key' \
 	  '  make deps-server            Install base Ubuntu/Debian server dependencies' \
 	  '  make deps-client            Install base Linux client/dev dependencies (not UE itself)' \
@@ -58,6 +59,9 @@ help:
 
 doctor:
 	@$(CONTROL) doctor
+
+ue-detect:
+	@$(CONTROL) ue-detect
 
 env-init:
 	@$(CONTROL) env-init

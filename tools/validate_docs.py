@@ -54,7 +54,7 @@ REQUIRED_DOCS = [
     "docs/crew-social.md",
     "docs/pets-companions.md",
     "docs/adr/README.md",
-    "assets/zneondrive-banner.svg",
+    "assets/neondrive.png",
 ]
 
 MARKDOWN_LINK = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
