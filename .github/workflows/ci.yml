@@ -41,6 +41,7 @@ jobs:
             docs/game-design-bible-v0.1.md
             docs/game-design-bible-v0.2.md
             docs/vertical-slice-v0.2.md
+            docs/runtime-prototype-v0.4.md
             docs/architecture.md
             docs/content-contracts.md
             docs/adr/0003-executable-reference-runtime.md
@@ -60,6 +61,7 @@ jobs:
             tests/test_reference_runtime.py
             tools/validate_design.py
             tools/validate_client_demo.py
+            tools/validate_runtime_v0_4.py
             demo/index.html
             demo/styles.css
             demo/app.js
@@ -69,6 +71,14 @@ jobs:
             client/DEMO-RUNBOOK-TH.md
             client/COMMERCIAL-SCOPE-TH.md
             client/CLIENT-QA-TH.md
+            game/NeonDrive.uproject
+            game/Source/NeonDrive/NDVehiclePawn.cpp
+            game/Source/NeonDriveServer.Target.cs
+            services/game-api/go.mod
+            services/game-api/cmd/server/main.go
+            services/game-api/internal/store/postgres.go
+            services/game-api/internal/store/migrations/001_init.sql
+            compose.yaml
           )
           for path in "${required[@]}"; do
             test -f "$path" || { echo "Missing required file: $path"; exit 1; }
@@ -97,6 +107,8 @@ jobs:
           for path in Path("design").rglob("*.json"):
               json.loads(path.read_text(encoding="utf-8"))
               print(f"ok {path}")
+          json.loads(Path("game/NeonDrive.uproject").read_text(encoding="utf-8"))
+          print("ok game/NeonDrive.uproject")
           PY
 
       - name: Validate design invariants
@@ -104,6 +116,9 @@ jobs:
 
       - name: Validate client presentation package
         run: python3 tools/validate_client_demo.py
+
+      - name: Validate runtime prototype structure
+        run: python3 tools/validate_runtime_v0_4.py
 
       - name: Run executable reference contract tests
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
