@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "NDServiceSubsystem.generated.h"
 
+class FJsonObject;
+
 USTRUCT(BlueprintType)
 struct FNDPlayerSnapshot
 {
