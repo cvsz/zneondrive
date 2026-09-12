@@ -1,0 +1,2431 @@
+{
+  "version": "0.1",
+  "count": 100,
+  "chapters": 7,
+  "quests": [
+    {
+      "id": "MQ001",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Arrival After Midnight",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 1 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ002",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Garage 17",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 2 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ001"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ003",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "A Chassis With No Name",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 3 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ002"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ004",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Scrap Rights",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 4 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ003"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ005",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Borrowed Tools",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 5 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ004"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ006",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Dead Grid",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 6 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ005"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ007",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "First Fuel",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 7 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ006"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ008",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Legacy ECU",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 8 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ007"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ009",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Missing Fastener",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 9 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ008"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ010",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Cold Crank",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 10 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ009"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ011",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "First Ignition",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 11 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ010"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ012",
+      "chapter": 1,
+      "chapter_name": "The Broken Machine",
+      "title": "Roadworthy",
+      "summary": "rebuild the starter vehicle and learn Garage 17; story beat 12 of 12.",
+      "district": "district_foundry_9",
+      "primary_npc": "char_maya_voss",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ011"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ013",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Small Deliveries",
+      "summary": "work the city and earn a credible street identity; story beat 1 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ012"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ014",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "The Long Way Around",
+      "summary": "work the city and earn a credible street identity; story beat 2 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ013"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ015",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "A Name on Neon Mile",
+      "summary": "work the city and earn a credible street identity; story beat 3 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ014"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ016",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Clean Run",
+      "summary": "work the city and earn a credible street identity; story beat 4 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ015"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ017",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Unpaid Favor",
+      "summary": "work the city and earn a credible street identity; story beat 5 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ016"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ018",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Courier's Shortcut",
+      "summary": "work the city and earn a credible street identity; story beat 6 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ017"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ019",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Meet at Tessa's",
+      "summary": "work the city and earn a credible street identity; story beat 7 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ018"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ020",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Street Ledger",
+      "summary": "work the city and earn a credible street identity; story beat 8 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ019"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ021",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "The First Challenge",
+      "summary": "work the city and earn a credible street identity; story beat 9 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ020"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ022",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Heat Check",
+      "summary": "work the city and earn a credible street identity; story beat 10 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ021"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ023",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Repair What You Broke",
+      "summary": "work the city and earn a credible street identity; story beat 11 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ022"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ024",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Signal at the Car Meet",
+      "summary": "work the city and earn a credible street identity; story beat 12 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ023"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ025",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Rookie No More",
+      "summary": "work the city and earn a credible street identity; story beat 13 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ024"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ026",
+      "chapter": 2,
+      "chapter_name": "Street Reputation",
+      "title": "Invitation in Black",
+      "summary": "work the city and earn a credible street identity; story beat 14 of 14.",
+      "district": "district_neon_mile",
+      "primary_npc": "char_jun_park",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ025"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ027",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Black Circuit Entry",
+      "summary": "enter the underground and choose whom to trust; story beat 1 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ026"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ028",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Rook's Test",
+      "summary": "enter the underground and choose whom to trust; story beat 2 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ027"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ029",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "No Cameras",
+      "summary": "enter the underground and choose whom to trust; story beat 3 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ028"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ030",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Adrian's Line",
+      "summary": "enter the underground and choose whom to trust; story beat 4 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ029"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ031",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Risk Premium",
+      "summary": "enter the underground and choose whom to trust; story beat 5 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ030"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ032",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Ghost Route",
+      "summary": "enter the underground and choose whom to trust; story beat 6 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ031"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ033",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "The Smuggler's Split",
+      "summary": "enter the underground and choose whom to trust; story beat 7 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ032"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ034",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Trust Costs More",
+      "summary": "enter the underground and choose whom to trust; story beat 8 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ033"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ035",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Telemetry Theft",
+      "summary": "enter the underground and choose whom to trust; story beat 9 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ034"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ036",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Night Run",
+      "summary": "enter the underground and choose whom to trust; story beat 10 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ035"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ037",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "A Debt to the Wolves",
+      "summary": "enter the underground and choose whom to trust; story beat 11 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ036"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ038",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Free Roads Contact",
+      "summary": "enter the underground and choose whom to trust; story beat 12 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ037"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ039",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Authority Eyes",
+      "summary": "enter the underground and choose whom to trust; story beat 13 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ038"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ040",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Betrayal Lap",
+      "summary": "enter the underground and choose whom to trust; story beat 14 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ039"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ041",
+      "chapter": 3,
+      "chapter_name": "Underground",
+      "title": "Choose Your Crew",
+      "summary": "enter the underground and choose whom to trust; story beat 15 of 15.",
+      "district": "district_black_circuit",
+      "primary_npc": "char_adrian_cross",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ040"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ042",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Public Qualifier",
+      "summary": "qualify for and survive public championship pressure; story beat 1 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ041"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ043",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Legal Spec",
+      "summary": "qualify for and survive public championship pressure; story beat 2 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ042"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ044",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Scrutineering",
+      "summary": "qualify for and survive public championship pressure; story beat 3 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ043"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ045",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Media Day",
+      "summary": "qualify for and survive public championship pressure; story beat 4 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ044"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ046",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Dax Sets the Pace",
+      "summary": "qualify for and survive public championship pressure; story beat 5 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ045"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ047",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Three Disciplines",
+      "summary": "qualify for and survive public championship pressure; story beat 6 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ046"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ048",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Team Heat",
+      "summary": "qualify for and survive public championship pressure; story beat 7 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ047"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ049",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Sponsor Pressure",
+      "summary": "qualify for and survive public championship pressure; story beat 8 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ048"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ050",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Fault Under Load",
+      "summary": "qualify for and survive public championship pressure; story beat 9 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ049"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ051",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Second Qualifier",
+      "summary": "qualify for and survive public championship pressure; story beat 10 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ050"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ052",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Skyway Trial",
+      "summary": "qualify for and survive public championship pressure; story beat 11 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ051"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ053",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Crowd Favorite",
+      "summary": "qualify for and survive public championship pressure; story beat 12 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ052"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ054",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Sabotage Claim",
+      "summary": "qualify for and survive public championship pressure; story beat 13 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ053"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ055",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Final Grid",
+      "summary": "qualify for and survive public championship pressure; story beat 14 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ054"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ056",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "NOVA Grand Prix",
+      "summary": "qualify for and survive public championship pressure; story beat 15 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ055"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ057",
+      "chapter": 4,
+      "chapter_name": "The Championship",
+      "title": "Podium Consequences",
+      "summary": "qualify for and survive public championship pressure; story beat 16 of 16.",
+      "district": "district_skyway",
+      "primary_npc": "char_dax_hollow",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ056"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ058",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Glass Crown Invitation",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 1 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ057"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ059",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Selene's Offer",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 2 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ058"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ060",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Corporate Museum",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 3 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ059"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ061",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Prototype Number",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 4 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ060"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ062",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Archive Gap",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 5 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ061"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ063",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Orlov's Warning",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 6 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ062"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ064",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Security Sweep",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 7 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ063"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ065",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Maya's File",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 8 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ064"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ066",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "The Missing Partition",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 9 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ065"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ067",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Family Telemetry",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 10 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ066"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ068",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Cassian's Hunt",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 11 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ067"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ069",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Evidence Chain",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 12 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ068"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ070",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "Broadcast Window",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 13 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ069"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ071",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "VANTEX Break-In",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 14 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ070"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ072",
+      "chapter": 5,
+      "chapter_name": "VANTEX",
+      "title": "The Vehicle Knows",
+      "summary": "prove the prototype connection and uncover the conspiracy; story beat 15 of 15.",
+      "district": "district_glass_crown",
+      "primary_npc": "char_aria_knox",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ071"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ073",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "DRIVE ZERO Wake",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 1 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ072"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ074",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Control Layer",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 2 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ073"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ075",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "False Freedom",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 3 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ074"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ076",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Blackout Test",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 4 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ075"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ077",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Citywide Handshake",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 5 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ076"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ078",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "The Pursuit",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 6 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ077"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ079",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "No Safe Garage",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 7 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ078"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ080",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Luna Finds the Door",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 8 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ079"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ081",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Decoy Convoy",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 9 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ080"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ082",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Root Authority",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 10 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ081"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ083",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Victor's Argument",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 11 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ082"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ084",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Maya's Confession",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 12 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ083"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ085",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Distributed Key",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 13 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ084"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ086",
+      "chapter": 6,
+      "chapter_name": "Drive Zero",
+      "title": "Zero Hour",
+      "summary": "understand DRIVE ZERO and survive direct pursuit; story beat 14 of 14.",
+      "district": "district_old_grid",
+      "primary_npc": "char_ilya_orlov",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ085"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ087",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Five Roads to War",
+      "summary": "decide the governance future of mobility; story beat 1 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Establish the chapter problem with the primary contact.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ086"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ088",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Authority Ultimatum",
+      "summary": "decide the governance future of mobility; story beat 2 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ087"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ089",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Wolves at the Gate",
+      "summary": "decide the governance future of mobility; story beat 3 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ088"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ090",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Guild Lockout",
+      "summary": "decide the governance future of mobility; story beat 4 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ089"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ091",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Free Roads Rising",
+      "summary": "decide the governance future of mobility; story beat 5 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ090"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ092",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "VANTEX Mobilizes",
+      "summary": "decide the governance future of mobility; story beat 6 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ091"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ093",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Champions Choose",
+      "summary": "decide the governance future of mobility; story beat 7 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ092"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ094",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "The Last Qualifier",
+      "summary": "decide the governance future of mobility; story beat 8 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ093"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ095",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Hold the Network",
+      "summary": "decide the governance future of mobility; story beat 9 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ094"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ096",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "Kane's Endgame",
+      "summary": "decide the governance future of mobility; story beat 10 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ095"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": "possible"
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ097",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "The Civic Choice",
+      "summary": "decide the governance future of mobility; story beat 11 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ096"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ098",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "The Corporate Choice",
+      "summary": "decide the governance future of mobility; story beat 12 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ097"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ099",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "The Sovereign Choice",
+      "summary": "decide the governance future of mobility; story beat 13 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Report the outcome and apply relationship/reputation consequences."
+      ],
+      "prerequisites": [
+        "MQ098"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [],
+      "replay_policy": "story-once"
+    },
+    {
+      "id": "MQ100",
+      "chapter": 7,
+      "chapter_name": "War for Nova",
+      "title": "The Open Road",
+      "summary": "decide the governance future of mobility; story beat 14 of 14.",
+      "district": "district_central_arcology",
+      "primary_npc": "char_sol_reyes",
+      "objectives": [
+        "Complete the primary authored objective and validate quest progress.",
+        "Resolve the chapter climax and persist resulting choices."
+      ],
+      "prerequisites": [
+        "MQ099"
+      ],
+      "rewards": {
+        "money": "scaled",
+        "xp": "scaled",
+        "reputation": "contextual",
+        "blueprint": null
+      },
+      "choice_tags": [
+        "branching-consequence"
+      ],
+      "replay_policy": "story-once"
+    }
+  ]
+}
