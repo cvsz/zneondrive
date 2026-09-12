@@ -45,9 +45,12 @@ for required in (
     "CompleteQuest",
     "ReviseBuild",
     "FOR UPDATE",
-    'questID == "MQ012"',
 ):
     assert required in store_go, f"missing durable-store invariant: {required}"
+
+assert (
+    'questID == "MQ012"' in store_go or 'case "MQ012":' in store_go
+), "missing durable-store invariant: MQ012 Roadworthy transition"
 
 migration = (ROOT / "services/game-api/internal/store/migrations/001_init.sql").read_text(encoding="utf-8")
 for table in ("accounts", "characters", "vehicles", "vehicle_builds", "sessions", "quest_completions"):
