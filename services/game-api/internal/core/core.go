@@ -17,18 +17,25 @@ var (
 	ErrInvalidParts = errors.New("invalid vehicle parts")
 )
 
+type InventoryItem struct {
+	ItemID   string `json:"item_id"`
+	Quantity int64  `json:"quantity"`
+}
+
 type Snapshot struct {
-	AccountID           string   `json:"account_id"`
-	CharacterID         string   `json:"character_id"`
-	VehicleID           string   `json:"vehicle_id"`
-	Money               int64    `json:"money"`
-	XP                  int64    `json:"xp"`
-	Reputation          int64    `json:"reputation"`
-	ActiveBuildRevision int      `json:"active_build_revision"`
-	ActivePartIDs       []string `json:"active_part_ids"`
-	StarterLineage      bool     `json:"starter_lineage"`
-	Roadworthy          bool     `json:"roadworthy"`
-	CompletedQuests     []string `json:"completed_quests"`
+	AccountID           string          `json:"account_id"`
+	CharacterID         string          `json:"character_id"`
+	VehicleID           string          `json:"vehicle_id"`
+	Money               int64           `json:"money"`
+	XP                  int64           `json:"xp"`
+	Reputation          int64           `json:"reputation"`
+	ActiveBuildRevision int             `json:"active_build_revision"`
+	ActivePartIDs       []string        `json:"active_part_ids"`
+	Inventory           []InventoryItem `json:"inventory"`
+	Blueprints          []string        `json:"blueprints"`
+	StarterLineage      bool            `json:"starter_lineage"`
+	Roadworthy          bool            `json:"roadworthy"`
+	CompletedQuests     []string        `json:"completed_quests"`
 }
 
 type RewardReceipt struct {
@@ -68,7 +75,7 @@ func NormalizeParts(partIDs []string) ([]string, error) {
 	normalized := make([]string, 0, len(partIDs))
 	for _, partID := range partIDs {
 		partID = strings.TrimSpace(partID)
-		if !strings.HasPrefix(partID, "part_") || len(partID) > 128 {
+		if !strings.HasPrefix(partID, "part_") || len(partID) > 128 || !IsCatalogPart(partID) {
 			return nil, ErrInvalidParts
 		}
 		if _, exists := seen[partID]; exists {
