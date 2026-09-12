@@ -53,6 +53,7 @@
 - [x] multiplayer/networking authority spec
 - [x] threat-model baseline (production abuse testing still open)
 - [x] runtime security hardening v0.8 evidence boundary
+- [x] distributed abuse-controls v0.9 evidence boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (measurement still open)
 - [x] deployment + backup/restore/DR plans (verification still open)
@@ -81,6 +82,7 @@
 - [x] MQ012 Roadworthy transition
 - [x] Go unit tests
 - [x] PostgreSQL integration tests
+- [x] Redis distributed-limiter integration test
 - [x] committed go.mod/go.sum module lock
 - [x] one-time gameplay-ticket persistence and atomic redemption
 - [x] server-only shared-key internal redemption endpoint
@@ -107,7 +109,9 @@
 - [x] raw bearer/session credentials excluded from limiter keys
 - [x] limiter bucket cardinality bounded with stale/oldest eviction
 - [x] 429 + Retry-After contract unit tested
-- [ ] Redis-coordinated distributed rate limiting across replicas
+- [x] Redis-coordinated token bucket shares abuse budget across limiter instances
+- [x] Redis-unavailable path retains bounded local limiting rather than unbounded fail-open
+- [x] rate-limit rejection/fallback security events exclude raw credentials
 - [ ] trusted-proxy/ingress client identity policy implemented and exercised
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
@@ -143,9 +147,12 @@
 - [x] Per-process HTTP abuse rate limiting implemented and unit tested
 - [x] Credential-derived rate-limit identities are hashed before bucket storage
 - [x] Health probes are exempt from player mutation rate limits
+- [x] Redis coordination shares limiter state across independent instances
+- [x] Rate-limit rejection/fallback security log events
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
-- [ ] Redis distributed rate limiting / replay acceleration
-- [ ] Rate-limit/auth rejection telemetry
+- [ ] Trusted ingress/proxy identity handling
+- [ ] Multi-replica HTTP load evidence for distributed limiter
+- [ ] Auth rejection telemetry/correlation
 - [ ] Cheat telemetry
 - [ ] Ranked impossible-state detection
 - [ ] Admin/live-ops audit trail
@@ -164,10 +171,11 @@
 ## Release evidence
 - [ ] Stack-specific Unreal + Go CI all green
 - [x] Go HTTP/PostgreSQL runtime integration/e2e
+- [x] Redis shared limiter integration evidence
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
 - [ ] Security scans pass for complete runtime surface
-- [ ] Distributed abuse controls verified under multi-replica load
+- [ ] Distributed abuse controls verified under multi-replica HTTP load
 - [ ] Performance budgets measured/passed
 - [ ] Accessibility review
 - [ ] Privacy/data-retention review
