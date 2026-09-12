@@ -52,6 +52,7 @@
 - [x] API + durable data model docs through authoritative race v0.7
 - [x] multiplayer/networking authority spec
 - [x] threat-model baseline (production abuse testing still open)
+- [x] runtime security hardening v0.8 evidence boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (measurement still open)
 - [x] deployment + backup/restore/DR plans (verification still open)
@@ -101,6 +102,13 @@
 - [x] ordered checkpoint cursor + monotonic elapsed-time enforcement
 - [x] idempotent race start/checkpoint/finish operation semantics
 - [x] deterministic final result hash bound to authoritative build evidence
+- [x] bounded per-process token-bucket limiter wrapped around service HTTP API
+- [x] limiter covers bootstrap/state/tickets/quests/builds/internal race mutations
+- [x] raw bearer/session credentials excluded from limiter keys
+- [x] limiter bucket cardinality bounded with stale/oldest eviction
+- [x] 429 + Retry-After contract unit tested
+- [ ] Redis-coordinated distributed rate limiting across replicas
+- [ ] trusted-proxy/ingress client identity policy implemented and exercised
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 - [ ] live packaged Unreal ↔ Go race lifecycle evidence
@@ -132,9 +140,12 @@
 - [x] One-time ticket replay rejected by service E2E
 - [x] Durable race result/build identity cannot be submitted directly by player-facing endpoints
 - [x] Ordered/monotonic race checkpoint acceptance enforced in PostgreSQL runtime
+- [x] Per-process HTTP abuse rate limiting implemented and unit tested
+- [x] Credential-derived rate-limit identities are hashed before bucket storage
+- [x] Health probes are exempt from player mutation rate limits
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
-- [ ] Rate limiting
-- [ ] Redis replay/idempotency acceleration
+- [ ] Redis distributed rate limiting / replay acceleration
+- [ ] Rate-limit/auth rejection telemetry
 - [ ] Cheat telemetry
 - [ ] Ranked impossible-state detection
 - [ ] Admin/live-ops audit trail
@@ -156,6 +167,7 @@
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
 - [ ] Security scans pass for complete runtime surface
+- [ ] Distributed abuse controls verified under multi-replica load
 - [ ] Performance budgets measured/passed
 - [ ] Accessibility review
 - [ ] Privacy/data-retention review
