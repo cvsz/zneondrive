@@ -74,6 +74,10 @@ All notable changes to zNeonDrive are documented here.
 - Credential-safe rate-limit rejection/fallback security log events
 - Redis integration test proving independent limiter instances consume the same shared budget
 - Runtime Go CI Redis service alongside PostgreSQL integration coverage
+- Runtime Trusted Ingress Identity v1.0 evidence/non-claim documentation
+- Explicit `TRUSTED_PROXY_CIDRS` allowlist with startup rejection for invalid entries
+- Trusted-proxy `X-Forwarded-For` resolution from right to left with fail-closed malformed-chain handling
+- Unit coverage for spoof resistance, multi-hop proxy chains, exact-IP/CIDR configuration, malformed headers, and distinct client buckets behind one ingress
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -104,6 +108,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced Phase 4.3 to durable server-authoritative race lifecycle persistence without claiming live Unreal race or anti-cheat evidence
 - Advanced the service-plane source baseline to v0.8 abuse resistance while keeping distributed Redis limiting, telemetry, anti-cheat and multi-replica evidence open
 - Advanced the service-plane source baseline to v0.9 with Redis-coordinated limiter state and credential-safe security events while keeping trusted-ingress, real multi-replica load, anti-cheat and production evidence open
+- Advanced the service-plane source baseline to v1.0 with explicit trusted-ingress client identity resolution while keeping deployed ingress verification, real multi-replica load, anti-cheat and production evidence open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -125,6 +130,10 @@ All notable changes to zNeonDrive are documented here.
 - Rate-limit state has bounded local cardinality with stale/oldest eviction to resist attacker-controlled memory growth
 - Redis coordinates shared token-bucket state across API instances using atomic Lua decisions and expiring keys
 - Redis failure retains the bounded process-local limiter and emits a fallback security event
+- Forwarded client identity is ignored unless the immediate socket peer is explicitly trusted
+- Trusted `X-Forwarded-For` chains are evaluated from right to left so client-supplied left-most spoof values do not override the first untrusted hop
+- Malformed forwarding chains fail closed to the socket peer and log no supplied header value
+- Invalid trusted-proxy CIDR configuration fails startup rather than silently widening trust
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Trusted-ingress identity handling, multi-replica HTTP load/soak and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, multi-replica HTTP load/soak and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

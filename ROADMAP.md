@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v0.9
+## Phase 4 — Runtime prototype / integration v1.0
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -69,7 +69,8 @@
 - [x] Add Redis-backed distributed rate-limit coordination for multi-process deployment
 - [x] Retain bounded per-process limiting as Redis-unavailable fallback
 - [x] Add credential-safe rate-limit rejection/fallback security events
-- [ ] Implement trusted-proxy/ingress client identity policy and tests
+- [x] Implement trusted-proxy/ingress client identity policy and tests
+- [x] Fail closed on invalid proxy CIDR configuration and malformed forwarding chains
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -96,6 +97,7 @@
 - [x] threat model, testing strategy and performance-budget targets
 - [x] runtime security hardening v0.8 evidence/non-claim contract
 - [x] distributed abuse-controls v0.9 evidence/non-claim contract
+- [x] trusted-ingress identity v1.0 evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -104,7 +106,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, trusted-ingress identity, anti-cheat, load/soak, restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, anti-cheat, load/soak, restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -130,7 +132,8 @@
 - [x] Per-process HTTP abuse limiter implemented and unit tested
 - [x] Redis-backed limiter coordination exercised across independent limiter instances
 - [x] Credential-safe rate-limit rejection/fallback events emitted
-- [ ] Trusted-ingress identity handling exercised
+- [x] Trusted-ingress identity handling implemented and unit exercised
+- [ ] Deployed ingress forwarding/sanitization configuration verified
 - [ ] Distributed abuse controls verified under multi-replica HTTP load/soak
 - [ ] Threat/abuse cases exercised against integrated runtime
 - [ ] SLOs/observability measured in deployed environment

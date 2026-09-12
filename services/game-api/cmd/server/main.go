@@ -20,9 +20,20 @@ func main() {
 	databaseURL := env("DATABASE_URL", "postgres://zneondrive:zneondrive@127.0.0.1:55432/zneondrive?sslmode=disable")
 	listenAddr := env("LISTEN_ADDR", ":8080")
 	redisAddr := strings.TrimSpace(os.Getenv("REDIS_ADDR"))
+	trustedProxyCIDRs := strings.TrimSpace(os.Getenv("TRUSTED_PROXY_CIDRS"))
 	gameServerKey := strings.TrimSpace(os.Getenv("GAME_SERVER_SHARED_KEY"))
 	if len(gameServerKey) < 32 {
 		log.Fatal("GAME_SERVER_SHARED_KEY must be configured with at least 32 characters")
+	}
+
+	proxyPolicy, err := httpapi.ParseTrustedProxyCIDRs(trustedProxyCIDRs)
+	if err != nil {
+		log.Fatalf("TRUSTED_PROXY_CIDRS: %v", err)
+	}
+	if trustedProxyCIDRs == "" {
+		log.Printf("trusted proxy identity disabled; forwarded headers will be ignored")
+	} else {
+		log.Printf("trusted proxy identity enabled from configured CIDR allowlist")
 	}
 
 	db, err := store.OpenPostgres(ctx, databaseURL)
@@ -39,9 +50,9 @@ func main() {
 	}
 
 	apiHandler := httpapi.New(db, gameServerKey)
-	rateLimitedHandler := httpapi.NewRateLimitedHandler(apiHandler)
+	rateLimitedHandler := httpapi.NewRateLimitedHandlerWithTrustedProxies(apiHandler, proxyPolicy)
 	if redisAddr != "" {
-		rateLimitedHandler = httpapi.NewDistributedRateLimitedHandler(apiHandler, redisAddr)
+		rateLimitedHandler = httpapi.NewDistributedRateLimitedHandlerWithTrustedProxies(apiHandler, redisAddr, proxyPolicy)
 		log.Printf("distributed rate limiting enabled via Redis")
 	} else {
 		log.Printf("WARN: REDIS_ADDR is not configured; rate limiting is process-local only")

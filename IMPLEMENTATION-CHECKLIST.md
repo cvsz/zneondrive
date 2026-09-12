@@ -54,6 +54,7 @@
 - [x] threat-model baseline (production abuse testing still open)
 - [x] runtime security hardening v0.8 evidence boundary
 - [x] distributed abuse-controls v0.9 evidence boundary
+- [x] trusted-ingress identity v1.0 evidence boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (measurement still open)
 - [x] deployment + backup/restore/DR plans (verification still open)
@@ -112,7 +113,11 @@
 - [x] Redis-coordinated token bucket shares abuse budget across limiter instances
 - [x] Redis-unavailable path retains bounded local limiting rather than unbounded fail-open
 - [x] rate-limit rejection/fallback security events exclude raw credentials
-- [ ] trusted-proxy/ingress client identity policy implemented and exercised
+- [x] trusted-proxy/ingress client identity policy implemented and unit exercised
+- [x] direct/untrusted peers cannot spoof X-Forwarded-For identity
+- [x] multi-hop forwarding chain selects first untrusted hop from the right
+- [x] invalid proxy CIDRs fail startup; malformed XFF falls back to socket peer
+- [ ] deployed ingress sanitization/network-isolation evidence
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 - [ ] live packaged Unreal ↔ Go race lifecycle evidence
@@ -149,8 +154,9 @@
 - [x] Health probes are exempt from player mutation rate limits
 - [x] Redis coordination shares limiter state across independent instances
 - [x] Rate-limit rejection/fallback security log events
+- [x] Trusted ingress/proxy identity source handling unit tested
+- [ ] Deployed proxy header sanitization + direct-bypass prevention verified
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
-- [ ] Trusted ingress/proxy identity handling
 - [ ] Multi-replica HTTP load evidence for distributed limiter
 - [ ] Auth rejection telemetry/correlation
 - [ ] Cheat telemetry
@@ -172,6 +178,8 @@
 - [ ] Stack-specific Unreal + Go CI all green
 - [x] Go HTTP/PostgreSQL runtime integration/e2e
 - [x] Redis shared limiter integration evidence
+- [x] Trusted-ingress identity source unit evidence
+- [ ] Deployed ingress trust-boundary evidence
 - [ ] Live Unreal/Go packaged integration/e2e
 - [ ] Live Unreal/Go race lifecycle e2e
 - [ ] Security scans pass for complete runtime surface

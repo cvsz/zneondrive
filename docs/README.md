@@ -44,6 +44,8 @@ Every engineering document should distinguish:
 - [Inventory + Rebuild v0.6](./runtime-inventory-rebuild-v0.6.md)
 - [Authoritative Race Runtime v0.7](./runtime-authoritative-race-v0.7.md)
 - [Runtime Security Hardening v0.8](./runtime-security-hardening-v0.8.md)
+- [Runtime Distributed Abuse Controls v0.9](./runtime-distributed-abuse-controls-v0.9.md)
+- [Runtime Trusted Ingress Identity v1.0](./runtime-trusted-ingress-v1.0.md)
 - [Content Contracts](./content-contracts.md)
 - [ADR Index](./adr/README.md)
 
@@ -75,4 +77,4 @@ Every engineering document should distinguish:
 
 ## Evidence boundary
 
-The repository currently has implementation evidence for the Python authority oracle, Go/PostgreSQL service-plane slices, per-process Go HTTP abuse controls, content/design validators, and source-level Unreal integration. It does not yet claim verified distributed Redis rate limiting, packaged Unreal↔Go production E2E, final vehicle physics, ranked anti-cheat, load/soak, HA/DR, or production deployment.
+The repository currently has implementation evidence for the Python authority oracle, Go/PostgreSQL service-plane slices, bounded local HTTP abuse controls, Redis-coordinated shared limiter state, trusted-ingress client-identity source handling, content/design validators, and source-level Unreal integration. It does not yet claim deployed ingress/header-sanitization evidence, real multi-replica HTTP load/soak, packaged Unreal↔Go production E2E, final vehicle physics, ranked anti-cheat, HA/DR, or production deployment.

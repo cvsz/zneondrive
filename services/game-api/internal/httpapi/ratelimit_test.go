@@ -114,3 +114,100 @@ func TestHealthEndpointIsNotRateLimited(t *testing.T) {
 		t.Fatal("health endpoint must remain available to probes")
 	}
 }
+
+func TestParseTrustedProxyCIDRsRejectsInvalidConfig(t *testing.T) {
+	if _, err := ParseTrustedProxyCIDRs("10.0.0.0/8,not-a-network"); err == nil {
+		t.Fatal("invalid trusted proxy CIDR must fail closed")
+	}
+}
+
+func TestParseTrustedProxyCIDRsAcceptsCIDRsAndExactIPs(t *testing.T) {
+	policy, err := ParseTrustedProxyCIDRs("10.0.0.0/8, 2001:db8::/32, 192.0.2.44")
+	if err != nil {
+		t.Fatalf("parse trusted proxies: %v", err)
+	}
+	if got := len(policy.trusted); got != 3 {
+		t.Fatalf("expected 3 trusted networks, got %d", got)
+	}
+}
+
+func TestUntrustedPeerCannotSpoofForwardedClientIdentity(t *testing.T) {
+	policy, err := ParseTrustedProxyCIDRs("10.0.0.0/8")
+	if err != nil {
+		t.Fatal(err)
+	}
+	req := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", nil)
+	req.RemoteAddr = "203.0.113.77:41234"
+	req.Header.Set("X-Forwarded-For", "198.51.100.9")
+
+	if got := remoteIdentityWithTrustedProxies(req, policy); got != "203.0.113.77" {
+		t.Fatalf("untrusted peer must not control forwarded identity, got %q", got)
+	}
+}
+
+func TestTrustedProxyUsesForwardedClientIdentity(t *testing.T) {
+	policy, err := ParseTrustedProxyCIDRs("10.0.0.0/8")
+	if err != nil {
+		t.Fatal(err)
+	}
+	req := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", nil)
+	req.RemoteAddr = "10.10.0.8:443"
+	req.Header.Set("X-Forwarded-For", "198.51.100.23")
+
+	if got := remoteIdentityWithTrustedProxies(req, policy); got != "198.51.100.23" {
+		t.Fatalf("trusted proxy should preserve real client identity, got %q", got)
+	}
+}
+
+func TestTrustedProxyWalksForwardedChainRightToLeft(t *testing.T) {
+	policy, err := ParseTrustedProxyCIDRs("10.0.0.0/8,192.168.0.0/16")
+	if err != nil {
+		t.Fatal(err)
+	}
+	req := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", nil)
+	req.RemoteAddr = "10.0.0.7:443"
+	// A client-supplied left-most spoof must not win when the trusted edge has
+	// appended the real client followed by an internal proxy hop.
+	req.Header.Set("X-Forwarded-For", "192.0.2.200, 198.51.100.42, 192.168.20.10")
+
+	if got := remoteIdentityWithTrustedProxies(req, policy); got != "198.51.100.42" {
+		t.Fatalf("expected first untrusted hop from the right, got %q", got)
+	}
+}
+
+func TestMalformedForwardedChainFallsBackToSocketPeer(t *testing.T) {
+	policy, err := ParseTrustedProxyCIDRs("10.0.0.0/8")
+	if err != nil {
+		t.Fatal(err)
+	}
+	req := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", nil)
+	req.RemoteAddr = "10.0.0.7:443"
+	req.Header.Set("X-Forwarded-For", "198.51.100.42, definitely-not-an-ip")
+
+	if got := remoteIdentityWithTrustedProxies(req, policy); got != "10.0.0.7" {
+		t.Fatalf("malformed chain must fail closed to socket peer, got %q", got)
+	}
+}
+
+func TestTrustedProxySeparatesBootstrapBucketsByClient(t *testing.T) {
+	policy, err := ParseTrustedProxyCIDRs("10.0.0.0/8")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	reqA := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", nil)
+	reqA.RemoteAddr = "10.0.0.9:443"
+	reqA.Header.Set("X-Forwarded-For", "198.51.100.10")
+	reqB := httptest.NewRequest(http.MethodPost, "/v1/sessions/bootstrap", nil)
+	reqB.RemoteAddr = "10.0.0.9:443"
+	reqB.Header.Set("X-Forwarded-For", "198.51.100.11")
+
+	_, scopeA, identityA, limitedA := rateLimitRuleWithTrustedProxies(reqA, policy)
+	_, scopeB, identityB, limitedB := rateLimitRuleWithTrustedProxies(reqB, policy)
+	if !limitedA || !limitedB || scopeA != "bootstrap" || scopeB != "bootstrap" {
+		t.Fatal("bootstrap route should be rate limited")
+	}
+	if rateLimitKey(scopeA, identityA) == rateLimitKey(scopeB, identityB) {
+		t.Fatal("distinct clients behind a trusted proxy must not collapse into one bucket")
+	}
+}
