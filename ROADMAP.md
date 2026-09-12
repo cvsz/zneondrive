@@ -28,45 +28,45 @@
 - [x] ADR: preserve starter-vehicle identity
 
 ## Phase 3 — Vertical-slice specification v0.2
-- [x] Lock Garage 17 + Foundry 9 vertical-slice spaces and race proof targets
-- [x] Expand MQ001–MQ012 to implementation acceptance criteria
-- [x] Define starter vehicle handling/physical target envelope
-- [x] Define player movement and interaction specification
-- [x] Define first-session UX from identity to First Ignition/Roadworthy
-- [x] Define reconnect/save semantics
-- [x] Define accessibility baseline
-- [x] Create graybox/content production checklist
-- [x] Add machine-readable vertical-slice proof catalog/schema
-- [x] Add executable reference contract model and tests
+- [x] Garage 17 + Foundry 9 spaces/race proof targets
+- [x] MQ001–MQ012 implementation acceptance criteria
+- [x] starter vehicle handling target envelope
+- [x] movement/interaction specification
+- [x] first-session UX through First Ignition/Roadworthy
+- [x] reconnect/save semantics
+- [x] accessibility baseline
+- [x] graybox/content checklist
+- [x] machine-readable vertical-slice proof catalog/schema
+- [x] executable reference contract model/tests
 
 ## Client presentation readiness v0.3
-- [x] Executive brief and Thai talk track
-- [x] Offline interactive browser demo
-- [x] NOVA CITY / story / vehicle / vertical-slice presentation flow
-- [x] Thai/English presentation toggle
-- [x] VIP fairness and authoritative architecture visuals
-- [x] Commercial scope options and prepared Q&A
-- [x] Demo runbook and meeting checklist
-- [x] Automated client-demo smoke validation
-- [x] Manual GitHub Pages deployment workflow
-- [x] Production technology ADRs for playable-client implementation
+- [x] executive brief / Thai talk track
+- [x] offline interactive browser demo
+- [x] Thai/English presentation mode
+- [x] commercial scope + Q&A + runbook
+- [x] demo validation + manual Pages workflow
+- [x] production technology ADRs
 
-## Phase 4 — Runtime prototype
-- [x] Select engine/client technology by ADR — Unreal Engine 5.8
-- [x] Select production gameplay/service-plane direction by ADR — UE dedicated servers + Go service plane
+## Phase 4 — Runtime prototype v0.4
+- [x] Select engine/client — Unreal Engine 5.8
+- [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
+- [x] Select PostgreSQL/Redis persistence/ephemeral direction
 - [x] Select phase-gated deployment strategy
-- [ ] Create Unreal project/source-build CI baseline
-- [ ] Implement identity/session prototype against durable persistence
-- [ ] Implement one-character persistence
-- [ ] Implement one-vehicle persistence and build revisions
+- [x] Create Unreal C++ project / Game / Editor / Server target baseline
+- [x] Add manual self-hosted UE 5.8 source-build workflow
+- [ ] Produce successful archived UE source-build evidence
+- [x] Implement prototype identity/session bootstrap against PostgreSQL
+- [x] Implement one-primary-character persistence
+- [x] Implement starter-vehicle persistence and immutable build revisions
+- [x] Implement optimistic/idempotent durable mutation semantics
 - [ ] Implement inventory/blueprint prototype
-- [ ] Implement quest-state prototype
-- [ ] Implement authoritative race prototype
-- [ ] Implement relationship/faction-state prototype
-- [ ] Port reference contract tests to selected runtime
-- [ ] Automated integration/e2e tests
-
-> The stdlib Python model is executable design evidence only; the browser client demo is presentation evidence only. Neither completes the production runtime.
+- [x] Implement sequential quest-state persistence
+- [ ] Implement authoritative race instance/result runtime
+- [ ] Implement relationship/faction-state runtime
+- [x] Add Go unit tests
+- [x] Add PostgreSQL integration test suite
+- [ ] Complete Python-reference parity tests in Go
+- [ ] Unreal ↔ Go authenticated integration/e2e tests
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -110,4 +110,4 @@
 - [ ] Disaster-recovery evidence
 - [ ] Go/no-go release review
 
-**Rule:** do not mark playable runtime, production, HA, DR, anti-cheat, or live-ops items complete without executable evidence.
+**Rule:** do not mark playable content, production, HA, DR, anti-cheat, or live-ops complete without executable evidence.

@@ -28,15 +28,31 @@ All notable changes to zNeonDrive are documented here.
 - Executive brief, talk track, demo runbook, commercial scope options, and prepared client Q&A
 - Automated client-demo validation
 - Manual GitHub Pages deployment workflow
+- Runtime Prototype v0.4 documentation
+- Unreal Engine 5.8 C++ project with Game, Editor, and dedicated Server targets
+- Server-authoritative replicated prototype vehicle pawn
+- Manual self-hosted Unreal source-build workflow
+- Go 1.27 service-plane module and HTTP API
+- PostgreSQL durable schema for accounts, characters, vehicles, immutable builds, sessions, and quest completions
+- Hashed resume/session credential handling
+- Idempotent quest/build mutation semantics
+- Sequential MQ001–MQ100 durable quest gate and MQ012 Roadworthy transition
+- PostgreSQL integration tests and Go runtime CI workflow
+- Docker Compose local PostgreSQL 17 + Redis 8 + game API stack
+- Phase 4 static runtime validator
 
 ### Changed
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
 - Advanced Phase 3 vertical-slice specification to complete while keeping playable/runtime claims evidence-gated
-- Extended CI to validate JSON design catalogs, client-demo integrity, reference-runtime tests, and Python compilation
-- Advanced Phase 4 technology selection while leaving implementation evidence explicitly open
-- Reframed repository status around evidence-gated design, presentation, prototype, alpha, and production milestones
+- Extended CI to validate JSON design catalogs, client-demo integrity, reference-runtime tests, runtime source structure, and Python compilation
+- Advanced Phase 4 from technology selection into executable Unreal/Go/PostgreSQL source
+- Reframed repository status around evidence-gated design, presentation, runtime prototype, alpha, and production milestones
+- Local runtime ports default to 55432/56379/18080 to reduce collisions with common PostgreSQL/Redis/dev ports
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
-- Rewardable reference mutations require idempotency semantics and races bind results to the accepted build revision
+- Rewardable mutations require idempotency semantics
+- Resume keys and session tokens are stored as hashes in PostgreSQL
+- Vehicle build mutations use optimistic revision checks and row locking
+- Unreal driving inputs are clamped on the authority before movement
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

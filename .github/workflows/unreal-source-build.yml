@@ -1,0 +1,36 @@
+name: Unreal Source Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    runs-on: [self-hosted, linux, unreal-5.8]
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate runtime structure
+        run: python3 tools/validate_runtime_v0_4.py
+
+      - name: Validate Unreal source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${UE_ROOT:-}" || { echo "UE_ROOT is required"; exit 1; }
+          test -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"
+
+      - name: Build editor target
+        shell: bash
+        run: |
+          "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"             NeonDriveEditor Linux Development             "$GITHUB_WORKSPACE/game/NeonDrive.uproject"             -WaitMutex
+
+      - name: Build dedicated server target
+        shell: bash
+        run: |
+          "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"             NeonDriveServer Linux Development             "$GITHUB_WORKSPACE/game/NeonDrive.uproject"             -WaitMutex

@@ -1,28 +1,40 @@
 SHELL := /bin/sh
 
-.PHONY: help validate-design check-json lint test test-reference build security ci
+.PHONY: help validate-design validate-runtime check-json lint test test-reference build security ci runtime-up runtime-down go-test
 
 help:
-	@printf '%s\n' 'Targets: validate-design check-json lint test-reference test build security ci'
+	@printf '%s\n' 'Targets: validate-design validate-runtime check-json lint test-reference go-test test build security ci runtime-up runtime-down'
 
 validate-design:
 	python3 tools/validate_design.py
 
+validate-runtime:
+	python3 tools/validate_runtime_v0_4.py
+
 check-json:
 	python3 -c 'import json,pathlib; [json.loads(p.read_text(encoding="utf-8")) for p in pathlib.Path("design").rglob("*.json")]; print("JSON OK")'
 
-lint: check-json validate-design
+lint: check-json validate-design validate-runtime
 
 test-reference:
 	PYTHONPATH=src python3 -m unittest discover -s tests -v
 
-test: validate-design test-reference
+go-test:
+	cd services/game-api && go test ./...
+
+test: validate-design validate-runtime test-reference
 
 build:
 	python3 -m compileall -q src
-	@echo 'Reference contracts compile. Production runtime build remains undefined until technology ADRs are accepted.'
+	@echo 'Reference contracts compile. Unreal source build requires the self-hosted unreal-5.8 runner.'
 
 security:
-	@echo 'Repository security workflows remain authoritative; add runtime scanners after stack selection.'
+	@echo 'Repository security workflows remain authoritative; runtime threat/anti-cheat gates are still open.'
+
+runtime-up:
+	docker compose up --build
+
+runtime-down:
+	docker compose down
 
 ci: lint test build

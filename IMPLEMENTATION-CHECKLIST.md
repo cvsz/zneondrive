@@ -1,107 +1,118 @@
 # Implementation Checklist — PROJECT: NEON DRIVE
 
 ## Design baseline
-- [x] Story premise and NOVA CITY 2097
+- [x] Story premise / NOVA CITY 2097
 - [x] Garage 17 opening and starter prototype
-- [x] Maya Voss / Adrian Cross / Victor Kane / Luna anchors
+- [x] Maya / Adrian / Victor / Luna anchors
 - [x] PROJECT DRIVE ZERO conflict
-- [x] Seven campaign chapters
-- [x] Five endgame governance paths
-- [x] VIP fairness principle
-- [x] Social/crew and pet design
-- [x] 25-character launch catalog
-- [x] 100-main-quest graph
-- [x] World, faction, district, and part catalogs
-- [x] Automated catalog integrity checks
-- [x] Game Design Bible v0.2 canonical implementation rules
+- [x] seven campaign chapters / five endings
+- [x] VIP fairness, social/crew, pets
+- [x] 25 characters / 100 main quests / world catalogs
+- [x] automated design validation
+- [x] Game Design Bible v0.2
 
 ## Vertical-slice contract
 - [x] MQ001–MQ012 acceptance matrix
 - [x] Garage 17 / Foundry 9 graybox scope
-- [x] First-session UX path
-- [x] Starter handling target envelope
-- [x] Movement/interaction minimum
-- [x] Legal + underground race proof definitions
-- [x] Save/reconnect semantics
-- [x] Accessibility baseline
-- [x] Machine-readable slice catalog and schema
+- [x] first-session UX
+- [x] starter handling target
+- [x] movement/interaction minimum
+- [x] legal + underground race proof definitions
+- [x] save/reconnect semantics
+- [x] accessibility baseline
+- [x] machine-readable slice catalog/schema
 
 ## Executable reference authority
-- [x] One account → one primary character reference invariant
-- [x] Vehicle ownership authoritative reference invariant
-- [x] Append-only build revisions with optimistic conflict checks
-- [x] Quest reward idempotency
-- [x] Race result bound to accepted build revision
-- [x] Ordered checkpoint validation
-- [x] VIP capacity separated from competitive build signature
-- [x] Starter vehicle routine-deletion protection
-- [x] Unit tests for reference invariants
+- [x] Python contract oracle
+- [x] one account → one character
+- [x] vehicle ownership
+- [x] append-only build revisions
+- [x] quest reward idempotency
+- [x] race/build binding reference rule
+- [x] ordered checkpoint reference rule
+- [x] VIP separation reference rule
+- [x] starter deletion protection reference rule
 
 ## Client meeting package
-- [x] Executive brief
-- [x] Thai presentation talk track
-- [x] Interactive offline demo
-- [x] Demo runbook
-- [x] Commercial scope options
-- [x] Prepared Q&A
+- [x] executive brief / talk track
+- [x] interactive offline demo
+- [x] runbook / commercial scope / Q&A
 - [x] Thai/English toggle
-- [x] Client-demo CI validation
-- [x] Manual GitHub Pages workflow
-- [x] Explicit “not a production build” status language
+- [x] client-demo CI / manual Pages
+- [x] explicit evidence language
 
 ## Production technology decisions
-- [x] Unreal Engine 5.8 client/dedicated gameplay server ADR
+- [x] Unreal Engine 5.8 gameplay ADR
 - [x] Go + PostgreSQL + Redis service-plane ADR
-- [x] Phase-gated deployment/observability ADR
+- [x] phase-gated deployment ADR
+
+## Phase 4 runtime source
+- [x] Unreal .uproject baseline
+- [x] Unreal Game / Editor / dedicated Server targets
+- [x] server-authoritative replicated prototype pawn
+- [x] manual self-hosted UE source-build workflow
+- [ ] successful UE 5.8 source-build artifact
+- [x] Go 1.27 service binary
+- [x] PostgreSQL durable schema
+- [x] local Docker Compose PostgreSQL + Redis + API
+- [x] hashed resume/session credentials
+- [x] durable one-character bootstrap
+- [x] durable starter vehicle + immutable revisions
+- [x] idempotent quest/build operations
+- [x] MQ001–MQ100 prerequisite enforcement
+- [x] MQ012 Roadworthy transition
+- [x] Go unit tests
+- [x] PostgreSQL integration tests
+- [ ] full reference-oracle parity in Go
+- [ ] Unreal ↔ Go authenticated integration
 
 ## Content production
-- [ ] Full dialogue/script for MQ001–MQ100
-- [ ] Side-quest narratives beyond seed records
-- [ ] Cinematic list and storyboard requirements
-- [ ] Environment storytelling asset list
-- [ ] Voice/localization style guides
-- [ ] Content sensitivity and age-rating review
+- [ ] Full dialogue/script MQ001–MQ100
+- [ ] Side-quest narratives
+- [ ] Cinematic/storyboard list
+- [ ] Environment storytelling assets
+- [ ] Voice/localization guide
+- [ ] Rating/sensitivity review
 
 ## Playable runtime vertical slice
-- [x] Selected client engine ADR
-- [x] Selected production server/runtime ADR
-- [ ] Unreal project/source-build baseline
+- [x] selected client/server ADRs
+- [x] Unreal source project baseline
 - [ ] Garage 17 environment playable
-- [ ] First vehicle rebuild playable from broken state
-- [ ] First Ignition end-to-end in selected runtime
-- [ ] Foundry 9 traversal and jobs playable
-- [ ] One legal and one underground race playable
-- [ ] Maya relationship state transition visible in client
-- [ ] Luna discovery utility playable
-- [ ] Durable save/reconnect verified against selected persistence
+- [ ] first vehicle rebuild playable
+- [ ] First Ignition end-to-end in Unreal
+- [ ] Foundry 9 traversal/jobs
+- [ ] legal + underground race playable
+- [ ] Maya relationship visible
+- [ ] Luna utility playable
+- [ ] durable Unreal save/reconnect verified
 
 ## Multiplayer and security
 - [ ] Threat model complete
-- [ ] Client trust boundaries tested over real transport
+- [ ] Client trust boundaries tested over Unreal↔Go transport
 - [ ] Rate limiting
-- [ ] Replay/idempotency protection in selected persistence/runtime
+- [ ] Redis replay/idempotency acceleration
 - [ ] Cheat telemetry
 - [ ] Ranked impossible-state detection
-- [ ] Privileged admin/live-ops audit trail
+- [ ] Admin/live-ops audit trail
 - [ ] Abuse/moderation model
 
 ## Reliability
-- [ ] Load test target defined
-- [ ] Soak test passed
-- [ ] Backup verified
-- [ ] Restore drill passed
-- [ ] RPO/RTO defined
-- [ ] Reconnect/recovery tested under process/node failure
-- [ ] Duplicate rewards prevented on retry/failover
-- [ ] Content rollback tested
+- [ ] Load test target
+- [ ] Soak test
+- [ ] Backup verification
+- [ ] Restore drill
+- [ ] RPO/RTO
+- [ ] process/node reconnect recovery
+- [ ] duplicate-reward prevention under failover
+- [ ] content rollback
 
 ## Release evidence
-- [ ] Stack-specific Unreal/Go CI green
-- [ ] Unit/integration/e2e suites for selected runtime
-- [ ] Security scans pass
-- [ ] Performance budgets pass
+- [ ] Stack-specific Unreal + Go CI all green
+- [ ] Unreal/Go integration/e2e
+- [ ] Security scans pass for runtime
+- [ ] Performance budgets
 - [ ] Accessibility review
-- [ ] Privacy/data-retention review
+- [ ] Privacy/data retention
 - [ ] Production deployment evidence
 - [ ] DR evidence
 - [ ] Go/no-go approval
