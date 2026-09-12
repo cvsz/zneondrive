@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.1
+## Phase 4 — Runtime prototype / integration v1.2
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -72,6 +72,7 @@
 - [x] Implement trusted-proxy/ingress client identity policy and tests
 - [x] Fail closed on invalid proxy CIDR configuration and malformed forwarding chains
 - [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
+- [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -100,6 +101,7 @@
 - [x] distributed abuse-controls v0.9 evidence/non-claim contract
 - [x] trusted-ingress identity v1.0 evidence/non-claim contract
 - [x] multi-replica HTTP load v1.1 CI evidence/non-claim contract
+- [x] race-integrity telemetry v1.2 evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -108,14 +110,15 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, anti-cheat, deployment-scale load/soak, restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
 - [ ] Presence/social
 - [ ] Crew MVP
 - [ ] Match/event registration
-- [ ] Race anti-cheat telemetry
+- [x] Race rejection/auth telemetry baseline
+- [ ] Physics-derived race anti-cheat telemetry
 - [ ] Disconnect/rejoin behavior
 - [ ] Deployment-scale load and long-duration soak testing
 - [ ] Backup/restore drill
@@ -139,6 +142,8 @@
 - [x] Distributed abuse controls verified under concurrent two-replica HTTP CI load
 - [ ] Deployment-scale distributed limiter load evidence
 - [ ] Long-duration soak evidence
+- [x] Authoritative race rejection + game-server auth telemetry emitted with hashed correlation buckets
+- [ ] Physics-derived impossible-state telemetry from live Unreal race samples
 - [ ] Threat/abuse cases exercised against integrated runtime
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
