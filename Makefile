@@ -38,14 +38,14 @@ help:
 	  'Player client' \
 	  '  make client-install CLIENT_PACKAGE=/path/client.zip' \
 	  '  make client-build           Build NeonDriveClient with UE_ROOT on Linux' \
-  '  make client-package-linux   Cook/stage/archive a Linux player package' \
+	  '  make client-package-linux   Cook/stage/archive a Linux player package' \
 	  '  make client-play            Launch installed client; ZNEON_GAME_API_URL may override API' \
 	  '  make client-doctor          Windows/Linux client guidance and host check' \
 	  '' \
 	  'Dedicated gameplay server' \
 	  '  make game-server-package-linux  Cook/stage/archive Linux dedicated server' \
-  '  make package-all-linux           Package Linux client + dedicated server' \
-  '  make game-server-install SERVER_PACKAGE=/path/server.tar.gz' \
+	  '  make package-all-linux           Package Linux client + dedicated server' \
+	  '  make game-server-install SERVER_PACKAGE=/path/server.tar.gz' \
 	  '  make game-server-start|game-server-stop|game-server-status|game-server-logs' \
 	  '' \
 	  'Full stack' \
