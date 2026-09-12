@@ -91,6 +91,55 @@ Request:
 
 Success returns the authoritative player snapshot. Tickets are single-use.
 
+### POST /v1/internal/races/start
+
+Dedicated-server only; requires `X-Game-Server-Key`.
+
+Request:
+
+```json
+{
+  "account_id":"acc_...",
+  "vehicle_id":"veh_...",
+  "race_id":"race_...",
+  "operation_id":"stable-operation-id"
+}
+```
+
+The service resolves authoritative account/character/vehicle state, requires the vehicle to be Roadworthy, and binds the race instance to the exact active build revision and validation hash.
+
+### POST /v1/internal/races/{raceInstanceID}/checkpoints
+
+Dedicated-server only.
+
+Request:
+
+```json
+{
+  "checkpoint_index":0,
+  "elapsed_ms":12345,
+  "operation_id":"stable-operation-id"
+}
+```
+
+Checkpoint index must match the service-side cursor and elapsed time must increase monotonically.
+
+### POST /v1/internal/races/{raceInstanceID}/finish
+
+Dedicated-server only.
+
+Request:
+
+```json
+{
+  "checkpoint_count":5,
+  "finish_elapsed_ms":65432,
+  "operation_id":"stable-operation-id"
+}
+```
+
+Finish must match the accepted checkpoint cursor and occur after the last checkpoint. The service persists a deterministic result hash bound to race, account, character, vehicle, build revision/hash, checkpoint count and finish time.
+
 ### POST /v1/quests/{questID}/complete
 
 Requires Bearer session.
@@ -148,6 +197,8 @@ Current codes include:
 - `operation_id_conflict`
 - `insufficient_inventory`
 - `blueprint_required`
+- `race_vehicle_not_ready`
+- `race_event_out_of_order`
 - `invalid_domain_input`
 - `dependency_unavailable`
 - `internal_error`
