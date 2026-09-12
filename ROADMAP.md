@@ -77,6 +77,19 @@
 - [ ] Complete Python-reference parity tests in Go
 - [ ] Produce live Unreal ↔ Go packaged/session E2E evidence
 
+## Repository documentation readiness v0.7
+- [x] GitHub governance/support/maintainers baseline
+- [x] complete documentation index
+- [x] product/API/data/networking contracts
+- [x] security/threat/testing/performance documentation
+- [x] deployment/observability/incident/DR plans
+- [x] accessibility/localization/content/monetization/safety/privacy/live-ops policies
+- [x] release-readiness/IP/glossary/brand guidance
+- [x] bug/documentation issue templates
+- [x] README banner asset
+
+> Documentation readiness does not close runtime evidence gates such as live UE build, anti-cheat, load/soak, restore/DR or production deployment.
+
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
 - [ ] Presence/social
