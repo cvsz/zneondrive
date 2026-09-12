@@ -33,6 +33,7 @@ REQUIRED_DOCS = [
     "docs/performance-budget.md",
     "docs/observability-slo.md",
     "docs/deployment.md",
+    "docs/control-panel.md",
     "docs/backup-restore-dr.md",
     "docs/incident-response.md",
     "docs/accessibility.md",
