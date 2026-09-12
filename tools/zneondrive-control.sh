@@ -172,6 +172,33 @@ client_build() { ue_build NeonDriveClient; }
 editor_build() { ue_build NeonDriveEditor; }
 game_server_build() { ue_build NeonDriveServer; }
 
+require_uat() {
+  require_ue
+  [[ -x "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" ]] || die "RunUAT.sh is missing under UE_ROOT."
+}
+
+client_package_linux() {
+  require_uat
+  local out="$DIST_DIR/packages/client-linux"
+  rm -rf "$out"; mkdir -p "$out"
+  "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
+    -project="$ROOT/game/NeonDrive.uproject" -noP4 -build -cook -stage -pak -archive \
+    -archivedirectory="$out" -targetplatform=Linux -clientconfig=Development -client -utf8output
+  note "Linux player package archived under $out"
+}
+
+game_server_package_linux() {
+  require_uat
+  local out="$DIST_DIR/packages/server-linux"
+  rm -rf "$out"; mkdir -p "$out"
+  "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
+    -project="$ROOT/game/NeonDrive.uproject" -noP4 -build -cook -stage -pak -archive \
+    -archivedirectory="$out" -server -noclient -serverplatform=Linux -serverconfig=Development -utf8output
+  note "Linux dedicated-server package archived under $out"
+}
+
+package_all_linux() { client_package_linux; game_server_package_linux; }
+
 install_package() {
   local src="$1" dst="$2"
   [[ -e "$src" ]] || die "Package not found: $src"
@@ -302,8 +329,8 @@ Usage: bash tools/zneondrive-control.sh <command> [args]
 doctor | env-init | deps-server | deps-client | control-panel
 server-install | server-up | server-down | server-restart | server-status
 server-health | server-logs [service] | server-reset | db-shell | redis-cli
-client-generate | client-build | editor-build | client-install [package] | client-play
-game-server-build | game-server-install [package] | game-server-start | game-server-stop
+client-generate | client-build | client-package-linux | editor-build | client-install [package] | client-play
+game-server-build | game-server-package-linux | package-all-linux | game-server-install [package] | game-server-start | game-server-stop
 game-server-status | game-server-logs | full-install [client-package] | full-up | full-down | status
 EOF
 }
@@ -314,8 +341,8 @@ case "$cmd" in
   server-install) server_install;; server-up) server_up;; server-down) server_down;; server-restart) server_restart;;
   server-status) server_status;; server-health) server_health;; server-logs) server_logs "$@";; server-reset) server_reset;;
   db-shell) db_shell;; redis-cli) redis_cli;; client-generate) client_generate;; client-build) client_build;; editor-build) editor_build;;
-  client-install) client_install "${1:-}";; client-play) client_play;; game-server-build) game_server_build;;
-  game-server-install) game_server_install "${1:-}";; game-server-start) game_server_start;; game-server-stop) game_server_stop;;
+  client-install) client_install "${1:-}";; client-play) client_play;; client-package-linux) client_package_linux;; game-server-build) game_server_build;;
+  game-server-package-linux) game_server_package_linux;; package-all-linux) package_all_linux;; game-server-install) game_server_install "${1:-}";; game-server-start) game_server_start;; game-server-stop) game_server_stop;;
   game-server-status) game_server_status;; game-server-logs) game_server_logs;; full-install) full_install "${1:-}";;
   full-up) full_up;; full-down) full_down;; status) status_all;; control-panel) control_panel;; help|-h|--help) usage;;
   *) usage; die "Unknown command: $cmd";;
