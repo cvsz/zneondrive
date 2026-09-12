@@ -19,6 +19,7 @@ func main() {
 	ctx := context.Background()
 	databaseURL := env("DATABASE_URL", "postgres://zneondrive:zneondrive@127.0.0.1:55432/zneondrive?sslmode=disable")
 	listenAddr := env("LISTEN_ADDR", ":8080")
+	metricsListenAddr := strings.TrimSpace(os.Getenv("METRICS_LISTEN_ADDR"))
 	redisAddr := strings.TrimSpace(os.Getenv("REDIS_ADDR"))
 	trustedProxyCIDRs := strings.TrimSpace(os.Getenv("TRUSTED_PROXY_CIDRS"))
 	gameServerKey := strings.TrimSpace(os.Getenv("GAME_SERVER_SHARED_KEY"))
@@ -58,13 +59,36 @@ func main() {
 	} else {
 		log.Printf("WARN: REDIS_ADDR is not configured; rate limiting is process-local only")
 	}
+
+	metrics := httpapi.NewHTTPMetrics()
+	observedHandler := metrics.Wrap(rateLimitedHandler)
 	server := &http.Server{
 		Addr:              listenAddr,
-		Handler:           rateLimitedHandler,
+		Handler:           observedHandler,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
 		WriteTimeout:      15 * time.Second,
 		IdleTimeout:       60 * time.Second,
+	}
+
+	var metricsServer *http.Server
+	if metricsListenAddr != "" {
+		metricsServer = &http.Server{
+			Addr:              metricsListenAddr,
+			Handler:           metrics.Handler(),
+			ReadHeaderTimeout: 3 * time.Second,
+			ReadTimeout:       5 * time.Second,
+			WriteTimeout:      5 * time.Second,
+			IdleTimeout:       30 * time.Second,
+		}
+		go func() {
+			log.Printf("zNeonDrive internal metrics listening on %s", metricsListenAddr)
+			if serveErr := metricsServer.ListenAndServe(); serveErr != nil && !errors.Is(serveErr, http.ErrServerClosed) {
+				log.Fatalf("metrics server: %v", serveErr)
+			}
+		}()
+	} else {
+		log.Printf("internal metrics listener disabled; set METRICS_LISTEN_ADDR on a private interface to enable scraping")
 	}
 
 	go func() {
@@ -82,6 +106,11 @@ func main() {
 	defer cancel()
 	if err = server.Shutdown(shutdownCtx); err != nil {
 		log.Printf("graceful shutdown failed: %v", err)
+	}
+	if metricsServer != nil {
+		if err = metricsServer.Shutdown(shutdownCtx); err != nil {
+			log.Printf("metrics graceful shutdown failed: %v", err)
+		}
 	}
 }
 

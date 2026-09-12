@@ -85,6 +85,11 @@ All notable changes to zNeonDrive are documented here.
 - Credential-safe `race_integrity_rejected` telemetry for authoritative checkpoint/finish HTTP 400/409 outcomes
 - Credential-safe `game_server_auth_rejected` telemetry for unauthorized internal game-server calls
 - Unit coverage proving raw race-instance IDs and peer addresses are absent from security telemetry
+- Runtime Observability Metrics v1.3 source/unit evidence documentation
+- Low-cardinality HTTP request totals by bounded route scope and status class
+- Fixed-bucket HTTP request-duration histogram and current in-flight request gauge
+- Separate `METRICS_LISTEN_ADDR` listener with loopback-only Docker Compose host publication
+- Unit coverage proving metrics exclude authorization values and dynamic vehicle/race identifiers
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -118,6 +123,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the service-plane source baseline to v1.0 with explicit trusted-ingress client identity resolution while keeping deployed ingress verification, real multi-replica load, anti-cheat and production evidence open
 - Advanced the evidence baseline to v1.1 with concurrent two-replica HTTP/Redis limiter verification while keeping deployment-scale load, long-duration soak, deployed ingress verification, anti-cheat and production evidence open
 - Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
+- Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -146,6 +152,8 @@ All notable changes to zNeonDrive are documented here.
 - Concurrent two-replica HTTP integration evidence verifies Redis prevents per-process burst multiplication for one trusted-ingress-derived identity
 - Race-integrity and game-server-auth rejection telemetry uses hashed race/peer correlation buckets and bounded static route scopes
 - Security telemetry observes existing authoritative outcomes and does not override or weaken race acceptance decisions
+- HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
+- Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

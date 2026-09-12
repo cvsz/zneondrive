@@ -1,6 +1,6 @@
 # Observability & SLOs
 
-**Status:** target operating contract; production SLOs are not yet measured.
+**Status:** Go HTTP instrumentation source implemented; production SLOs are not yet measured.
 
 ## Telemetry principles
 
@@ -11,18 +11,31 @@ Every durable mutation should be traceable across:
 - database transaction,
 - resulting audit/receipt.
 
-Never log raw secrets, resume keys, session tokens or gameplay tickets.
+Never log or export raw secrets, resume keys, session tokens, gameplay tickets, shared keys, peer addresses, or player-controlled identifiers as metric labels.
 
-## Required telemetry
+## Implemented Go HTTP baseline — v1.3
+
+The service plane now exports a low-cardinality Prometheus text surface from a separate internal listener:
+- request totals by bounded route scope + status class,
+- request-duration histogram by bounded route scope,
+- current in-flight request gauge,
+- fixed route labels that do not contain quest, vehicle, race, account, token, operation, or peer identifiers.
+
+`METRICS_LISTEN_ADDR` controls the listener. Docker Compose binds the host side to loopback only by default (`127.0.0.1:${GAME_API_METRICS_PORT:-19090}`). This is source/configuration evidence, not proof of deployed firewall or NetworkPolicy isolation.
+
+See [Runtime Observability Metrics v1.3](./runtime-observability-metrics-v1.3.md).
+
+## Required telemetry still open
 
 ### Go service
-- request count,
-- status/error code,
-- latency histogram,
-- database query/transaction latency,
-- connection-pool usage,
-- mutation conflict/idempotency rejects,
-- ticket issue/redeem/reuse rejects.
+- [x] request count,
+- [x] status class,
+- [x] latency histogram,
+- [ ] database query/transaction latency,
+- [ ] connection-pool usage,
+- [x] mutation conflict/race rejection baseline through HTTP status and security telemetry,
+- [x] game-server auth rejection telemetry baseline,
+- [ ] ticket issue/redeem/reuse domain counters.
 
 ### Unreal server
 - active sessions,
@@ -39,7 +52,7 @@ Never log raw secrets, resume keys, session tokens or gameplay tickets.
 - storage growth,
 - backup age,
 - replication/failover metrics when introduced,
-- Redis memory/eviction/latency when introduced.
+- Redis memory/eviction/latency.
 
 ## Initial SLO targets
 
@@ -66,4 +79,4 @@ Avoid alerting on noisy single requests.
 
 ## Evidence
 
-SLO readiness requires dashboards, alert rules, retained test/incident evidence and a review of false-positive/false-negative behavior.
+SLO readiness requires deployed metrics, dashboards, alert rules, retained load/soak or incident evidence, and a review of false-positive/false-negative behavior. The v1.3 source metrics baseline alone does not close that gate.
