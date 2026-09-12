@@ -179,9 +179,33 @@ db_shell() {
 redis_cli() { compose exec redis redis-cli; }
 
 require_ue() {
-  [[ -n "${UE_ROOT:-}" ]] || die "UE_ROOT is required."
-  [[ -x "$UE_ROOT/GenerateProjectFiles.sh" ]] || die "Invalid UE_ROOT: GenerateProjectFiles.sh missing."
+  [[ -n "${UE_ROOT:-}" ]] || die "UE_ROOT is required. Run 'make ue-detect' to search common locations."
+  if [[ ! -x "$UE_ROOT/GenerateProjectFiles.sh" ]]; then
+    printf 'UE_ROOT=%s\n' "$UE_ROOT" >&2
+    printf 'Expected: %s/GenerateProjectFiles.sh\n' "$UE_ROOT" >&2
+    printf 'Search with: make ue-detect\n' >&2
+    die "Invalid UE_ROOT: GenerateProjectFiles.sh missing."
+  fi
   [[ -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" ]] || die "Invalid UE_ROOT: Linux Build.sh missing."
+}
+
+ue_detect() {
+  local found=0 candidate
+  printf 'Searching for Unreal Engine source roots...\n'
+  while IFS= read -r candidate; do
+    [[ -n "$candidate" ]] || continue
+    found=1
+    printf '  candidate: %s\n' "$candidate"
+  done < <(
+    find /opt "$HOME" /usr/local /mnt/c /mnt/d       -maxdepth 5 -type f -name GenerateProjectFiles.sh -print 2>/dev/null |
+      sed 's#/GenerateProjectFiles.sh$##' |
+      sort -u
+  )
+  if [[ "$found" -eq 0 ]]; then
+    printf 'No Linux Unreal source tree found in common locations.\n'
+    printf 'A placeholder path such as /opt/UnrealEngine-5.8 is not enough; UE 5.8 source must actually be present and built.\n'
+    return 1
+  fi
 }
 client_generate() { require_ue; "$UE_ROOT/GenerateProjectFiles.sh" -project="$ROOT/game/NeonDrive.uproject" -game; }
 ue_build() { local target="$1"; require_ue; "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" "$target" Linux Development "$ROOT/game/NeonDrive.uproject" -WaitMutex; }
@@ -298,12 +322,35 @@ game_server_stop() {
 }
 game_server_status() {
   local f="$RUNTIME_DIR/game-server.pid"
-  if [[ -f "$f" ]] && kill -0 "$(cat "$f")" 2>/dev/null; then printf 'running pid=%s\n' "$(cat "$f")"; else printf 'stopped\n'; return 1; fi
+  if [[ -f "$f" ]] && kill -0 "$(cat "$f")" 2>/dev/null; then
+    printf 'running pid=%s\n' "$(cat "$f")"
+  else
+    printf 'stopped\n'
+  fi
 }
 game_server_logs() { touch "$RUNTIME_DIR/game-server.log"; tail -n "$LOG_TAIL" -f "$RUNTIME_DIR/game-server.log"; }
 
-full_install() { server_install; client_install "${1:-}"; [[ -n "${SERVER_PACKAGE:-}" ]] && game_server_install "$SERVER_PACKAGE" || warn "SERVER_PACKAGE not set; dedicated server package not installed."; }
-full_up() { server_up; game_server_start; }
+full_install() {
+  local client_package="${1:-${CLIENT_PACKAGE:-}}"
+  local server_package="${SERVER_PACKAGE:-}"
+  [[ -n "$client_package" ]] || die "CLIENT_PACKAGE is required for full-install."
+  [[ -e "$client_package" ]] || die "Client package not found: $client_package"
+  [[ -n "$server_package" ]] || die "SERVER_PACKAGE is required for full-install."
+  [[ -e "$server_package" ]] || die "Server package not found: $server_package"
+
+  note "Full-install preflight passed."
+  server_install
+  client_install "$client_package"
+  game_server_install "$server_package"
+}
+
+full_up() {
+  local bin
+  bin="$(find_game_server || true)"
+  [[ -n "$bin" ]] || die "Dedicated game-server package is not installed. Run make game-server-install first."
+  server_up
+  game_server_start
+}
 full_down() { game_server_stop || true; server_down; }
 status_all() {
   printf '\n-- service plane --\n'; server_status || true
@@ -324,6 +371,8 @@ PROJECT: NEON DRIVE — Control Panel
  6 Server status               14 Full-stack status
  7 Server logs                 15 Run make ci
  8 Install player package      16 Reset LOCAL DB/Redis volumes
+17 Package Linux player        18 Package Linux game server
+19 Package both Linux builds
  0 Exit
 MENU
     read -r -p "Select: " choice
@@ -344,7 +393,7 @@ usage() {
   cat <<'EOF'
 Usage: bash tools/zneondrive-control.sh <command> [args]
 
-doctor | client-doctor | env-init | deps-server | deps-client | control-panel
+doctor | client-doctor | ue-detect | env-init | deps-server | deps-client | control-panel
 server-install | server-up | server-down | server-restart | server-status
 server-health | server-logs [service] | server-reset | db-shell | redis-cli
 client-generate | client-build | client-package-linux | editor-build | client-install [package] | client-play
@@ -355,7 +404,7 @@ EOF
 
 cmd="${1:-help}"; shift || true
 case "$cmd" in
-  doctor) doctor;; client-doctor) client_doctor;; env-init) env_init;; deps-server) deps_server;; deps-client) deps_client;;
+  doctor) doctor;; client-doctor) client_doctor;; ue-detect) ue_detect;; env-init) env_init;; deps-server) deps_server;; deps-client) deps_client;;
   server-install) server_install;; server-up) server_up;; server-down) server_down;; server-restart) server_restart;;
   server-status) server_status;; server-health) server_health;; server-logs) server_logs "$@";; server-reset) server_reset;;
   db-shell) db_shell;; redis-cli) redis_cli;; client-generate) client_generate;; client-build) client_build;; editor-build) editor_build;;
