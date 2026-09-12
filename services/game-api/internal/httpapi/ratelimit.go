@@ -3,6 +3,7 @@ package httpapi
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"log"
 	"math"
 	"net"
@@ -31,14 +32,26 @@ type rateLimiter struct {
 	now        func() time.Time
 }
 
+// TrustedProxyPolicy defines the only peers allowed to influence client
+// identity through X-Forwarded-For. A zero-value policy trusts no proxy.
+// This deliberately keeps trust configuration explicit and fail-closed.
+type TrustedProxyPolicy struct {
+	trusted []*net.IPNet
+}
+
 type rateLimitMiddleware struct {
-	next    http.Handler
-	limiter *rateLimiter
-	redis   *redisRateLimiter
+	next        http.Handler
+	limiter     *rateLimiter
+	redis       *redisRateLimiter
+	proxyPolicy TrustedProxyPolicy
 }
 
 func NewRateLimitedHandler(next http.Handler) http.Handler {
-	return &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000)}
+	return NewRateLimitedHandlerWithTrustedProxies(next, TrustedProxyPolicy{})
+}
+
+func NewRateLimitedHandlerWithTrustedProxies(next http.Handler, policy TrustedProxyPolicy) http.Handler {
+	return &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000), proxyPolicy: policy}
 }
 
 // NewDistributedRateLimitedHandler coordinates rate-limit decisions through
@@ -47,11 +60,62 @@ func NewRateLimitedHandler(next http.Handler) http.Handler {
 // a credential-safe security event is logged. Redis failure never moves
 // gameplay authority away from PostgreSQL/dedicated-server validation.
 func NewDistributedRateLimitedHandler(next http.Handler, redisAddr string) http.Handler {
-	middleware := &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000)}
+	return NewDistributedRateLimitedHandlerWithTrustedProxies(next, redisAddr, TrustedProxyPolicy{})
+}
+
+func NewDistributedRateLimitedHandlerWithTrustedProxies(next http.Handler, redisAddr string, policy TrustedProxyPolicy) http.Handler {
+	middleware := &rateLimitMiddleware{next: next, limiter: newRateLimiter(10000), proxyPolicy: policy}
 	if strings.TrimSpace(redisAddr) != "" {
 		middleware.redis = newRedisRateLimiter(redisAddr)
 	}
 	return middleware
+}
+
+// ParseTrustedProxyCIDRs parses a comma-separated allowlist such as
+// "10.0.0.0/8,192.168.0.0/16". Invalid entries fail startup rather than
+// silently widening trust. Plain IP literals are accepted as exact /32 or /128
+// networks for small deployments.
+func ParseTrustedProxyCIDRs(raw string) (TrustedProxyPolicy, error) {
+	var policy TrustedProxyPolicy
+	for _, entry := range strings.Split(raw, ",") {
+		entry = strings.TrimSpace(entry)
+		if entry == "" {
+			continue
+		}
+
+		if ip := net.ParseIP(entry); ip != nil {
+			bits := 128
+			if ip.To4() != nil {
+				ip = ip.To4()
+				bits = 32
+			}
+			policy.trusted = append(policy.trusted, &net.IPNet{IP: ip, Mask: net.CIDRMask(bits, bits)})
+			continue
+		}
+
+		_, network, err := net.ParseCIDR(entry)
+		if err != nil {
+			return TrustedProxyPolicy{}, fmt.Errorf("invalid trusted proxy CIDR %q: %w", entry, err)
+		}
+		policy.trusted = append(policy.trusted, network)
+	}
+	return policy, nil
+}
+
+func (p TrustedProxyPolicy) configured() bool {
+	return len(p.trusted) > 0
+}
+
+func (p TrustedProxyPolicy) isTrusted(ip net.IP) bool {
+	if ip == nil {
+		return false
+	}
+	for _, network := range p.trusted {
+		if network.Contains(ip) {
+			return true
+		}
+	}
+	return false
 }
 
 func newRateLimiter(maxEntries int) *rateLimiter {
@@ -66,7 +130,7 @@ func newRateLimiter(maxEntries int) *rateLimiter {
 }
 
 func (m *rateLimitMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	policy, scope, identity, limited := rateLimitRule(r)
+	policy, scope, identity, limited := rateLimitRuleWithTrustedProxies(r, m.proxyPolicy)
 	if limited {
 		key := rateLimitKey(scope, identity)
 		backend := "local"
@@ -94,8 +158,12 @@ func (m *rateLimitMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 }
 
 func rateLimitRule(r *http.Request) (rateLimitPolicy, string, string, bool) {
+	return rateLimitRuleWithTrustedProxies(r, TrustedProxyPolicy{})
+}
+
+func rateLimitRuleWithTrustedProxies(r *http.Request, proxyPolicy TrustedProxyPolicy) (rateLimitPolicy, string, string, bool) {
 	path := r.URL.Path
-	remote := remoteIdentity(r)
+	remote := remoteIdentityWithTrustedProxies(r, proxyPolicy)
 
 	switch {
 	case r.Method == http.MethodPost && path == "/v1/sessions/bootstrap":
@@ -198,14 +266,62 @@ func rateLimitKey(scope, identity string) string {
 }
 
 func remoteIdentity(r *http.Request) string {
-	remote := strings.TrimSpace(r.RemoteAddr)
-	if host, _, err := net.SplitHostPort(remote); err == nil && host != "" {
-		return host
-	}
-	if remote == "" {
+	return remoteIdentityWithTrustedProxies(r, TrustedProxyPolicy{})
+}
+
+func remoteIdentityWithTrustedProxies(r *http.Request, policy TrustedProxyPolicy) string {
+	peer := remoteIP(r.RemoteAddr)
+	if peer == nil {
 		return "unknown"
 	}
-	return remote
+	peerText := peer.String()
+
+	// Forwarded identity is ignored unless the socket peer itself is trusted.
+	// This prevents direct clients from spoofing X-Forwarded-For.
+	if !policy.isTrusted(peer) {
+		return peerText
+	}
+
+	xff := strings.TrimSpace(r.Header.Get("X-Forwarded-For"))
+	if xff == "" {
+		return peerText
+	}
+
+	parts := strings.Split(xff, ",")
+	chain := make([]net.IP, 0, len(parts)+1)
+	for _, part := range parts {
+		ip := net.ParseIP(strings.TrimSpace(part))
+		if ip == nil {
+			log.Printf("security_event=forwarded_identity_rejected reason=malformed_x_forwarded_for")
+			return peerText
+		}
+		chain = append(chain, ip)
+	}
+	chain = append(chain, peer)
+
+	// Walk from the immediate peer toward the client. Trusted proxy hops are
+	// skipped; the first untrusted address is the effective client identity.
+	// This is robust when a trusted edge appends to a pre-existing XFF chain.
+	for i := len(chain) - 1; i >= 0; i-- {
+		if policy.isTrusted(chain[i]) {
+			continue
+		}
+		return chain[i].String()
+	}
+
+	// An all-trusted chain can legitimately occur for internal callers. Use the
+	// left-most forwarded address so distinct trusted clients remain distinct.
+	return chain[0].String()
+}
+
+func remoteIP(remoteAddr string) net.IP {
+	remote := strings.TrimSpace(remoteAddr)
+	if host, _, err := net.SplitHostPort(remote); err == nil {
+		if ip := net.ParseIP(strings.TrimSpace(host)); ip != nil {
+			return ip
+		}
+	}
+	return net.ParseIP(remote)
 }
 
 var (
