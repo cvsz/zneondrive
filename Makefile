@@ -173,7 +173,7 @@ client-doctor:
 ifeq ($(OS),Windows_NT)
 	powershell -ExecutionPolicy Bypass -File tools/install-client.ps1 -Mode doctor
 else
-	@$(CONTROL) doctor
+	@$(CONTROL) client-doctor
 endif
 
 game-server-build:
