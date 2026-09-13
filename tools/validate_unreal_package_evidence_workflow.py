@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+WORKFLOW = ROOT / ".github/workflows/unreal-package-evidence.yml"
+
+REQUIRED = [
+    "name: Unreal Package Evidence",
+    "workflow_dispatch:",
+    "runs-on: [self-hosted, linux, unreal-5.8]",
+    "bash tools/ue-linux.sh info",
+    "bash tools/ue-linux.sh generate",
+    "bash tools/ue-linux.sh package-client",
+    "bash tools/ue-linux.sh package-server",
+    "client-manifest.txt",
+    "server-manifest.txt",
+    "client-sha256sums.txt",
+    "server-sha256sums.txt",
+    "Assert package evidence exists",
+    "if: always()",
+    "actions/upload-artifact@v4",
+    "retention-days: 30",
+]
+FORBIDDEN = [
+    "GAME_SERVER_SHARED_KEY",
+    "ZNEON_GAME_SERVER_KEY",
+    "DATABASE_URL",
+    "REDIS_URL",
+]
+
+
+def main() -> int:
+    errors: list[str] = []
+    if not WORKFLOW.is_file():
+        errors.append("missing .github/workflows/unreal-package-evidence.yml")
+    else:
+        text = WORKFLOW.read_text(encoding="utf-8")
+        for token in REQUIRED:
+            if token not in text:
+                errors.append(f"package evidence workflow missing {token!r}")
+        for token in FORBIDDEN:
+            if token in text:
+                errors.append(f"package evidence workflow must not contain runtime secret/data-plane token {token!r}")
+        if "dist/packages/client-linux" not in text or "dist/packages/server-linux" not in text:
+            errors.append("client/server package roots must remain separate")
+        if "if: success()" not in text:
+            errors.append("successful runs must assert non-empty retained package manifests/checksums")
+
+    if errors:
+        print("Unreal package evidence workflow validation FAILED", file=sys.stderr)
+        for error in errors:
+            print(f"- {error}", file=sys.stderr)
+        return 1
+    print("Unreal package evidence workflow validation OK")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
