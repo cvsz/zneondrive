@@ -51,6 +51,8 @@ jobs:
             docs/adr/0004-unreal-engine-client-and-gameplay-server.md
             docs/adr/0005-durable-service-plane.md
             docs/adr/0006-phase-gated-deployment.md
+            docs/ue-build-evidence-v1.6.md
+            docs/ue-package-evidence-v1.7.md
             design/catalog/characters.json
             design/catalog/factions.json
             design/catalog/districts.json
@@ -71,6 +73,7 @@ jobs:
             tools/validate_runtime_v0_6.py
             tools/validate_control_surface.py
             tools/validate_unreal_evidence_workflow.py
+            tools/validate_unreal_package_evidence_workflow.py
             tools/zneondrive-control.sh
             tools/ue-linux.sh
             tools/install-client.ps1
@@ -153,6 +156,7 @@ jobs:
         run: |
           python3 tools/validate_control_surface.py
           python3 tools/validate_unreal_evidence_workflow.py
+          python3 tools/validate_unreal_package_evidence_workflow.py
           bash -n tools/zneondrive-control.sh
           bash -n tools/ue-linux.sh
           make help >/dev/null
