@@ -1,0 +1,121 @@
+name: Unreal Package Evidence
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package-evidence:
+    runs-on: [self-hosted, linux, unreal-5.8]
+    timeout-minutes: 240
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate repository and Unreal tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/validate_runtime_v0_4.py
+          python3 tools/validate_control_surface.py
+          python3 tools/validate_unreal_evidence_workflow.py
+          python3 tools/validate_unreal_package_evidence_workflow.py
+          bash -n tools/ue-linux.sh
+          python3 -m unittest tests.test_ue_linux_tooling -v
+
+      - name: Initialize evidence directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          rm -rf "$evidence"
+          mkdir -p "$evidence/logs"
+          {
+            printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+            printf 'commit=%s\n' "$GITHUB_SHA"
+            printf 'run_id=%s\n' "$GITHUB_RUN_ID"
+            printf 'run_attempt=%s\n' "$GITHUB_RUN_ATTEMPT"
+            printf 'runner_name=%s\n' "$RUNNER_NAME"
+            printf 'runner_os=%s\n' "$RUNNER_OS"
+            printf 'started_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > "$evidence/run.txt"
+
+      - name: Validate Unreal Engine 5.8 installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${UE_ROOT:-}" || { echo "UE_ROOT is required"; exit 1; }
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          bash tools/ue-linux.sh info | tee "$evidence/engine-info.txt"
+          cp "$UE_ROOT/Engine/Build/Build.version" "$evidence/Build.version"
+
+      - name: Generate project files
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          bash tools/ue-linux.sh generate 2>&1 | tee "$evidence/logs/project-generation.log"
+
+      - name: Package Linux client
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          bash tools/ue-linux.sh package-client 2>&1 | tee "$evidence/logs/client-package.log"
+
+      - name: Package Linux dedicated server
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          bash tools/ue-linux.sh package-server 2>&1 | tee "$evidence/logs/server-package.log"
+
+      - name: Collect package manifests and checksums
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          mkdir -p "$evidence"
+          {
+            printf 'finished_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            printf 'commit=%s\n' "$GITHUB_SHA"
+          } >> "$evidence/run.txt"
+
+          for kind in client server; do
+            root="$GITHUB_WORKSPACE/dist/packages/${kind}-linux"
+            manifest="$evidence/${kind}-manifest.txt"
+            sums="$evidence/${kind}-sha256sums.txt"
+            : > "$manifest"
+            : > "$sums"
+            if [[ -d "$root" ]]; then
+              find "$root" -type f -printf '%P\t%s bytes\n' | sort > "$manifest"
+              while IFS= read -r file; do
+                sha256sum "$file" >> "$sums"
+              done < <(find "$root" -type f -print | sort)
+              du -sb "$root" > "$evidence/${kind}-size-bytes.txt"
+            fi
+          done
+
+      - name: Assert package evidence exists
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-package-evidence"
+          test -s "$evidence/client-manifest.txt"
+          test -s "$evidence/server-manifest.txt"
+          test -s "$evidence/client-sha256sums.txt"
+          test -s "$evidence/server-sha256sums.txt"
+
+      - name: Upload Unreal package evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ue-package-evidence-${{ github.sha }}
+          path: .runtime/ue-package-evidence/
+          if-no-files-found: error
+          retention-days: 30

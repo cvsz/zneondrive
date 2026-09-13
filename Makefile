@@ -91,6 +91,7 @@ validate-runtime:
 validate-control:
 	python3 tools/validate_control_surface.py
 	python3 tools/validate_unreal_evidence_workflow.py
+	python3 tools/validate_unreal_package_evidence_workflow.py
 	bash -n tools/zneondrive-control.sh
 	bash -n tools/ue-linux.sh
 
