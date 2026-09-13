@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
     "Makefile",
     "tools/zneondrive-control.sh",
+    "tools/ue-linux.sh",
+    "tools/test-ue-linux.sh",
     "tools/install-client.ps1",
     "game/Source/NeonDriveClient.Target.cs",
     "docs/control-panel.md",
@@ -29,6 +31,7 @@ def main() -> int:
 
     make = (ROOT / "Makefile").read_text(encoding="utf-8")
     shell = (ROOT / "tools/zneondrive-control.sh").read_text(encoding="utf-8")
+    ue = (ROOT / "tools/ue-linux.sh").read_text(encoding="utf-8")
     ps1 = (ROOT / "tools/install-client.ps1").read_text(encoding="utf-8")
     target = (ROOT / "game/Source/NeonDriveClient.Target.cs").read_text(encoding="utf-8")
     cpp = (ROOT / "game/Source/NeonDrive/NDServiceSubsystem.cpp").read_text(encoding="utf-8")
@@ -43,6 +46,19 @@ def main() -> int:
         require(make, token, "Makefile", errors)
 
     for token in [
+        "UE := bash tools/ue-linux.sh",
+        "$(UE) detect",
+        "$(UE) generate",
+        "$(UE) build NeonDriveClient",
+        "$(UE) build NeonDriveServer",
+        "$(UE) package-client",
+        "$(UE) package-server",
+        "$(UE) package-all",
+        "bash tools/test-ue-linux.sh",
+    ]:
+        require(make, token, "Makefile UE routing", errors)
+
+    for token in [
         "ue_detect()", "server_install()", "client_install()", "client_package_linux()", "client_play()",
         "game_server_package_linux()", "package_all_linux()",
         "game_server_install()", "game_server_start()", "control_panel()",
@@ -50,6 +66,17 @@ def main() -> int:
         "CONFIRM_RESET", "ZNEON_GAME_API_URL", "ZNEON_GAME_SERVER_KEY",
     ]:
         require(shell, token, "Linux control panel", errors)
+
+    for token in [
+        "UnrealBuildTool/UnrealBuildTool.dll",
+        "Binaries/ThirdParty/DotNet",
+        "-projectfiles",
+        "GenerateProjectFiles.sh",
+        "Engine/Build/BatchFiles/Linux/Build.sh",
+        "Engine/Build/BatchFiles/RunUAT.sh",
+        "UE_SEARCH_ROOTS",
+    ]:
+        require(ue, token, "UE Linux helper", errors)
 
     require(ps1, "Server shared keys are intentionally not accepted", "Windows installer", errors)
     if "GAME_SERVER_SHARED_KEY" in ps1 or "ZNEON_GAME_SERVER_KEY" in ps1:
