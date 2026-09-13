@@ -111,6 +111,10 @@ All notable changes to zNeonDrive are documented here.
 - Bounded Redis `INFO` probe exporting availability, client count, used/peak memory, rejected connections, evictions, keyspace hit/miss counters, and instantaneous operations per second
 - Fixed-enum Redis metric labels with no address, key, client name, replication ID, credential, player/race identifier, peer address, or raw probe error exposure
 - Short Redis metrics dial/I/O deadlines plus unit and loopback RESP coverage for successful and failed probes
+- Runtime PostgreSQL Server Observability v1.7 source/integration evidence documentation
+- Bounded current-database `pg_stat_database` metrics for backends, transactions, block reads/cache hits, tuple activity, deadlocks, temporary files/bytes, and database size
+- Fixed-enum PostgreSQL metric labels with no database name, SQL text, query fingerprint, relation, connection URL, credential, player/race identifier, or raw query error exposure
+- PostgreSQL 17 integration evidence requiring a live backend count, positive database size, and non-negative cumulative counters
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -148,6 +152,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
 - Advanced the observability source baseline to v1.5 with bounded PostgreSQL connection-pool metrics while keeping query-level/server-exporter metrics, Redis/Unreal metrics, deployed dashboards/SLOs, load/soak, HA/DR and production evidence open
 - Advanced the observability source baseline to v1.6 with bounded Redis server INFO metrics while keeping deployed Redis monitoring/HA evidence, PostgreSQL server/query exporter coverage, Unreal runtime metrics, deployed SLOs, load/soak, HA/DR and production evidence open
+- Advanced the observability source baseline to v1.7 with bounded current-database PostgreSQL server metrics while keeping query-level/external exporter coverage, deployed dashboards/SLOs, Unreal runtime metrics, load/soak, HA/DR and production evidence open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -183,10 +188,12 @@ All notable changes to zNeonDrive are documented here.
 - PostgreSQL pool metrics use only fixed connection-state labels and numeric pgx counters/durations; no connection string, SQL text, database name, credential, or player-controlled identifier is exported
 - Redis server metrics parse only allowlisted numeric INFO fields and expose fixed-enum labels; raw Redis addresses, arbitrary INFO fields, keys, client names, replication IDs and probe errors are not exported
 - Redis server metrics probing is read-only and cannot alter rate-limit, PostgreSQL, or gameplay authority decisions
+- PostgreSQL server metrics query only bounded current-database numeric counters and size; database names, SQL text, query fingerprints, relation names, URLs, credentials and raw errors are not exported
+- PostgreSQL server metrics are observational/read-only and cannot alter persistence, progression, race acceptance, rate limiting or gameplay authority
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/server-exporter coverage, deployed Redis HA/failover monitoring evidence, Unreal runtime metrics, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/external exporter coverage, deployed Redis HA/failover monitoring evidence, Unreal runtime metrics, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
