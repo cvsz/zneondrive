@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "build_hash_cases": [
+    {
+      "name": "starter_parts",
+      "part_ids": [
+        "part_chassis_starter_prototype",
+        "part_engine_ice_street_i",
+        "part_ecu_legacy_zero"
+      ],
+      "expected_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+    },
+    {
+      "name": "order_and_duplicate_canonicalization",
+      "part_ids": [
+        "part_ecu_legacy_zero",
+        "part_chassis_starter_prototype",
+        "part_engine_ice_street_i",
+        "part_ecu_legacy_zero"
+      ],
+      "expected_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+    }
+  ],
+  "quest_id_cases": [
+    {"quest_id": "MQ001", "valid": true, "previous": null},
+    {"quest_id": "MQ012", "valid": true, "previous": "MQ011"},
+    {"quest_id": "MQ100", "valid": true, "previous": "MQ099"},
+    {"quest_id": "MQ000", "valid": false, "previous": null},
+    {"quest_id": "MQ101", "valid": false, "previous": null},
+    {"quest_id": "MQ01", "valid": false, "previous": null},
+    {"quest_id": "Q001", "valid": false, "previous": null}
+  ]
+}
