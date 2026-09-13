@@ -1,0 +1,15 @@
+{
+  "product": "PROJECT: NEON DRIVE",
+  "studio": "ZEAZDEV COMPANY LIMITED",
+  "version": "0.0.1",
+  "channel": "development",
+  "baseUrl": "https://zneon.zeaz.dev/client-v-0-0-1/",
+  "unrealEngine": "5.8",
+  "productionReady": false,
+  "artifacts": {
+    "zip": {"status": "pending", "file": "zneondrive-client-v-0-0-1.zip", "sha256": null},
+    "apk": {"status": "pending", "file": "zneondrive-client-v-0-0-1.apk", "sha256": null},
+    "exe": {"status": "pending", "file": "zneondrive-client-v-0-0-1.exe", "sha256": null},
+    "bat": {"status": "pending", "file": "zneondrive-client-v-0-0-1.bat", "sha256": null}
+  }
+}
