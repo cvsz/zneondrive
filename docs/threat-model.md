@@ -1,6 +1,8 @@
 # Threat Model
 
-**Status:** baseline threat model. Mitigations are a mix of implemented prototype controls and production requirements.
+**Status:** baseline threat model with a CI-exercised partial abuse matrix. Production security remains evidence-gated.
+
+See [Security Threat Exercise v3.0](./security-threat-exercise-v3.0.md) for the machine-checked mapping between selected abuse scenarios and current CI evidence. The exercise deliberately leaves deployed/live blockers open and does not claim production security readiness.
 
 ## Assets to protect
 
@@ -52,9 +54,8 @@ Current controls:
 - constant-time game-server key comparison.
 
 Still required:
-- TLS,
-- rotation,
-- rate limits,
+- deployed TLS evidence,
+- credential/key rotation evidence,
 - anomaly detection,
 - scoped service identities.
 
@@ -67,7 +68,8 @@ Risks:
 Controls:
 - operation IDs,
 - unique constraints,
-- quest completion uniqueness.
+- quest completion uniqueness,
+- payload-bound idempotency semantics.
 
 ### Vehicle/build forgery
 Risks:
@@ -79,7 +81,8 @@ Controls:
 - canonical catalog validation,
 - optimistic expected revision,
 - blueprint/inventory checks,
-- transactional consumption/return.
+- transactional consumption/return,
+- immutable build revisions.
 
 ### Race cheating
 Risks:
@@ -88,13 +91,18 @@ Risks:
 - clock tampering,
 - result fabrication.
 
-Required before ranked release:
+Current source/CI controls:
 - authoritative checkpoint sequence,
 - accepted build binding,
-- impossible-state telemetry,
-- server timing,
-- result audit record,
-- cheat response policy.
+- server timing for accepted checkpoint progression,
+- deterministic build-bound result records,
+- source-level impossible displacement/rotation telemetry envelopes.
+
+Required before ranked release:
+- live final-physics calibration,
+- false-positive/false-negative evaluation,
+- ranked sanctions policy,
+- live packaged Unreal↔Go race evidence.
 
 ### Privilege abuse
 Risks:
@@ -115,20 +123,27 @@ Risks:
 - expensive query patterns,
 - gameplay-instance exhaustion.
 
-Required:
-- rate limits,
-- bounded request bodies,
-- quotas/backpressure,
+Current source/CI controls:
+- bounded local token buckets,
+- Redis-coordinated distributed limiter budgets,
+- bounded local fallback when Redis is unavailable,
+- bounded limiter state/cardinality,
+- health-probe exemption.
+
+Still required:
+- deployment-scale load evidence,
+- quotas/backpressure on the target environment,
 - capacity alerts,
-- graceful degradation.
+- graceful degradation evidence under target failure modes.
 
 ## Security exit criteria for production
 
 Production security cannot be claimed until:
-- transport security is deployed,
-- threat tests pass,
+- transport security is deployed and verified,
+- threat tests cover live Unreal↔Go and deployed ingress boundaries,
 - secrets are externally managed/rotatable,
-- rate limits are verified,
-- ranked abuse cases are tested,
+- rate limits are verified under deployment-scale load,
+- ranked abuse cases are tested against final physics,
+- privileged/admin actions are auditable,
 - security findings are triaged/remediated,
 - incident and rollback procedures are exercised.

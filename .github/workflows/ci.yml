@@ -75,10 +75,13 @@ jobs:
             tools/validate_control_surface.py
             tools/validate_unreal_evidence_workflow.py
             tools/validate_unreal_package_evidence_workflow.py
+            tools/validate_threat_exercise.py
             tools/zneondrive-control.sh
             tools/ue-linux.sh
             tools/install-client.ps1
             docs/control-panel.md
+            docs/security-threat-exercise-v3.0.md
+            security/threat-exercise-v3.0.json
             demo/index.html
             demo/styles.css
             demo/app.js
@@ -137,6 +140,8 @@ jobs:
               print(f"ok {path}")
           json.loads(Path("game/NeonDrive.uproject").read_text(encoding="utf-8"))
           print("ok game/NeonDrive.uproject")
+          json.loads(Path("security/threat-exercise-v3.0.json").read_text(encoding="utf-8"))
+          print("ok security/threat-exercise-v3.0.json")
           PY
 
       - name: Validate design invariants
@@ -144,6 +149,9 @@ jobs:
 
       - name: Validate documentation completeness and links
         run: python3 tools/validate_docs.py
+
+      - name: Validate threat-model exercise evidence
+        run: python3 tools/validate_threat_exercise.py
 
       - name: Validate client presentation package
         run: python3 tools/validate_client_demo.py
