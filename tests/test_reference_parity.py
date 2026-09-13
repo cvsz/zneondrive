@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 import unittest
 
-from zneondrive.domain import WorldState
+from zneondrive.domain import RaceValidationError, WorldState
+from zneondrive.race_contract import normalize_race_id, validate_race_checkpoint
 
 
 VECTORS_PATH = Path(__file__).with_name("reference-parity-vectors.json")
@@ -18,8 +19,12 @@ class ReferenceParityTests(unittest.TestCase):
     def test_shared_fixture_integrity(self) -> None:
         build_cases = self.vectors.get("build_hash_cases", [])
         quest_cases = self.vectors.get("quest_id_cases", [])
+        race_id_cases = self.vectors.get("race_id_cases", [])
+        checkpoint_cases = self.vectors.get("race_checkpoint_cases", [])
         self.assertTrue(build_cases, "build_hash_cases must not be empty")
         self.assertTrue(quest_cases, "quest_id_cases must not be empty")
+        self.assertTrue(race_id_cases, "race_id_cases must not be empty")
+        self.assertTrue(checkpoint_cases, "race_checkpoint_cases must not be empty")
 
         build_names: set[str] = set()
         for vector in build_cases:
@@ -41,6 +46,25 @@ class ReferenceParityTests(unittest.TestCase):
                     vector["previous"],
                     f"invalid quest vector {quest_id} must not declare a predecessor",
                 )
+
+        race_names: set[str] = set()
+        for vector in race_id_cases:
+            name = vector["name"]
+            self.assertTrue(name, "race id vector name must not be empty")
+            self.assertNotIn(name, race_names, f"duplicate race id vector name: {name}")
+            race_names.add(name)
+            if vector["valid"]:
+                self.assertIsInstance(vector["normalized"], str)
+                self.assertTrue(vector["normalized"])
+            else:
+                self.assertIsNone(vector["normalized"])
+
+        checkpoint_names: set[str] = set()
+        for vector in checkpoint_cases:
+            name = vector["name"]
+            self.assertTrue(name, "race checkpoint vector name must not be empty")
+            self.assertNotIn(name, checkpoint_names, f"duplicate checkpoint vector name: {name}")
+            checkpoint_names.add(name)
 
     def test_python_oracle_build_hashes_match_shared_vectors(self) -> None:
         for index, vector in enumerate(self.vectors["build_hash_cases"], start=1):
@@ -80,6 +104,27 @@ class ReferenceParityTests(unittest.TestCase):
                         and 1 <= int(quest_id[2:]) <= 100
                     )
                     self.assertFalse(structurally_valid)
+
+    def test_python_race_ids_match_shared_vectors(self) -> None:
+        for vector in self.vectors["race_id_cases"]:
+            with self.subTest(vector=vector["name"]):
+                if vector["valid"]:
+                    self.assertEqual(
+                        normalize_race_id(vector["race_id"]),
+                        vector["normalized"],
+                    )
+                else:
+                    with self.assertRaises(RaceValidationError):
+                        normalize_race_id(vector["race_id"])
+
+    def test_python_race_checkpoints_match_shared_vectors(self) -> None:
+        for vector in self.vectors["race_checkpoint_cases"]:
+            with self.subTest(vector=vector["name"]):
+                if vector["valid"]:
+                    validate_race_checkpoint(vector["index"], vector["elapsed_ms"])
+                else:
+                    with self.assertRaises(RaceValidationError):
+                        validate_race_checkpoint(vector["index"], vector["elapsed_ms"])
 
 
 if __name__ == "__main__":
