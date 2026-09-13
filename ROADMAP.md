@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.9
+## Phase 4 — Runtime prototype / integration v2.0
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -82,6 +82,7 @@
 - [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
 - [x] Add bounded Redis server INFO metrics on the private metrics listener
 - [x] Add bounded current-database PostgreSQL server metrics with PostgreSQL 17 integration evidence
+- [x] Add Unreal dedicated-server aggregate tick/session/input-clamp/ticket-redemption telemetry source baseline
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
@@ -119,6 +120,7 @@
 - [x] PostgreSQL server observability v1.7 source/integration evidence/non-claim contract
 - [x] integrated trust-boundary v1.8 PostgreSQL/Redis CI evidence/non-claim contract
 - [x] repeated multi-replica stability v1.9 CI evidence/non-claim contract
+- [x] Unreal dedicated-server observability v2.0 source/static-validation evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -128,7 +130,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, Unreal observability, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication/runtime observability, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -168,8 +170,9 @@
 - [x] Bounded PostgreSQL connection-pool metrics source/unit baseline
 - [x] Bounded Redis server metrics source/unit baseline
 - [x] Bounded PostgreSQL current-database server metrics source/integration baseline
+- [x] Unreal dedicated-server aggregate tick/session/input-clamp/ticket-redemption telemetry source baseline
 - [ ] PostgreSQL query-level/external exporter metrics completed
-- [ ] Unreal runtime metrics completed
+- [ ] Unreal replication-rate/bytes, race-validation, authority-correction and deployed scrape evidence
 - [x] Integrated trust-boundary abuse-path baseline exercised against PostgreSQL + Redis
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
