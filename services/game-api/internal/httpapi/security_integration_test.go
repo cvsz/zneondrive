@@ -34,9 +34,6 @@ func TestIntegratedTrustBoundaryAbusePaths(t *testing.T) {
 	if err = db.EnsureSchema(ctx); err != nil {
 		t.Fatal(err)
 	}
-	if err = db.EnsureRaceSchema(ctx); err != nil {
-		t.Fatal(err)
-	}
 
 	originalBootstrapPolicy := bootstrapRatePolicy
 	bootstrapRatePolicy = rateLimitPolicy{Burst: 3, RefillEvery: time.Hour}
