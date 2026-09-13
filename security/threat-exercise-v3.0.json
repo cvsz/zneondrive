@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "evidence_level": "ci_exercised_partial",
+  "architecture": {
+    "gameplay_authority": "Unreal Engine 5.8 dedicated server",
+    "service_plane": "Go 1.27",
+    "durable_authority": "PostgreSQL",
+    "ephemeral_coordination": "Redis"
+  },
+  "scenarios": [
+    {
+      "id": "credential_forgery_and_ticket_replay",
+      "category": "credential_replay",
+      "status": "ci_evidenced",
+      "evidence": [
+        {
+          "path": "services/game-api/internal/httpapi/security_integration_test.go",
+          "markers": [
+            "func TestIntegratedTrustBoundaryAbusePaths",
+            "forged session token: expected 401",
+            "wrong game-server key: expected 401",
+            "ticket replay: expected 401"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trusted_ingress_spoof_resistance",
+      "category": "availability_and_identity_abuse",
+      "status": "ci_evidenced",
+      "evidence": [
+        {
+          "path": "services/game-api/internal/httpapi/security_integration_test.go",
+          "markers": [
+            "Direct clients are not trusted to supply forwarding headers",
+            "expected 201",
+            "trusted_ingress_identity=true"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "distributed_rate_limit_budget",
+      "category": "availability_and_identity_abuse",
+      "status": "ci_evidenced",
+      "evidence": [
+        {
+          "path": "IMPLEMENTATION-CHECKLIST.md",
+          "markers": [
+            "two HTTP replicas under concurrent CI traffic consume exactly one Redis-coordinated burst budget",
+            "Redis-unavailable path retains bounded local limiting rather than unbounded fail-open"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "authoritative_race_ordering_and_result_integrity",
+      "category": "race_cheating",
+      "status": "ci_evidenced",
+      "evidence": [
+        {
+          "path": "IMPLEMENTATION-CHECKLIST.md",
+          "markers": [
+            "ordered checkpoint cursor + monotonic elapsed-time enforcement",
+            "deterministic final result hash bound to authoritative build evidence",
+            "race start bound to owned Roadworthy vehicle + exact active build revision/hash"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inventory_blueprint_rebuild_authority",
+      "category": "vehicle_build_forgery",
+      "status": "ci_evidenced",
+      "evidence": [
+        {
+          "path": "IMPLEMENTATION-CHECKLIST.md",
+          "markers": [
+            "PostgreSQL inventory + blueprint persistence",
+            "atomic inventory consume/return + immutable rebuild revision",
+            "build operation replay bound to exact validation hash"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quest_reward_replay_resistance",
+      "category": "economy_reward_duplication",
+      "status": "ci_evidenced",
+      "evidence": [
+        {
+          "path": "IMPLEMENTATION-CHECKLIST.md",
+          "markers": [
+            "idempotent quest/build operations",
+            "MQ004/MQ009 idempotent item grants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deployed_ingress_direct_bypass",
+      "category": "deployment_boundary",
+      "status": "open",
+      "blockers": [
+        "Requires deployed ingress header sanitization evidence.",
+        "Requires direct service bypass prevention evidence on the target environment."
+      ]
+    },
+    {
+      "id": "live_unreal_go_transport_trust",
+      "category": "live_transport",
+      "status": "open",
+      "blockers": [
+        "Requires packaged Unreal Engine 5.8 Client and Dedicated Server artifacts.",
+        "Requires live gameplay-ticket redemption over the packaged Unreal↔Go path."
+      ]
+    },
+    {
+      "id": "physics_derived_ranked_anticheat",
+      "category": "race_cheating",
+      "status": "open",
+      "blockers": [
+        "Requires final-physics dedicated-server samples for displacement/rotation/acceleration calibration.",
+        "Requires false-positive/false-negative evaluation and ranked sanctions policy."
+      ]
+    },
+    {
+      "id": "privileged_admin_audit",
+      "category": "privilege_abuse",
+      "status": "open",
+      "blockers": [
+        "Requires runtime RBAC and immutable privileged-action audit trail.",
+        "Requires high-impact economy action approval controls."
+      ]
+    }
+  ]
+}
