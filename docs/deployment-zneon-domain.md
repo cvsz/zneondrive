@@ -1,22 +1,25 @@
 # zneon.zeaz.dev deployment
 
-This document describes the public marketing/web surface for **PROJECT: NEON DRIVE** by **ZEAZDEV COMPANY LIMITED**.
+This document defines the public web and versioned client-release surface for **PROJECT: NEON DRIVE** by **ZEAZDEV COMPANY LIMITED**.
 
 ## Public architecture
 
-`https://zneon.zeaz.dev` should terminate at Cloudflare and forward through a Cloudflare Tunnel to the local web container on `127.0.0.1:18081`.
+`https://zneon.zeaz.dev` terminates at Cloudflare and forwards through the shared Cloudflare Tunnel to the dedicated zNeonDrive loopback origin `127.0.0.1:18085`.
 
-The public web container serves the static frontend and exposes only `/api/healthz` to the Go service. Player/session/quest/build/race mutation APIs are intentionally **not** reverse-proxied through the marketing site.
+Port `18085` is reserved for zNeonDrive so it does not collide with other ZEAZDEV services. The matching Terraform/Cloudflare configuration is maintained in `cvsz/zworkforce/infrastructure/terraform/cloudflare`.
+
+The public nginx container serves static content and exposes only `/api/healthz` to the Go service. Player/session/quest/build/race mutation APIs are not reverse-proxied through this website.
 
 Runtime topology:
 
 ```text
 Internet
-  -> Cloudflare TLS/WAF
+  -> Cloudflare
   -> Cloudflare Tunnel
-  -> 127.0.0.1:18081
+  -> 127.0.0.1:18085
   -> nginx web container
-      -> static frontend
+      -> project website
+      -> /client-v-0-0-1/
       -> /api/healthz -> game-api:8080/healthz
 
 private compose network
@@ -24,80 +27,51 @@ private compose network
            -> Redis 8
 ```
 
-## Start locally
+## Local start
 
-```bash
-cp .env.example .env
-make env-init
+Create `.env` from `.env.example`, initialize the local server credential with the repository-supported `make env-init`, then start the Compose stack. `WEB_PORT=18085` is the reviewed default.
 
-docker compose up -d --build
+Expected local checks:
 
-docker compose ps
-curl -fsS http://127.0.0.1:18081/healthz
-curl -fsS http://127.0.0.1:18081/api/healthz
-```
+- `http://127.0.0.1:18085/healthz`
+- `http://127.0.0.1:18085/api/healthz`
+- `http://127.0.0.1:18085/client-v-0-0-1/`
+- `http://127.0.0.1:18085/client-v-0-0-1/manifest.json`
 
-The frontend is then available at `http://127.0.0.1:18081`.
+## Cloudflare route
 
-## Cloudflare Tunnel
-
-If a tunnel already exists for `zeaz.dev`, add this ingress rule before the catch-all rule:
+The tunnel route is:
 
 ```yaml
-ingress:
-  - hostname: zneon.zeaz.dev
-    service: http://127.0.0.1:18081
-  - service: http_status:404
+- hostname: zneon.zeaz.dev
+  service: http://127.0.0.1:18085
 ```
 
-Then route DNS to the tunnel and restart/reload `cloudflared` using the installation method already used on the host.
+It must appear before the terminal `http_status:404` rule. Terraform keeps full tunnel configuration management opt-in until the live ingress has been reconciled and reviewed.
 
-Typical verification:
+## Public release URLs
 
-```bash
-curl -I https://zneon.zeaz.dev/
-curl -fsS https://zneon.zeaz.dev/healthz
-curl -fsS https://zneon.zeaz.dev/api/healthz
-```
+Release metadata is safe to publish before platform binaries exist:
+
+- `https://zneon.zeaz.dev/client-v-0-0-1/`
+- `https://zneon.zeaz.dev/client-v-0-0-1/manifest.json`
+- `https://zneon.zeaz.dev/client-v-0-0-1/SHA256SUMS.txt`
+
+The following files remain absent until real platform builds succeed:
+
+- `zneondrive-client-v-0-0-1.zip`
+- `zneondrive-client-v-0-0-1.apk`
+- `zneondrive-client-v-0-0-1.exe`
+- `zneondrive-client-v-0-0-1.bat`
+
+The manifest must keep each unavailable artifact in `pending` state with a null checksum. Never create placeholder binaries or rename unrelated files to a release extension.
 
 ## Security boundary
 
-- The public site is read-only marketing content plus a health probe.
-- `GAME_SERVER_SHARED_KEY` remains server-only and is never sent to or embedded in the frontend.
 - PostgreSQL remains durable authority.
 - Unreal dedicated servers remain gameplay authority.
 - Redis remains ephemeral coordination.
-- Metrics stay bound to loopback by default and are not exposed by the web proxy.
-- The site does not mark the game production-ready. Live Unreal↔Go E2E, load/soak, deployed SLO, HA/DR and release evidence remain separate gates.
-
-## Website content
-
-The site presents:
-
-- PROJECT: NEON DRIVE / NOVA CITY 2097 hero experience;
-- game scope and launch-content counts;
-- Unreal Engine 5.8 + Go 1.27 + PostgreSQL 17 + Redis 8 architecture;
-- ZEAZDEV COMPANY LIMITED studio profile;
-- live service-plane health state;
-- evidence-gated development status;
-- links to the project repository and corporate site.
-
-## Operations
-
-Recommended routine checks:
-
-```bash
-docker compose ps
-docker compose logs --tail=200 web game-api
-curl -fsS http://127.0.0.1:18081/healthz
-curl -fsS http://127.0.0.1:18081/api/healthz
-```
-
-For updates:
-
-```bash
-git pull --ff-only
-docker compose up -d --build
-```
-
-Do not expose PostgreSQL, Redis, metrics, or the dedicated-server shared key through the public domain.
+- Internal metrics stay on loopback.
+- Server-only credentials are not embedded in frontend or downloadable client files.
+- The release directory inherits the same CSP, frame, referrer and content-type protections as the website.
+- Publishing the website or release metadata does not claim that the game is production-ready.

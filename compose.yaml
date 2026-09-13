@@ -37,7 +37,7 @@ services:
       TRUSTED_PROXY_CIDRS: ${TRUSTED_PROXY_CIDRS:-}
       LISTEN_ADDR: :8080
       METRICS_LISTEN_ADDR: :9090
-      GAME_SERVER_SHARED_KEY: ${GAME_SERVER_SHARED_KEY:-zneondrive-local-server-key-change-me-0001}
+      GAME_SERVER_SHARED_KEY: ${GAME_SERVER_SHARED_KEY:?GAME_SERVER_SHARED_KEY must be set}
     ports:
       - "${GAME_API_PORT:-18080}:8080"
       - "127.0.0.1:${GAME_API_METRICS_PORT:-19090}:9090"
@@ -52,7 +52,7 @@ services:
       context: .
       dockerfile: web/Dockerfile
     ports:
-      - "127.0.0.1:${WEB_PORT:-18081}:8080"
+      - "127.0.0.1:${WEB_PORT:-18085}:8080"
     depends_on:
       game-api:
         condition: service_started
