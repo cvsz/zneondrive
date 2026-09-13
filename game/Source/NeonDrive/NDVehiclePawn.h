@@ -76,8 +76,13 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Prototype Driving|Integrity")
     float AuthorityDisplacementSlackCm = 150.0f;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Prototype Driving|Integrity")
+    float AuthorityRotationSlackDegrees = 8.0f;
+
     FVector LastAuthorityLocation = FVector::ZeroVector;
+    float LastAuthorityYawDegrees = 0.0f;
     bool bAuthorityLocationBaselineValid = false;
+    bool bAuthorityRotationBaselineValid = false;
 
     void InputThrottle(float Value);
     void InputSteering(float Value);

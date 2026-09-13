@@ -13,6 +13,7 @@ struct FNDServerTelemetrySnapshot
     uint64 CollisionBlocksTotal = 0;
     uint64 NetUpdateRequestsTotal = 0;
     uint64 ImpossibleDisplacementsTotal = 0;
+    uint64 ImpossibleRotationsTotal = 0;
     uint64 TicketRedeemAttemptsTotal = 0;
     uint64 TicketRedeemSuccessesTotal = 0;
     uint64 TicketRedeemFailuresTotal = 0;
@@ -35,6 +36,7 @@ public:
     static void RecordCollisionBlock();
     static void RecordNetUpdateRequest();
     static void RecordImpossibleDisplacement();
+    static void RecordImpossibleRotation();
     static void RecordTicketRedeemAttempt();
     static void RecordTicketRedeemSuccess();
     static void RecordTicketRedeemFailure();
@@ -51,6 +53,7 @@ private:
     static uint64 CollisionBlocksTotal;
     static uint64 NetUpdateRequestsTotal;
     static uint64 ImpossibleDisplacementsTotal;
+    static uint64 ImpossibleRotationsTotal;
     static uint64 TicketRedeemAttemptsTotal;
     static uint64 TicketRedeemSuccessesTotal;
     static uint64 TicketRedeemFailuresTotal;

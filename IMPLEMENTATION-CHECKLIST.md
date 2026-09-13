@@ -67,6 +67,7 @@
 - [x] Unreal dedicated-server observability v2.0 source/static-validation evidence boundary
 - [x] Unreal authority activity observability v2.1 source/static-validation evidence boundary
 - [x] Unreal displacement-envelope telemetry v2.2 source/static-validation evidence boundary
+- [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -119,6 +120,8 @@
 - [x] Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source
 - [x] Unreal authority displacement envelope derived from server max speed + bounded slack
 - [x] Unreal displacement baseline reset on durable identity bind and updated only after authoritative movement
+- [x] Unreal authority rotation envelope derived from server turn rate + bounded yaw slack
+- [x] Unreal rotation baseline reset on durable identity bind, wrap-safe delta checked before movement, and updated after authoritative rotation
 - [x] Unreal dedicated-server telemetry static validation enforcing numeric-only bounded fields, hook placement and no credential/dynamic identifiers
 - [x] PostgreSQL 17 isolated pg_dump/pg_restore CI drill
 - [x] restore assertions for account/progression/vehicle/build/inventory/blueprint/quest/race state and operation IDs
@@ -171,6 +174,7 @@
 - [x] Unreal server tick/session/input-clamp/ticket-redemption aggregate telemetry source + static validation
 - [x] Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source + static validation
 - [x] Unreal authority displacement-envelope source + static-placement evidence
+- [x] Unreal authority rotation-envelope source + static-placement evidence
 - [ ] Unreal replication-rate/bytes, live race-validation, final-physics authority-correction and deployed scrape evidence
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
@@ -217,6 +221,7 @@
 - [x] Unreal authoritative input-clamp aggregate telemetry source baseline
 - [x] Unreal durable-identity gate and collision-block aggregate telemetry source baseline
 - [x] Unreal source-level impossible-displacement envelope telemetry baseline
+- [x] Unreal source-level impossible-rotation envelope telemetry baseline
 - [ ] Deployed proxy header sanitization + direct-bypass prevention verified
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
 - [ ] Deployment-scale HTTP load evidence for distributed limiter
@@ -234,6 +239,7 @@
 - [x] Unreal dedicated-server aggregate tick/session/input/ticket telemetry source baseline
 - [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [x] Unreal source-level authority displacement-envelope telemetry baseline
+- [x] Unreal source-level authority rotation-envelope telemetry baseline
 - [ ] PostgreSQL query-level/external exporter metrics
 - [ ] Unreal replication-rate/bytes and deployed scrape/dashboard evidence
 - [ ] Deployed metrics scrape/dashboard evidence
@@ -265,6 +271,7 @@
 - [x] Unreal dedicated-server observability source/static-validation evidence
 - [x] Unreal authority activity observability source/static-validation evidence
 - [x] Unreal authority displacement-envelope source/static-validation evidence
+- [x] Unreal authority rotation-envelope source/static-validation evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract
