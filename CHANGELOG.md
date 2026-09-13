@@ -5,6 +5,8 @@ All notable changes to zNeonDrive are documented here.
 ## [Unreleased]
 
 ### Added
+- Security Threat Exercise v3.0 machine-checked partial abuse matrix tying selected credential replay, ingress identity, distributed rate-limit, race-integrity, rebuild-authority, and reward-idempotency scenarios to concrete CI evidence while retaining live/deployment blockers as open
+- CI validator for the threat-exercise manifest that pins the Unreal Engine 5.8 + Go 1.27 + PostgreSQL + Redis authority model, requires core abuse categories, verifies evidence markers, and rejects silent promotion of open production-security scenarios
 - Canonical Game Design Bible v0.1
 - Game Design Bible v0.2 implementation contract layer
 - NOVA CITY world bible and gameplay systems specification
@@ -161,6 +163,7 @@ All notable changes to zNeonDrive are documented here.
 - Documentation completeness and relative-link validator
 
 ### Changed
+- Threat-model status now distinguishes CI-exercised partial abuse evidence from deployed/live security verification; production security remains explicitly gated on live Unreal↔Go, deployed ingress, final-physics anti-cheat, privileged audit, load/soak, HA/DR and recovery evidence
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
 - Advanced Phase 3 vertical-slice specification to complete while keeping playable/runtime claims evidence-gated
 - Extended CI to validate JSON design catalogs, client-demo integrity, reference-runtime tests, runtime source structure, and Python compilation
@@ -192,6 +195,7 @@ All notable changes to zNeonDrive are documented here.
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
 
 ### Security
+- CI now machine-checks selected threat-model evidence while requiring deployed ingress bypass prevention, live Unreal↔Go transport, final-physics ranked anti-cheat calibration, and privileged admin auditing to remain explicit open scenarios
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
 - Rewardable mutations require idempotency semantics
 - Resume keys and session tokens are stored as hashes in PostgreSQL
