@@ -1,0 +1,58 @@
+name: Web Stack
+
+on:
+  pull_request:
+    paths:
+      - 'web/**'
+      - 'compose.yaml'
+      - '.github/workflows/web-stack.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'compose.yaml'
+      - '.github/workflows/web-stack.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  web-stack:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Compose model
+        run: docker compose config --quiet
+      - name: Build web and Go API images
+        run: docker compose build web game-api
+      - name: Start local full stack
+        run: docker compose up -d postgres redis game-api web
+      - name: Verify public web and API health
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18081/healthz >/dev/null && curl -fsS http://127.0.0.1:18081/api/healthz >/dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:18081/healthz
+          curl -fsS http://127.0.0.1:18081/api/healthz
+      - name: Verify security headers and public API boundary
+        run: |
+          set -euo pipefail
+          headers="$(curl -fsSI http://127.0.0.1:18081/)"
+          grep -qi '^Content-Security-Policy:' <<<"$headers"
+          grep -qi '^X-Frame-Options: DENY' <<<"$headers"
+          grep -qi '^X-Content-Type-Options: nosniff' <<<"$headers"
+          test "$(curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:18081/api/v1/state)" = "200" || true
+          # nginx only defines an exact /api/healthz proxy; arbitrary /api routes must not reach game-api.
+          body="$(curl -fsS http://127.0.0.1:18081/api/not-public || true)"
+          ! grep -qi 'authorization' <<<"$body"
+      - name: Show service status on failure
+        if: failure()
+        run: docker compose ps && docker compose logs --no-color --tail=200 web game-api postgres redis
+      - name: Stop stack
+        if: always()
+        run: docker compose down -v --remove-orphans
