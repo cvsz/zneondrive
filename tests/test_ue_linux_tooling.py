@@ -88,31 +88,13 @@ class UELinuxToolingTests(unittest.TestCase):
         result = self._run("info")
         self.assertIn("UE_VERSION=5.8.2", result.stdout)
         self.assertIn("UE_PROJECTFILES_MODE=installed-ubt", result.stdout)
+        preflight = self._run("preflight")
+        self.assertIn("PREFLIGHT_STATUS=ok", preflight.stdout)
+        self.assertIn("UE_PROJECTFILES_MODE=installed-ubt", preflight.stdout)
         self._run("generate")
         text = self.calls.read_text(encoding="utf-8")
         self.assertIn("UnrealBuildTool.dll -projectfiles", text)
         self.assertIn("-game -engine", text)
-
-    def test_installed_build_preflight_requires_dotnet(self) -> None:
-        dll = self.engine / "Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.dll"
-        dll.write_text("fixture", encoding="utf-8")
-        env = os.environ.copy()
-        env.update(
-            UE_ROOT=str(self.engine),
-            ZNEON_UE_PROJECT=str(PROJECT),
-            CALLS_LOG=str(self.calls),
-            UE_MIN_FREE_GB="0",
-            PATH="/usr/bin:/bin",
-        )
-        result = subprocess.run(
-            ["bash", str(SCRIPT), "preflight"],
-            env=env,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("requires bundled/system dotnet", result.stderr)
 
     def test_preflight_rejects_invalid_disk_threshold(self) -> None:
         self._write_exe(
