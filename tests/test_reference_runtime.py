@@ -1,12 +1,15 @@
 import unittest
 
 from zneondrive.domain import (
+    BlueprintRequiredError,
     BuildConflictError,
     CapacityError,
     DomainError,
     Entitlements,
+    InsufficientInventoryError,
     OperationConflictError,
     RaceValidationError,
+    STARTER_REBUILD_BLUEPRINT,
     WorldState,
 )
 
@@ -138,6 +141,95 @@ class WorldStateTests(unittest.TestCase):
         )
         self.assertEqual(receipt["money"], 0)
         self.assertEqual(self.world.characters["char-1"].money, 500)
+
+    def test_garage_17_quest_side_effects_are_idempotent(self) -> None:
+        character = self.world.characters["char-1"]
+        self.world.complete_quest("acct-1", "MQ004", operation_id="mq004-a")
+        self.assertEqual(character.inventory.get("part_brakes_track_i"), 1)
+        self.world.complete_quest("acct-1", "MQ004", operation_id="mq004-b")
+        self.assertEqual(character.inventory.get("part_brakes_track_i"), 1)
+
+        self.world.complete_quest("acct-1", "MQ005", operation_id="mq005-a")
+        self.assertIn(STARTER_REBUILD_BLUEPRINT, character.blueprints)
+        self.world.complete_quest("acct-1", "MQ005", operation_id="mq005-b")
+        self.assertEqual(character.blueprints, {STARTER_REBUILD_BLUEPRINT})
+
+        self.world.complete_quest("acct-1", "MQ009", operation_id="mq009-a")
+        self.world.complete_quest("acct-1", "MQ009", operation_id="mq009-b")
+        self.assertEqual(character.inventory.get("part_tires_street_i"), 1)
+
+    def test_rebuild_requires_blueprint_and_inventory_before_mutation(self) -> None:
+        character = self.world.characters["char-1"]
+        target = STARTER_PARTS + ["part_brakes_track_i"]
+        with self.assertRaises(BlueprintRequiredError):
+            self.world.rebuild_vehicle(
+                "acct-1",
+                "veh-1",
+                target,
+                expected_revision=1,
+                operation_id="rebuild-before-blueprint",
+            )
+        self.assertEqual(self.vehicle.active_build.revision, 1)
+        self.assertEqual(character.inventory, {})
+
+        self.world.complete_quest("acct-1", "MQ005", operation_id="mq005-unlock")
+        with self.assertRaises(InsufficientInventoryError):
+            self.world.rebuild_vehicle(
+                "acct-1",
+                "veh-1",
+                target,
+                expected_revision=1,
+                operation_id="rebuild-without-part",
+            )
+        self.assertEqual(self.vehicle.active_build.revision, 1)
+        self.assertEqual(character.inventory, {})
+
+    def test_rebuild_consumes_returns_and_replays_semantic_payload(self) -> None:
+        character = self.world.characters["char-1"]
+        self.world.complete_quest("acct-1", "MQ004", operation_id="mq004")
+        self.world.complete_quest("acct-1", "MQ005", operation_id="mq005")
+        first_parts = STARTER_PARTS + ["part_brakes_track_i"]
+        first = self.world.rebuild_vehicle(
+            "acct-1",
+            "veh-1",
+            first_parts,
+            expected_revision=1,
+            operation_id="rebuild-1",
+        )
+        self.assertEqual(first.revision, 2)
+        self.assertNotIn("part_brakes_track_i", character.inventory)
+
+        replay = self.world.rebuild_vehicle(
+            "acct-1",
+            "veh-1",
+            list(reversed(first_parts)),
+            expected_revision=1,
+            operation_id="rebuild-1",
+        )
+        self.assertEqual(replay, first)
+        self.assertEqual(self.vehicle.active_build.revision, 2)
+
+        with self.assertRaises(OperationConflictError):
+            self.world.rebuild_vehicle(
+                "acct-1",
+                "veh-1",
+                STARTER_PARTS + ["part_tires_street_i"],
+                expected_revision=1,
+                operation_id="rebuild-1",
+            )
+        self.assertEqual(self.vehicle.active_build.revision, 2)
+
+        self.world.complete_quest("acct-1", "MQ009", operation_id="mq009")
+        swapped = self.world.rebuild_vehicle(
+            "acct-1",
+            "veh-1",
+            STARTER_PARTS + ["part_tires_street_i"],
+            expected_revision=2,
+            operation_id="rebuild-2",
+        )
+        self.assertEqual(swapped.revision, 3)
+        self.assertEqual(character.inventory.get("part_brakes_track_i"), 1)
+        self.assertNotIn("part_tires_street_i", character.inventory)
 
     def test_vehicle_grant_operation_replay_rejects_changed_vehicle(self) -> None:
         vip = WorldState()
