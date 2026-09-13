@@ -59,6 +59,7 @@
 - [x] race-integrity telemetry v1.2 evidence boundary
 - [x] observability metrics v1.3 source/unit evidence boundary
 - [x] PostgreSQL restore drill v1.4 CI evidence boundary
+- [x] PostgreSQL pool observability v1.5 source/unit evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -98,6 +99,8 @@
 - [x] bounded HTTP request/status-class/latency/in-flight metrics
 - [x] separate metrics listener with loopback-only Compose publication
 - [x] metrics unit coverage for label cardinality and secret/dynamic-ID non-disclosure
+- [x] bounded PostgreSQL pgx pool connection/acquire metrics
+- [x] PostgreSQL pool metrics unit coverage and credential/URL non-disclosure assertions
 - [x] PostgreSQL 17 isolated pg_dump/pg_restore CI drill
 - [x] restore assertions for account/progression/vehicle/build/inventory/blueprint/quest/race state and operation IDs
 - [x] restore-time replay of all canonical migrations
@@ -140,7 +143,8 @@
 - [ ] deployed ingress sanitization/network-isolation evidence
 - [ ] deployment-scale distributed limiter load evidence
 - [ ] long-duration soak evidence
-- [ ] PostgreSQL query/pool metrics
+- [x] PostgreSQL pool connection/acquire metrics source + unit evidence
+- [ ] PostgreSQL query-level/server exporter metrics
 - [ ] Redis server metrics
 - [ ] Unreal server tick/replication metrics
 - [ ] full reference-oracle parity in Go
@@ -193,6 +197,7 @@
 
 ## Reliability
 - [x] Go HTTP metrics source/unit instrumentation baseline
+- [x] PostgreSQL pool connection/acquire metrics source/unit baseline
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
 - [ ] Long-duration soak test
@@ -214,6 +219,7 @@
 - [x] Concurrent two-replica HTTP/Redis limiter CI evidence
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
+- [x] PostgreSQL pool metrics source + unit evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract
