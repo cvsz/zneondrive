@@ -105,12 +105,12 @@ jobs:
           GRANT pg_monitor TO zneondrive_monitor;
           SQL
 
-          role_flags=$(docker run --rm --network host \
+          role_privileges_ok=$(docker run --rm --network host \
             -e PGPASSWORD='zneondrive-test' \
             postgres:17-alpine \
             psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
-              -c "SELECT rolsuper::int || ':' || rolcreatedb::int || ':' || rolcreaterole::int || ':' || rolreplication::int || ':' || rolbypassrls::int FROM pg_roles WHERE rolname='zneondrive_monitor'")
-          test "$role_flags" = '0:0:0:0:0'
+              -c "SELECT (NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls)::text FROM pg_roles WHERE rolname='zneondrive_monitor'")
+          test "$role_privileges_ok" = 'true'
 
           membership=$(docker run --rm --network host \
             -e PGPASSWORD='zneondrive-test' \
