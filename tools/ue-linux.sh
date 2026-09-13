@@ -91,7 +91,7 @@ preflight() {
   min_free_gb="${UE_MIN_FREE_GB:-20}"
   [[ "$min_free_gb" =~ ^[0-9]+$ ]] || fail "UE_MIN_FREE_GB must be a non-negative integer."
   min_free_bytes=$((min_free_gb * 1024 * 1024 * 1024))
-  free_bytes="$(df -Pk "$ROOT" | awk 'NR==2 {print $4 * 1024}')"
+  free_bytes="$(df -Pk "$ROOT" | awk 'NR==2 {printf "%.0f\n", $4 * 1024}')"
   [[ "$free_bytes" =~ ^[0-9]+$ ]] || fail "Unable to determine runner free disk bytes."
   (( free_bytes >= min_free_bytes )) || fail "Insufficient runner disk: ${free_bytes} bytes free; need at least ${min_free_bytes}."
 
