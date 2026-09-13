@@ -97,11 +97,11 @@ void FNDServerTelemetry::MaybeLog(double WorldSeconds)
         Current.ActiveSessions,
         Current.LastTickMilliseconds,
         Current.PeakTickMilliseconds,
-        Current.PlayerJoinsTotal,
-        Current.PlayerLeavesTotal,
-        Current.InputClampsTotal,
-        Current.TicketRedeemAttemptsTotal,
-        Current.TicketRedeemSuccessesTotal,
-        Current.TicketRedeemFailuresTotal
+        static_cast<unsigned long long>(Current.PlayerJoinsTotal),
+        static_cast<unsigned long long>(Current.PlayerLeavesTotal),
+        static_cast<unsigned long long>(Current.InputClampsTotal),
+        static_cast<unsigned long long>(Current.TicketRedeemAttemptsTotal),
+        static_cast<unsigned long long>(Current.TicketRedeemSuccessesTotal),
+        static_cast<unsigned long long>(Current.TicketRedeemFailuresTotal)
     );
 }
