@@ -159,6 +159,7 @@ func (m *HTTPMetrics) render() string {
 	fmt.Fprintf(&b, "zneondrive_http_in_flight_requests %d\n", m.inFlight)
 
 	m.renderPostgresMetrics(&b)
+	renderRedisRateLimitMetrics(&b)
 	return b.String()
 }
 
@@ -191,6 +192,15 @@ func (m *HTTPMetrics) renderPostgresMetrics(b *strings.Builder) {
 	b.WriteString("# HELP zneondrive_postgres_pool_acquire_duration_seconds Cumulative time spent acquiring PostgreSQL pool connections.\n")
 	b.WriteString("# TYPE zneondrive_postgres_pool_acquire_duration_seconds counter\n")
 	fmt.Fprintf(b, "zneondrive_postgres_pool_acquire_duration_seconds %.9f\n", stats.AcquireDuration.Seconds())
+}
+
+func renderRedisRateLimitMetrics(b *strings.Builder) {
+	stats := redisRateLimitStatsSnapshot()
+	b.WriteString("# HELP zneondrive_redis_rate_limit_decisions_total Redis-backed rate-limit decisions by bounded outcome.\n")
+	b.WriteString("# TYPE zneondrive_redis_rate_limit_decisions_total counter\n")
+	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"allowed\"} %d\n", stats.Allowed)
+	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"rejected\"} %d\n", stats.Rejected)
+	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"error\"} %d\n", stats.Errors)
 }
 
 func metricsRoute(r *http.Request) string {
