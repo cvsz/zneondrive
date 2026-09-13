@@ -43,12 +43,14 @@ jobs:
             printf 'started_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           } > "$evidence/run.txt"
 
-      - name: Validate Unreal Engine 5.8 installation
+      - name: Preflight Unreal Engine 5.8 runner
         shell: bash
+        env:
+          UE_MIN_FREE_GB: "20"
         run: |
           set -euo pipefail
-          test -n "${UE_ROOT:-}" || { echo "UE_ROOT is required"; exit 1; }
           evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          bash tools/ue-linux.sh preflight | tee "$evidence/runner-preflight.txt"
           bash tools/ue-linux.sh info | tee "$evidence/engine-info.txt"
           cp "$UE_ROOT/Engine/Build/Build.version" "$evidence/Build.version"
 

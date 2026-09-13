@@ -9,6 +9,9 @@ REQUIRED = [
     "name: Unreal Package Evidence",
     "workflow_dispatch:",
     "runs-on: [self-hosted, linux, unreal-5.8]",
+    "bash tools/ue-linux.sh preflight",
+    'UE_MIN_FREE_GB: "40"',
+    "runner-preflight.txt",
     "bash tools/ue-linux.sh info",
     "bash tools/ue-linux.sh generate",
     "bash tools/ue-linux.sh package-client",
@@ -47,6 +50,8 @@ def main() -> int:
                 errors.append(f"package evidence workflow must not contain runtime secret/data-plane token {token!r}")
         if text.count('dist/packages/${kind}-linux') != 1:
             errors.append("package inventory must derive exactly one root per explicit client/server kind")
+        if text.count("bash tools/ue-linux.sh preflight") != 1:
+            errors.append("package evidence workflow must run runner preflight exactly once")
         if text.count("bash tools/ue-linux.sh package-client") != 1:
             errors.append("workflow must invoke the Client package command exactly once")
         if text.count("bash tools/ue-linux.sh package-server") != 1:
