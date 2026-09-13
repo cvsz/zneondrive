@@ -11,6 +11,7 @@ uint64 FNDServerTelemetry::IdentityGateBlocksTotal = 0;
 uint64 FNDServerTelemetry::CollisionBlocksTotal = 0;
 uint64 FNDServerTelemetry::NetUpdateRequestsTotal = 0;
 uint64 FNDServerTelemetry::ImpossibleDisplacementsTotal = 0;
+uint64 FNDServerTelemetry::ImpossibleRotationsTotal = 0;
 uint64 FNDServerTelemetry::TicketRedeemAttemptsTotal = 0;
 uint64 FNDServerTelemetry::TicketRedeemSuccessesTotal = 0;
 uint64 FNDServerTelemetry::TicketRedeemFailuresTotal = 0;
@@ -29,6 +30,7 @@ void FNDServerTelemetry::Reset()
     CollisionBlocksTotal = 0;
     NetUpdateRequestsTotal = 0;
     ImpossibleDisplacementsTotal = 0;
+    ImpossibleRotationsTotal = 0;
     TicketRedeemAttemptsTotal = 0;
     TicketRedeemSuccessesTotal = 0;
     TicketRedeemFailuresTotal = 0;
@@ -85,6 +87,11 @@ void FNDServerTelemetry::RecordImpossibleDisplacement()
     ++ImpossibleDisplacementsTotal;
 }
 
+void FNDServerTelemetry::RecordImpossibleRotation()
+{
+    ++ImpossibleRotationsTotal;
+}
+
 void FNDServerTelemetry::RecordTicketRedeemAttempt()
 {
     ++TicketRedeemAttemptsTotal;
@@ -112,6 +119,7 @@ FNDServerTelemetrySnapshot FNDServerTelemetry::Snapshot()
     Result.CollisionBlocksTotal = CollisionBlocksTotal;
     Result.NetUpdateRequestsTotal = NetUpdateRequestsTotal;
     Result.ImpossibleDisplacementsTotal = ImpossibleDisplacementsTotal;
+    Result.ImpossibleRotationsTotal = ImpossibleRotationsTotal;
     Result.TicketRedeemAttemptsTotal = TicketRedeemAttemptsTotal;
     Result.TicketRedeemSuccessesTotal = TicketRedeemSuccessesTotal;
     Result.TicketRedeemFailuresTotal = TicketRedeemFailuresTotal;
@@ -133,7 +141,7 @@ void FNDServerTelemetry::MaybeLog(double WorldSeconds)
     UE_LOG(
         LogNDServerTelemetry,
         Log,
-        TEXT("metric=zneondrive_unreal_server active_sessions=%d tick_ms=%.3f peak_tick_ms=%.3f joins_total=%llu leaves_total=%llu input_clamps_total=%llu authority_movement_ticks_total=%llu identity_gate_blocks_total=%llu collision_blocks_total=%llu net_update_requests_total=%llu impossible_displacements_total=%llu ticket_redeem_attempts_total=%llu ticket_redeem_successes_total=%llu ticket_redeem_failures_total=%llu"),
+        TEXT("metric=zneondrive_unreal_server active_sessions=%d tick_ms=%.3f peak_tick_ms=%.3f joins_total=%llu leaves_total=%llu input_clamps_total=%llu authority_movement_ticks_total=%llu identity_gate_blocks_total=%llu collision_blocks_total=%llu net_update_requests_total=%llu impossible_displacements_total=%llu impossible_rotations_total=%llu ticket_redeem_attempts_total=%llu ticket_redeem_successes_total=%llu ticket_redeem_failures_total=%llu"),
         Current.ActiveSessions,
         Current.LastTickMilliseconds,
         Current.PeakTickMilliseconds,
@@ -145,6 +153,7 @@ void FNDServerTelemetry::MaybeLog(double WorldSeconds)
         static_cast<unsigned long long>(Current.CollisionBlocksTotal),
         static_cast<unsigned long long>(Current.NetUpdateRequestsTotal),
         static_cast<unsigned long long>(Current.ImpossibleDisplacementsTotal),
+        static_cast<unsigned long long>(Current.ImpossibleRotationsTotal),
         static_cast<unsigned long long>(Current.TicketRedeemAttemptsTotal),
         static_cast<unsigned long long>(Current.TicketRedeemSuccessesTotal),
         static_cast<unsigned long long>(Current.TicketRedeemFailuresTotal)
