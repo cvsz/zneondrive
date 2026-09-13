@@ -23,6 +23,7 @@ required_telemetry = {
     "collision blocks": "collision_blocks_total=%llu",
     "net update requests": "net_update_requests_total=%llu",
     "impossible displacement counter": "impossible_displacements_total=%llu",
+    "impossible rotation counter": "impossible_rotations_total=%llu",
     "ticket attempts": "ticket_redeem_attempts_total=%llu",
     "ticket successes": "ticket_redeem_successes_total=%llu",
     "ticket failures": "ticket_redeem_failures_total=%llu",
@@ -55,6 +56,7 @@ for label, token in {
     "collision block": "FNDServerTelemetry::RecordCollisionBlock()",
     "explicit replication update request": "FNDServerTelemetry::RecordNetUpdateRequest()",
     "impossible displacement": "FNDServerTelemetry::RecordImpossibleDisplacement()",
+    "impossible rotation": "FNDServerTelemetry::RecordImpossibleRotation()",
 }.items():
     if token not in pawn:
         raise SystemExit(f"missing authoritative vehicle telemetry hook: {label}")
@@ -79,13 +81,21 @@ if "return;" not in identity_gate_block or identity_hook not in identity_gate_bl
     raise SystemExit("identity-gate telemetry must be emitted on the blocking path before movement returns")
 
 baseline_read = "const FVector CurrentAuthorityLocation = GetActorLocation();"
+yaw_read = "const float CurrentAuthorityYawDegrees = GetActorRotation().Yaw;"
 envelope = "MaxSpeedCmPerSecond * DeltaSeconds"
+rotation_envelope = "TurnRateDegreesPerSecond * DeltaSeconds"
 slack = "AuthorityDisplacementSlackCm"
+rotation_slack = "AuthorityRotationSlackDegrees"
 distance = "FVector::Dist(CurrentAuthorityLocation, LastAuthorityLocation)"
+yaw_delta = "FMath::FindDeltaAngleDegrees(LastAuthorityYawDegrees, CurrentAuthorityYawDegrees)"
 envelope_guard = "if (ObservedDisplacementCm > MaxExpectedDisplacementCm)"
+rotation_guard = "if (ObservedRotationDegrees > MaxExpectedRotationDegrees)"
 impossible_hook = "FNDServerTelemetry::RecordImpossibleDisplacement()"
+impossible_rotation_hook = "FNDServerTelemetry::RecordImpossibleRotation()"
+rotation_move = "AddActorWorldRotation(FRotator("
 swept_move = "AddActorWorldOffset(Delta, true, &Hit);"
 baseline_write = "LastAuthorityLocation = GetActorLocation();"
+yaw_baseline_write = "LastAuthorityYawDegrees = GetActorRotation().Yaw;"
 if not (
     pawn.index(movement_hook)
     < pawn.index(baseline_read)
@@ -93,6 +103,7 @@ if not (
     < pawn.index(distance)
     < pawn.index(envelope_guard)
     < pawn.index(impossible_hook)
+    < pawn.index(rotation_move)
     < pawn.index(swept_move)
     < pawn.index(baseline_write)
 ):
@@ -100,11 +111,29 @@ if not (
 if slack not in pawn or slack not in pawn_h:
     raise SystemExit("displacement envelope must include an explicit bounded server-side slack configuration")
 
+if not (
+    pawn.index(movement_hook)
+    < pawn.index(yaw_read)
+    < pawn.index(rotation_envelope)
+    < pawn.index(yaw_delta)
+    < pawn.index(rotation_guard)
+    < pawn.index(impossible_rotation_hook)
+    < pawn.index(rotation_move)
+    < pawn.index(yaw_baseline_write)
+):
+    raise SystemExit("rotation-envelope telemetry must compare pre-movement authority yaw and update the baseline after authoritative rotation")
+if rotation_slack not in pawn or rotation_slack not in pawn_h:
+    raise SystemExit("rotation envelope must include an explicit bounded server-side slack configuration")
+if "FMath::Abs(FMath::FindDeltaAngleDegrees" not in pawn:
+    raise SystemExit("rotation envelope must use wrap-safe absolute yaw delta")
+
 identity_bind = "bDurableIdentityBound = true;"
 force_net_update = "ForceNetUpdate();"
 identity_section = pawn[pawn.index(identity_bind):pawn.index(force_net_update)]
 if baseline_write not in identity_section or "bAuthorityLocationBaselineValid = true;" not in identity_section:
     raise SystemExit("durable identity binding must reset the authority displacement baseline before replication update")
+if yaw_baseline_write not in identity_section or "bAuthorityRotationBaselineValid = true;" not in identity_section:
+    raise SystemExit("durable identity binding must reset the authority rotation baseline before replication update")
 
 blocking_hit = "if (Hit.bBlockingHit)"
 collision_hook = "FNDServerTelemetry::RecordCollisionBlock()"
