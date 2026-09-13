@@ -15,6 +15,20 @@ services:
       timeout: 3s
       retries: 20
 
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.19.1
+    environment:
+      DATA_SOURCE_URI: postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable
+      DATA_SOURCE_USER: ${POSTGRES_USER:-zneondrive}
+      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD:-zneondrive-local}
+      PG_EXPORTER_COLLECTION_TIMEOUT: 5s
+    ports:
+      - "127.0.0.1:${POSTGRES_EXPORTER_PORT:-19187}:9187"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
   redis:
     image: redis:8-alpine
     command: ["redis-server", "--appendonly", "yes"]
