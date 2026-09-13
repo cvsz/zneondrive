@@ -62,6 +62,7 @@
 - [x] PostgreSQL pool observability v1.5 source/unit evidence boundary
 - [x] Redis server observability v1.6 source/unit evidence boundary
 - [x] PostgreSQL server observability v1.7 source/integration evidence boundary
+- [x] integrated trust-boundary v1.8 PostgreSQL/Redis CI evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -97,6 +98,7 @@
 - [x] PostgreSQL integration tests
 - [x] Redis distributed-limiter integration test
 - [x] concurrent two-replica HTTP integration test sharing one Redis limiter budget
+- [x] integrated PostgreSQL + Redis trust-boundary abuse-path test
 - [x] credential-safe race-integrity/auth rejection telemetry middleware
 - [x] bounded HTTP request/status-class/latency/in-flight metrics
 - [x] separate metrics listener with loopback-only Compose publication
@@ -146,6 +148,7 @@
 - [x] multi-hop forwarding chain selects first untrusted hop from the right
 - [x] invalid proxy CIDRs fail startup; malformed XFF falls back to socket peer
 - [x] two HTTP replicas under concurrent CI traffic consume exactly one Redis-coordinated burst budget
+- [x] integrated middleware rejects forged sessions, wrong game-server keys and one-time ticket replay
 - [x] race rejection/auth telemetry hashes race-instance and peer identifiers before logging
 - [ ] deployed ingress sanitization/network-isolation evidence
 - [ ] deployment-scale distributed limiter load evidence
@@ -193,6 +196,7 @@
 - [x] Rate-limit rejection/fallback security log events
 - [x] Trusted ingress/proxy identity source handling unit tested
 - [x] Multi-replica HTTP CI load evidence for distributed limiter
+- [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
 - [x] Dedicated-server auth rejection telemetry/correlation baseline
 - [x] Authoritative race rejection telemetry baseline
 - [ ] Deployed proxy header sanitization + direct-bypass prevention verified
@@ -229,6 +233,7 @@
 - [x] Redis shared limiter integration evidence
 - [x] Trusted-ingress identity source unit evidence
 - [x] Concurrent two-replica HTTP/Redis limiter CI evidence
+- [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
 - [x] PostgreSQL pool metrics source + unit evidence

@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.7
+## Phase 4 — Runtime prototype / integration v1.8
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -75,6 +75,7 @@
 - [x] Implement trusted-proxy/ingress client identity policy and tests
 - [x] Fail closed on invalid proxy CIDR configuration and malformed forwarding chains
 - [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
+- [x] Add integrated PostgreSQL + Redis trust-boundary abuse-path evidence
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
 - [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
@@ -115,6 +116,7 @@
 - [x] PostgreSQL pool observability v1.5 source/unit evidence/non-claim contract
 - [x] Redis server observability v1.6 source/unit evidence/non-claim contract
 - [x] PostgreSQL server observability v1.7 source/integration evidence/non-claim contract
+- [x] integrated trust-boundary v1.8 PostgreSQL/Redis CI evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -165,7 +167,7 @@
 - [x] Bounded PostgreSQL current-database server metrics source/integration baseline
 - [ ] PostgreSQL query-level/external exporter metrics completed
 - [ ] Unreal runtime metrics completed
-- [ ] Threat/abuse cases exercised against integrated runtime
+- [x] Integrated trust-boundary abuse-path baseline exercised against PostgreSQL + Redis
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
 - [ ] Incident/rollback exercise passed
