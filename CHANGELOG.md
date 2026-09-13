@@ -90,6 +90,11 @@ All notable changes to zNeonDrive are documented here.
 - Fixed-bucket HTTP request-duration histogram and current in-flight request gauge
 - Separate `METRICS_LISTEN_ADDR` listener with loopback-only Docker Compose host publication
 - Unit coverage proving metrics exclude authorization values and dynamic vehicle/race identifiers
+- Runtime PostgreSQL Restore Drill v1.4 evidence/non-claim documentation
+- Isolated PostgreSQL 17 `pg_dump`/`pg_restore --exit-on-error` drill in Runtime Go CI
+- Restore assertions covering account/progression, starter vehicle, immutable build + operation ID, quest + operation ID, inventory, blueprint, and authoritative race result state
+- Canonical migration replay after restore to detect schema/application incompatibility
+- 30-day retained GitHub Actions dump/report evidence without treating the drill as production RPO/RTO or DR proof
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -105,7 +110,7 @@ All notable changes to zNeonDrive are documented here.
 - Economy/monetization fairness, moderation/player-safety, privacy/data-retention, and live-ops policies
 - Release-readiness checklist, asset/IP policy, glossary, governance, support, and maintainers documents
 - GitHub bug-report and documentation issue templates
-- Repository 1280×640 SVG README banner asset
+- Repository 1280×640 raster README banner asset
 - Documentation completeness and relative-link validator
 
 ### Changed
@@ -124,6 +129,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the evidence baseline to v1.1 with concurrent two-replica HTTP/Redis limiter verification while keeping deployment-scale load, long-duration soak, deployed ingress verification, anti-cheat and production evidence open
 - Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
 - Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
+- Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -154,6 +160,7 @@ All notable changes to zNeonDrive are documented here.
 - Security telemetry observes existing authoritative outcomes and does not override or weaken race acceptance decisions
 - HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
+- Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
