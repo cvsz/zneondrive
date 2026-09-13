@@ -1,6 +1,7 @@
 package core
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -9,9 +10,9 @@ import (
 )
 
 type parityVectors struct {
-	SchemaVersion   int               `json:"schema_version"`
-	BuildHashCases  []buildHashVector `json:"build_hash_cases"`
-	QuestIDCases    []questIDVector   `json:"quest_id_cases"`
+	SchemaVersion  int               `json:"schema_version"`
+	BuildHashCases []buildHashVector `json:"build_hash_cases"`
+	QuestIDCases   []questIDVector   `json:"quest_id_cases"`
 }
 
 type buildHashVector struct {
@@ -45,6 +46,45 @@ func loadReferenceParityVectors(t *testing.T) parityVectors {
 		t.Fatalf("unsupported parity schema version: %d", vectors.SchemaVersion)
 	}
 	return vectors
+}
+
+func TestReferenceParityVectorIntegrity(t *testing.T) {
+	vectors := loadReferenceParityVectors(t)
+	if len(vectors.BuildHashCases) == 0 {
+		t.Fatal("build_hash_cases must not be empty")
+	}
+	if len(vectors.QuestIDCases) == 0 {
+		t.Fatal("quest_id_cases must not be empty")
+	}
+
+	buildNames := make(map[string]struct{}, len(vectors.BuildHashCases))
+	for _, vector := range vectors.BuildHashCases {
+		if vector.Name == "" {
+			t.Fatal("build hash vector name must not be empty")
+		}
+		if _, exists := buildNames[vector.Name]; exists {
+			t.Fatalf("duplicate build hash vector name: %s", vector.Name)
+		}
+		buildNames[vector.Name] = struct{}{}
+		if len(vector.PartIDs) == 0 {
+			t.Fatalf("build hash vector %s has no parts", vector.Name)
+		}
+		hashBytes, err := hex.DecodeString(vector.ExpectedHash)
+		if err != nil || len(hashBytes) != 32 {
+			t.Fatalf("build hash vector %s has invalid SHA-256: %q", vector.Name, vector.ExpectedHash)
+		}
+	}
+
+	questIDs := make(map[string]struct{}, len(vectors.QuestIDCases))
+	for _, vector := range vectors.QuestIDCases {
+		if _, exists := questIDs[vector.QuestID]; exists {
+			t.Fatalf("duplicate quest vector: %s", vector.QuestID)
+		}
+		questIDs[vector.QuestID] = struct{}{}
+		if !vector.Valid && vector.Previous != nil {
+			t.Fatalf("invalid quest vector %s must not declare a predecessor", vector.QuestID)
+		}
+	}
 }
 
 func TestReferenceParityBuildHashes(t *testing.T) {
