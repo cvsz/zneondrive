@@ -24,7 +24,7 @@ jobs:
           python3 tools/validate_unreal_evidence_workflow.py
           bash -n tools/zneondrive-control.sh
           bash -n tools/ue-linux.sh
-          python3 -m unittest tests.test_ue_linux_tooling -v
+          python3 -m unittest discover -s tests -p 'test_ue_linux_tooling.py' -v
 
       - name: Initialize evidence directory
         shell: bash
