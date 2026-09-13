@@ -63,13 +63,23 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
     FNDServerTelemetry::RecordAuthorityMovementTick();
 
     const FVector CurrentAuthorityLocation = GetActorLocation();
+    const float CurrentAuthorityYawDegrees = GetActorRotation().Yaw;
     const float MaxExpectedDisplacementCm = FMath::Max(0.0f, MaxSpeedCmPerSecond * DeltaSeconds) + AuthorityDisplacementSlackCm;
+    const float MaxExpectedRotationDegrees = FMath::Max(0.0f, TurnRateDegreesPerSecond * DeltaSeconds) + AuthorityRotationSlackDegrees;
     if (bAuthorityLocationBaselineValid)
     {
         const float ObservedDisplacementCm = FVector::Dist(CurrentAuthorityLocation, LastAuthorityLocation);
         if (ObservedDisplacementCm > MaxExpectedDisplacementCm)
         {
             FNDServerTelemetry::RecordImpossibleDisplacement();
+        }
+    }
+    if (bAuthorityRotationBaselineValid)
+    {
+        const float ObservedRotationDegrees = FMath::Abs(FMath::FindDeltaAngleDegrees(LastAuthorityYawDegrees, CurrentAuthorityYawDegrees));
+        if (ObservedRotationDegrees > MaxExpectedRotationDegrees)
+        {
+            FNDServerTelemetry::RecordImpossibleRotation();
         }
     }
 
@@ -91,7 +101,9 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
     }
 
     LastAuthorityLocation = GetActorLocation();
+    LastAuthorityYawDegrees = GetActorRotation().Yaw;
     bAuthorityLocationBaselineValid = true;
+    bAuthorityRotationBaselineValid = true;
 }
 
 void ANDVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -155,7 +167,9 @@ void ANDVehiclePawn::ApplyDurableIdentity(
     bDurableRoadworthy = bRoadworthy;
     bDurableIdentityBound = true;
     LastAuthorityLocation = GetActorLocation();
+    LastAuthorityYawDegrees = GetActorRotation().Yaw;
     bAuthorityLocationBaselineValid = true;
+    bAuthorityRotationBaselineValid = true;
     ForceNetUpdate();
     FNDServerTelemetry::RecordNetUpdateRequest();
 }
