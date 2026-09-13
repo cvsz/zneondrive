@@ -37,6 +37,9 @@ All notable changes to zNeonDrive are documented here.
 - Manual Unreal Build Evidence workflow that records real UE 5.8 engine metadata, project-generation/build logs, Client/Server target inventory, SHA-256 hashes, and a 30-day retained evidence artifact
 - Static validator that prevents the build-evidence workflow from embedding runtime secrets or silently claiming package evidence
 - UE build-evidence v1.6 documentation separating workflow readiness from successful real-engine build/package evidence
+- Manual Unreal Package Evidence workflow that runs real UE 5.8 Client and dedicated Server cook/stage/archive paths and retains compact package manifests, sizes, logs, and SHA-256 inventories for 30 days
+- Static validator that enforces separate Client/Server package roots, non-empty success evidence, failure evidence retention, and exclusion of runtime secrets/data-plane URLs
+- UE package-evidence v1.7 documentation separating workflow readiness from successful real package/cook evidence
 - Go 1.27 service-plane module and HTTP API
 - PostgreSQL durable schema for accounts, characters, vehicles, immutable builds, sessions, and quest completions
 - Hashed resume/session credential handling
@@ -58,7 +61,7 @@ All notable changes to zNeonDrive are documented here.
 - Runtime Inventory + Rebuild v0.6 contract and evidence documentation
 - PostgreSQL inventory item and character blueprint persistence
 - Canonical runtime vehicle-part allowlist checked against the design catalog
-- MQ004 idempotent salvage grant, MQ005 rebuild-blueprint unlock, and MQ009 idempotent recovered-part grant
+- MQ004 idempotent salvage grant, MQ005 starter-rebuild blueprint unlock, and MQ009 idempotent recovered-part grant
 - Inventory-authoritative rebuild transaction with atomic consume/return accounting
 - Unreal inventory/blueprint snapshot parsing
 - PostgreSQL integration proof for duplicate-grant prevention, rebuild replay safety, unowned-part rejection, swap accounting, and reconnect persistence
@@ -84,7 +87,7 @@ All notable changes to zNeonDrive are documented here.
 - Trusted-proxy `X-Forwarded-For` resolution from right to left with fail-closed malformed-chain handling
 - Unit coverage for spoof resistance, multi-hop proxy chains, exact-IP/CIDR configuration, malformed headers, and distinct client buckets behind one ingress
 - Runtime Multi-Replica HTTP Load Evidence v1.1 documentation
-- Concurrent HTTP integration test with two independent service replicas sharing one Redis limiter budget
+- Concurrent HTTP integration test with two independent HTTP server replicas sharing one Redis limiter backend
 - CI assertion that a 32-request shared burst allows exactly 32 of 128 concurrent requests across both replicas and rejects the remainder with HTTP 429
 - Runtime Race Integrity Telemetry v1.2 evidence/non-claim documentation
 - Credential-safe `race_integrity_rejected` telemetry for authoritative checkpoint/finish HTTP 400/409 outcomes
@@ -137,6 +140,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
+- Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -169,6 +173,7 @@ All notable changes to zNeonDrive are documented here.
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
+- Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
 - Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
