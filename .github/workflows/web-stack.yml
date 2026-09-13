@@ -5,12 +5,16 @@ on:
     paths:
       - 'web/**'
       - 'compose.yaml'
+      - '.env.example'
+      - 'docs/deployment-zneon-domain.md'
       - '.github/workflows/web-stack.yml'
   push:
     branches: [main]
     paths:
       - 'web/**'
       - 'compose.yaml'
+      - '.env.example'
+      - 'docs/deployment-zneon-domain.md'
       - '.github/workflows/web-stack.yml'
 
 permissions:
@@ -48,10 +52,13 @@ jobs:
       - name: Verify security headers and public API boundary
         run: |
           set -euo pipefail
-          headers="$(curl -fsSI http://127.0.0.1:18085/)"
-          grep -qi '^Content-Security-Policy:' <<<"$headers"
-          grep -qi '^X-Frame-Options: DENY' <<<"$headers"
-          grep -qi '^X-Content-Type-Options: nosniff' <<<"$headers"
+          for url in http://127.0.0.1:18085/ http://127.0.0.1:18085/client-v-0-0-1/ http://127.0.0.1:18085/client-v-0-0-1/manifest.json; do
+            headers="$(curl -fsSI "$url")"
+            grep -qi '^Content-Security-Policy:' <<<"$headers"
+            grep -qi '^X-Frame-Options: DENY' <<<"$headers"
+            grep -qi '^X-Content-Type-Options: nosniff' <<<"$headers"
+            grep -qi '^Referrer-Policy:' <<<"$headers"
+          done
           body="$(curl -fsS http://127.0.0.1:18085/api/not-public)"
           grep -q 'zNeonDrive' <<<"$body"
       - name: Verify unpublished artifacts stay absent
