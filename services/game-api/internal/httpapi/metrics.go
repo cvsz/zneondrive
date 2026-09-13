@@ -7,6 +7,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/cvsz/zneondrive/services/game-api/internal/store"
 )
 
 var httpDurationBuckets = []float64{0.005, 0.010, 0.025, 0.050, 0.100, 0.250, 0.500, 1.000, 2.500, 5.000}
@@ -18,14 +20,23 @@ type routeMetrics struct {
 	durationSum     float64
 }
 
-type HTTPMetrics struct {
-	mu       sync.RWMutex
-	routes   map[string]*routeMetrics
-	inFlight int64
+type postgresStatsProvider interface {
+	PostgresPoolStats() store.PostgresPoolStats
 }
 
-func NewHTTPMetrics() *HTTPMetrics {
-	return &HTTPMetrics{routes: make(map[string]*routeMetrics)}
+type HTTPMetrics struct {
+	mu            sync.RWMutex
+	routes        map[string]*routeMetrics
+	inFlight      int64
+	postgresStats postgresStatsProvider
+}
+
+func NewHTTPMetrics(postgresStats ...postgresStatsProvider) *HTTPMetrics {
+	metrics := &HTTPMetrics{routes: make(map[string]*routeMetrics)}
+	if len(postgresStats) > 0 {
+		metrics.postgresStats = postgresStats[0]
+	}
+	return metrics
 }
 
 func (m *HTTPMetrics) Wrap(next http.Handler) http.Handler {
@@ -146,7 +157,40 @@ func (m *HTTPMetrics) render() string {
 	b.WriteString("# HELP zneondrive_http_in_flight_requests Current in-flight HTTP requests.\n")
 	b.WriteString("# TYPE zneondrive_http_in_flight_requests gauge\n")
 	fmt.Fprintf(&b, "zneondrive_http_in_flight_requests %d\n", m.inFlight)
+
+	m.renderPostgresMetrics(&b)
 	return b.String()
+}
+
+func (m *HTTPMetrics) renderPostgresMetrics(b *strings.Builder) {
+	if m.postgresStats == nil {
+		return
+	}
+	stats := m.postgresStats.PostgresPoolStats()
+
+	b.WriteString("# HELP zneondrive_postgres_pool_connections PostgreSQL pool connections by bounded state.\n")
+	b.WriteString("# TYPE zneondrive_postgres_pool_connections gauge\n")
+	fmt.Fprintf(b, "zneondrive_postgres_pool_connections{state=\"max\"} %d\n", stats.MaxConns)
+	fmt.Fprintf(b, "zneondrive_postgres_pool_connections{state=\"total\"} %d\n", stats.TotalConns)
+	fmt.Fprintf(b, "zneondrive_postgres_pool_connections{state=\"idle\"} %d\n", stats.IdleConns)
+	fmt.Fprintf(b, "zneondrive_postgres_pool_connections{state=\"acquired\"} %d\n", stats.AcquiredConns)
+	fmt.Fprintf(b, "zneondrive_postgres_pool_connections{state=\"constructing\"} %d\n", stats.ConstructingConns)
+
+	b.WriteString("# HELP zneondrive_postgres_pool_acquires_total PostgreSQL pool acquire attempts.\n")
+	b.WriteString("# TYPE zneondrive_postgres_pool_acquires_total counter\n")
+	fmt.Fprintf(b, "zneondrive_postgres_pool_acquires_total %d\n", stats.AcquireCount)
+	b.WriteString("# HELP zneondrive_postgres_pool_empty_acquires_total Acquires that found no immediately idle connection.\n")
+	b.WriteString("# TYPE zneondrive_postgres_pool_empty_acquires_total counter\n")
+	fmt.Fprintf(b, "zneondrive_postgres_pool_empty_acquires_total %d\n", stats.EmptyAcquireCount)
+	b.WriteString("# HELP zneondrive_postgres_pool_canceled_acquires_total Canceled PostgreSQL pool acquire attempts.\n")
+	b.WriteString("# TYPE zneondrive_postgres_pool_canceled_acquires_total counter\n")
+	fmt.Fprintf(b, "zneondrive_postgres_pool_canceled_acquires_total %d\n", stats.CanceledAcquireCount)
+	b.WriteString("# HELP zneondrive_postgres_pool_new_connections_total PostgreSQL connections created by the pool.\n")
+	b.WriteString("# TYPE zneondrive_postgres_pool_new_connections_total counter\n")
+	fmt.Fprintf(b, "zneondrive_postgres_pool_new_connections_total %d\n", stats.NewConnsCount)
+	b.WriteString("# HELP zneondrive_postgres_pool_acquire_duration_seconds Cumulative time spent acquiring PostgreSQL pool connections.\n")
+	b.WriteString("# TYPE zneondrive_postgres_pool_acquire_duration_seconds counter\n")
+	fmt.Fprintf(b, "zneondrive_postgres_pool_acquire_duration_seconds %.9f\n", stats.AcquireDuration.Seconds())
 }
 
 func metricsRoute(r *http.Request) string {
