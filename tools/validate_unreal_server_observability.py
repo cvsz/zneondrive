@@ -17,6 +17,10 @@ required_telemetry = {
     "join counter": "joins_total=%llu",
     "leave counter": "leaves_total=%llu",
     "input clamp counter": "input_clamps_total=%llu",
+    "authority movement ticks": "authority_movement_ticks_total=%llu",
+    "identity gate blocks": "identity_gate_blocks_total=%llu",
+    "collision blocks": "collision_blocks_total=%llu",
+    "net update requests": "net_update_requests_total=%llu",
     "ticket attempts": "ticket_redeem_attempts_total=%llu",
     "ticket successes": "ticket_redeem_successes_total=%llu",
     "ticket failures": "ticket_redeem_failures_total=%llu",
@@ -42,8 +46,45 @@ for label, token in {
     if token not in controller:
         raise SystemExit(f"missing gameplay-ticket telemetry hook: {label}")
 
-if "FNDServerTelemetry::RecordInputClamp()" not in pawn:
-    raise SystemExit("missing authoritative input-clamp telemetry hook")
+for label, token in {
+    "authoritative input clamp": "FNDServerTelemetry::RecordInputClamp()",
+    "authority movement tick": "FNDServerTelemetry::RecordAuthorityMovementTick()",
+    "durable identity gate": "FNDServerTelemetry::RecordIdentityGateBlock()",
+    "collision block": "FNDServerTelemetry::RecordCollisionBlock()",
+    "explicit replication update request": "FNDServerTelemetry::RecordNetUpdateRequest()",
+}.items():
+    if token not in pawn:
+        raise SystemExit(f"missing authoritative vehicle telemetry hook: {label}")
+
+# Placement/order checks matter: merely mentioning a hook is not sufficient evidence.
+authority_guard = "if (!HasAuthority())"
+identity_guard = "if (!bDurableIdentityBound && GetNetMode() != NM_Standalone)"
+identity_hook = "FNDServerTelemetry::RecordIdentityGateBlock()"
+movement_hook = "FNDServerTelemetry::RecordAuthorityMovementTick()"
+if not (
+    pawn.index(authority_guard)
+    < pawn.index(identity_guard)
+    < pawn.index(identity_hook)
+    < pawn.index(movement_hook)
+):
+    raise SystemExit("authority movement telemetry must remain behind authority and durable-identity gates")
+
+identity_guard_start = pawn.index(identity_guard)
+movement_hook_start = pawn.index(movement_hook)
+identity_gate_block = pawn[identity_guard_start:movement_hook_start]
+if "return;" not in identity_gate_block or identity_hook not in identity_gate_block:
+    raise SystemExit("identity-gate telemetry must be emitted on the blocking path before movement returns")
+
+swept_move = "AddActorWorldOffset(Delta, true, &Hit);"
+blocking_hit = "if (Hit.bBlockingHit)"
+collision_hook = "FNDServerTelemetry::RecordCollisionBlock()"
+if not (pawn.index(swept_move) < pawn.index(blocking_hit) < pawn.index(collision_hook)):
+    raise SystemExit("collision telemetry must derive from the authoritative swept-movement blocking result")
+
+force_net_update = "ForceNetUpdate();"
+net_update_hook = "FNDServerTelemetry::RecordNetUpdateRequest()"
+if not (pawn.index(force_net_update) < pawn.index(net_update_hook)):
+    raise SystemExit("net-update telemetry must be emitted only after an actual ForceNetUpdate request")
 
 forbidden_metric_tokens = (
     "%s",

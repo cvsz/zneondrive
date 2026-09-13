@@ -65,6 +65,7 @@
 - [x] integrated trust-boundary v1.8 PostgreSQL/Redis CI evidence boundary
 - [x] repeated multi-replica stability v1.9 CI evidence boundary
 - [x] Unreal dedicated-server observability v2.0 source/static-validation evidence boundary
+- [x] Unreal authority activity observability v2.1 source/static-validation evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -114,6 +115,7 @@
 - [x] PostgreSQL server metrics unit/error non-disclosure coverage
 - [x] PostgreSQL 17 server metrics integration coverage
 - [x] Unreal dedicated-server aggregate telemetry source for sessions, tick timing, input clamps and ticket redemption outcomes
+- [x] Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source
 - [x] Unreal dedicated-server telemetry static validation enforcing numeric-only bounded fields and no credential/dynamic identifiers
 - [x] PostgreSQL 17 isolated pg_dump/pg_restore CI drill
 - [x] restore assertions for account/progression/vehicle/build/inventory/blueprint/quest/race state and operation IDs
@@ -164,7 +166,8 @@
 - [ ] PostgreSQL query-level/external exporter metrics
 - [x] Redis server metrics source + unit evidence
 - [x] Unreal server tick/session/input-clamp/ticket-redemption aggregate telemetry source + static validation
-- [ ] Unreal replication-rate/bytes, race-validation, authority-correction and deployed scrape evidence
+- [x] Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source + static validation
+- [ ] Unreal replication-rate/bytes, live race-validation, final-physics authority-correction and deployed scrape evidence
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
 - [ ] live packaged Unreal ↔ Go race lifecycle evidence
@@ -208,6 +211,7 @@
 - [x] Dedicated-server auth rejection telemetry/correlation baseline
 - [x] Authoritative race rejection telemetry baseline
 - [x] Unreal authoritative input-clamp aggregate telemetry source baseline
+- [x] Unreal durable-identity gate and collision-block aggregate telemetry source baseline
 - [ ] Deployed proxy header sanitization + direct-bypass prevention verified
 - [ ] Client trust boundaries tested over live Unreal↔Go transport
 - [ ] Deployment-scale HTTP load evidence for distributed limiter
@@ -223,6 +227,7 @@
 - [x] PostgreSQL current-database server metrics source/integration baseline
 - [x] Repeated two-replica Redis limiter CI stability evidence
 - [x] Unreal dedicated-server aggregate tick/session/input/ticket telemetry source baseline
+- [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [ ] PostgreSQL query-level/external exporter metrics
 - [ ] Unreal replication-rate/bytes and deployed scrape/dashboard evidence
 - [ ] Deployed metrics scrape/dashboard evidence
@@ -252,6 +257,7 @@
 - [x] Redis server metrics source + unit evidence
 - [x] PostgreSQL server metrics source + PostgreSQL 17 integration evidence
 - [x] Unreal dedicated-server observability source/static-validation evidence
+- [x] Unreal authority activity observability source/static-validation evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract

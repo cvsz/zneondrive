@@ -8,6 +8,10 @@ struct FNDServerTelemetrySnapshot
     uint64 PlayerJoinsTotal = 0;
     uint64 PlayerLeavesTotal = 0;
     uint64 InputClampsTotal = 0;
+    uint64 AuthorityMovementTicksTotal = 0;
+    uint64 IdentityGateBlocksTotal = 0;
+    uint64 CollisionBlocksTotal = 0;
+    uint64 NetUpdateRequestsTotal = 0;
     uint64 TicketRedeemAttemptsTotal = 0;
     uint64 TicketRedeemSuccessesTotal = 0;
     uint64 TicketRedeemFailuresTotal = 0;
@@ -25,6 +29,10 @@ public:
     static void RecordPlayerJoin();
     static void RecordPlayerLeave();
     static void RecordInputClamp();
+    static void RecordAuthorityMovementTick();
+    static void RecordIdentityGateBlock();
+    static void RecordCollisionBlock();
+    static void RecordNetUpdateRequest();
     static void RecordTicketRedeemAttempt();
     static void RecordTicketRedeemSuccess();
     static void RecordTicketRedeemFailure();
@@ -36,6 +44,10 @@ private:
     static uint64 PlayerJoinsTotal;
     static uint64 PlayerLeavesTotal;
     static uint64 InputClampsTotal;
+    static uint64 AuthorityMovementTicksTotal;
+    static uint64 IdentityGateBlocksTotal;
+    static uint64 CollisionBlocksTotal;
+    static uint64 NetUpdateRequestsTotal;
     static uint64 TicketRedeemAttemptsTotal;
     static uint64 TicketRedeemSuccessesTotal;
     static uint64 TicketRedeemFailuresTotal;
