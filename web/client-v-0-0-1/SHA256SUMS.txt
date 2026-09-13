@@ -1,1 +1,0 @@
-# No platform artifacts are published yet. Add only real SHA-256 entries after successful builds.
