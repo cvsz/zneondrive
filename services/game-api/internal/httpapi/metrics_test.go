@@ -5,7 +5,18 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
+
+	"github.com/cvsz/zneondrive/services/game-api/internal/store"
 )
+
+type fakePostgresStatsProvider struct {
+	stats store.PostgresPoolStats
+}
+
+func (f fakePostgresStatsProvider) PostgresPoolStats() store.PostgresPoolStats {
+	return f.stats
+}
 
 func TestHTTPMetricsRecordsBoundedRouteAndStatus(t *testing.T) {
 	metrics := NewHTTPMetrics()
@@ -75,6 +86,47 @@ func TestHTTPMetricsTracksDefault200AndInflightReturnsToZero(t *testing.T) {
 	}
 	if !strings.Contains(body, "zneondrive_http_in_flight_requests 0") {
 		t.Fatalf("in-flight gauge must return to zero, got: %s", body)
+	}
+}
+
+func TestHTTPMetricsExposeBoundedPostgresPoolStats(t *testing.T) {
+	provider := fakePostgresStatsProvider{stats: store.PostgresPoolStats{
+		MaxConns:             20,
+		TotalConns:           7,
+		IdleConns:            4,
+		AcquiredConns:        2,
+		ConstructingConns:    1,
+		AcquireCount:         123,
+		EmptyAcquireCount:    9,
+		CanceledAcquireCount: 3,
+		NewConnsCount:        11,
+		AcquireDuration:      1500 * time.Millisecond,
+	}}
+	metrics := NewHTTPMetrics(provider)
+	metricsRec := httptest.NewRecorder()
+	metrics.Handler().ServeHTTP(metricsRec, httptest.NewRequest(http.MethodGet, "/metrics", nil))
+	body := metricsRec.Body.String()
+
+	for _, want := range []string{
+		`zneondrive_postgres_pool_connections{state="max"} 20`,
+		`zneondrive_postgres_pool_connections{state="total"} 7`,
+		`zneondrive_postgres_pool_connections{state="idle"} 4`,
+		`zneondrive_postgres_pool_connections{state="acquired"} 2`,
+		`zneondrive_postgres_pool_connections{state="constructing"} 1`,
+		`zneondrive_postgres_pool_acquires_total 123`,
+		`zneondrive_postgres_pool_empty_acquires_total 9`,
+		`zneondrive_postgres_pool_canceled_acquires_total 3`,
+		`zneondrive_postgres_pool_new_connections_total 11`,
+		`zneondrive_postgres_pool_acquire_duration_seconds 1.500000000`,
+	} {
+		if !strings.Contains(body, want) {
+			t.Fatalf("missing PostgreSQL pool metric %q: %s", want, body)
+		}
+	}
+	for _, forbidden := range []string{"DATABASE_URL", "postgres://", "session", "vehicle", "race"} {
+		if strings.Contains(body, forbidden) {
+			t.Fatalf("PostgreSQL pool metrics exposed forbidden dynamic/sensitive token %q: %s", forbidden, body)
+		}
 	}
 }
 
