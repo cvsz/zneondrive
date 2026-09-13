@@ -47,8 +47,10 @@ def main() -> int:
                 errors.append(f"package evidence workflow must not contain runtime secret/data-plane token {token!r}")
         if text.count('dist/packages/${kind}-linux') != 1:
             errors.append("package inventory must derive exactly one root per explicit client/server kind")
-        if "package-client" == "package-server":
-            errors.append("client/server package commands must remain distinct")
+        if text.count("bash tools/ue-linux.sh package-client") != 1:
+            errors.append("workflow must invoke the Client package command exactly once")
+        if text.count("bash tools/ue-linux.sh package-server") != 1:
+            errors.append("workflow must invoke the dedicated Server package command exactly once")
 
     if errors:
         print("Unreal package evidence workflow validation FAILED", file=sys.stderr)
