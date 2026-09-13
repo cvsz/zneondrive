@@ -1,5 +1,4 @@
 #!/bin/sh
-set -eu
 
 : "${POSTGRES_EXPORTER_PASSWORD:?POSTGRES_EXPORTER_PASSWORD must be set}"
 
