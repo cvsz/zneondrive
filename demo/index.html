@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#070a12">
+  <meta name="description" content="PROJECT: NEON DRIVE client presentation demo">
+  <title>PROJECT: NEON DRIVE — Client Demo</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#hero" aria-label="PROJECT NEON DRIVE home">
+      <span class="brand-mark">ND</span>
+      <span><strong>PROJECT: NEON DRIVE</strong><small>NOVA CITY · 2097</small></span>
+    </a>
+    <nav aria-label="Presentation navigation">
+      <a href="#world" data-i18n="navWorld">โลก</a>
+      <a href="#story" data-i18n="navStory">เนื้อเรื่อง</a>
+      <a href="#vehicle" data-i18n="navVehicle">รถ</a>
+      <a href="#slice" data-i18n="navSlice">Vertical Slice</a>
+      <a href="#architecture" data-i18n="navArchitecture">ระบบ</a>
+      <a href="#roadmap" data-i18n="navRoadmap">Roadmap</a>
+    </nav>
+    <button id="langToggle" class="ghost" type="button" aria-label="Switch language">EN</button>
+  </header>
+
+  <main>
+    <section id="hero" class="hero section">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="eyebrow">ONLINE OPEN WORLD RPG · VEHICLE BUILDING · RACING · SOCIAL</p>
+        <h1>YOU DON'T OWN<br>THE ROAD.<br><span>YOU EARN IT.</span></h1>
+        <p class="lead" data-i18n="heroLead">เกมออนไลน์ที่ “รถ” เป็นตัวตนที่สองของผู้เล่น — สร้าง ซ่อม แข่ง และสะสมประวัติของรถคันเดียวไปจนเป็นตำนานของ Server</p>
+        <div class="cta-row">
+          <a class="button primary" href="#slice" data-i18n="startDemo">เริ่ม Demo</a>
+          <a class="button secondary" href="#architecture" data-i18n="seeArchitecture">ดูสถาปัตยกรรม</a>
+        </div>
+      </div>
+      <div class="hero-machine" aria-label="Stylized starter vehicle identity panel">
+        <div class="vehicle-silhouette">
+          <div class="roof"></div><div class="body"></div><div class="wheel left"></div><div class="wheel right"></div>
+        </div>
+        <div class="machine-meta">
+          <span>VEHICLE ID</span><strong>ND-PROTOTYPE-001</strong>
+          <span>PROVENANCE</span><strong>DRIVE ZERO / UNKNOWN</strong>
+          <span>STATUS</span><strong class="accent">BROKEN → LEGENDARY</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Project scale">
+      <article><strong>100</strong><span data-i18n="metricQuests">Main Quests</span></article>
+      <article><strong>10</strong><span data-i18n="metricDistricts">Districts</span></article>
+      <article><strong>25</strong><span data-i18n="metricCharacters">Characters</span></article>
+      <article><strong>5</strong><span data-i18n="metricFactions">Factions</span></article>
+      <article><strong>7</strong><span data-i18n="metricChapters">Story Chapters</span></article>
+    </section>
+
+    <section id="world" class="section">
+      <div class="section-head">
+        <p class="eyebrow">NOVA CITY</p>
+        <h2 data-i18n="worldTitle">หนึ่งเมือง หลายชีวิต หลายอำนาจ</h2>
+        <p data-i18n="worldText">เมืองปี 2097 ที่ถนน เทเลเมทรี และระบบยานยนต์กลายเป็นโครงสร้างพื้นฐานเชิงอำนาจ</p>
+      </div>
+      <div class="world-grid">
+        <div id="districtGrid" class="district-grid" aria-label="NOVA CITY districts"></div>
+        <aside id="districtDetail" class="detail-panel" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section id="story" class="section alt">
+      <div class="section-head">
+        <p class="eyebrow">MASTER PLOT</p>
+        <h2 data-i18n="storyTitle">จากรถพัง → สู่สงครามชิงอนาคตของ NOVA CITY</h2>
+      </div>
+      <div id="chapterTimeline" class="timeline"></div>
+      <div class="twist">
+        <div>
+          <span class="chip">PLOT TWIST</span>
+          <h3>PROJECT DRIVE ZERO</h3>
+        </div>
+        <p data-i18n="twistText">รถคันแรกไม่ใช่เศษเหล็กธรรมดา แต่คือ Prototype ที่ ECU ซ่อนกุญแจของระบบที่สามารถควบคุมยานพาหนะทั้งเมืองได้</p>
+      </div>
+    </section>
+
+    <section id="vehicle" class="section">
+      <div class="section-head">
+        <p class="eyebrow">VEHICLE LAB</p>
+        <h2 data-i18n="vehicleTitle">รถหนึ่งคัน เปลี่ยนบทบาทได้ทั้งเกม</h2>
+        <p data-i18n="vehicleText">เลือก Build Role เพื่อดูแนวทาง trade-off ของรถคันเดิม — ไม่มี VIP boost ต่อ performance</p>
+      </div>
+      <div class="vehicle-lab">
+        <div>
+          <div id="roleButtons" class="role-buttons"></div>
+          <div class="build-card">
+            <p class="build-label">ACTIVE BUILD REVISION</p>
+            <h3 id="buildRole">STREET</h3>
+            <p id="buildDescription"></p>
+            <div id="statBars" class="stats"></div>
+          </div>
+        </div>
+        <div class="fairness">
+          <span class="chip">NON-PAY-TO-WIN</span>
+          <h3 data-i18n="fairnessTitle">VIP เพิ่มพื้นที่ ไม่เพิ่มพลัง</h3>
+          <div class="compare">
+            <article><span>FREE</span><strong>1</strong><small data-i18n="garageSlot">Garage Slot</small></article>
+            <article><span>VIP</span><strong>5–20</strong><small data-i18n="garageSlots">Garage Slots</small></article>
+          </div>
+          <ul>
+            <li data-i18n="fair1">Performance signature เท่ากันเมื่อใช้ Build เดียวกัน</li>
+            <li data-i18n="fair2">ไม่มี hidden horsepower / grip / durability</li>
+            <li data-i18n="fair3">Ranked progression เปิดครบสำหรับ Free Player</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="slice" class="section alt">
+      <div class="section-head">
+        <p class="eyebrow">VERTICAL SLICE · MQ001–MQ012</p>
+        <h2 data-i18n="sliceTitle">Garage 17 → First Ignition</h2>
+        <p data-i18n="sliceText">กดเดินเรื่องเพื่อจำลอง proof-of-concept ของ first-session loop และ authoritative state</p>
+      </div>
+      <div class="slice-layout">
+        <div>
+          <div id="questStepper" class="quest-stepper"></div>
+          <div class="slice-controls">
+            <button id="prevQuest" class="button secondary" type="button">←</button>
+            <button id="nextQuest" class="button primary" type="button" data-i18n="nextQuest">Next Quest</button>
+            <button id="resetQuest" class="ghost" type="button" data-i18n="reset">Reset</button>
+          </div>
+        </div>
+        <aside class="state-panel">
+          <p class="eyebrow">AUTHORITATIVE STATE</p>
+          <dl>
+            <div><dt>CHARACTER</dt><dd>PRIMARY / OWNED</dd></div>
+            <div><dt>VEHICLE</dt><dd id="stateVehicle">UNCLAIMED</dd></div>
+            <div><dt>BUILD REV</dt><dd id="stateBuild">0</dd></div>
+            <div><dt>QUEST</dt><dd id="stateQuest">MQ001</dd></div>
+            <div><dt>IGNITION</dt><dd id="stateIgnition">LOCKED</dd></div>
+            <div><dt>ROADWORTHY</dt><dd id="stateRoadworthy">NO</dd></div>
+          </dl>
+          <p id="stateNote" class="state-note"></p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="architecture" class="section">
+      <div class="section-head">
+        <p class="eyebrow">PRODUCTION DIRECTION</p>
+        <h2 data-i18n="architectureTitle">Server-authoritative by design</h2>
+        <p data-i18n="architectureText">Client ส่ง intent — server เป็นผู้ตัดสิน state ที่มีมูลค่า แข่งขัน หรือคงอยู่ระยะยาว</p>
+      </div>
+      <div class="architecture">
+        <article class="arch-box client"><span>CLIENT</span><strong>Unreal Engine 5.8</strong><small>Rendering · Input · Prediction · UI</small></article>
+        <div class="arrow">→</div>
+        <article class="arch-box gameplay"><span>GAMEPLAY PLANE</span><strong>UE Dedicated Server</strong><small>Vehicle · Race · Checkpoints · Instance Authority</small></article>
+        <div class="arrow">→</div>
+        <article class="arch-box service"><span>SERVICE PLANE</span><strong>Go Services</strong><small>Identity · Quest · Vehicle · Economy · Crew · Entitlement</small></article>
+        <div class="arrow">→</div>
+        <article class="arch-box data"><span>DATA</span><strong>PostgreSQL + Redis</strong><small>Durable state + ephemeral coordination</small></article>
+      </div>
+      <div class="guardrails">
+        <span>✓ Idempotent rewards</span><span>✓ Build revision binding</span><span>✓ Audit trail</span><span>✓ Client untrusted</span><span>✓ VIP fairness</span>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section alt">
+      <div class="section-head">
+        <p class="eyebrow">DELIVERY ROADMAP</p>
+        <h2 data-i18n="roadmapTitle">ขายเป็น Milestone ที่พิสูจน์ได้ ไม่ขายคำว่า “เสร็จ”</h2>
+      </div>
+      <div class="roadmap-grid">
+        <article class="done"><span>DONE</span><h3>Pre-production Foundation</h3><p>Story Bible · 100 Quest Graph · World · Factions · Schemas · CI · Authority Proof</p></article>
+        <article class="next"><span>NEXT</span><h3>Playable Vertical Slice</h3><p>Garage 17 · MQ001–012 · First Ignition · 2 Race Proofs · Save/Reconnect</p><strong>8–12 weeks*</strong></article>
+        <article><span>ALPHA</span><h3>Online Alpha</h3><p>Persistent backend · Multiplayer district · Crews · Events · Telemetry · Restore Proof</p><strong>4–6 months*</strong></article>
+        <article><span>PROGRAM</span><h3>Live-Service Production</h3><p>100 Quests · Launch Districts · Seasons · Moderation · Live Ops · DR · Certification</p><strong>Multi-phase*</strong></article>
+      </div>
+      <p class="footnote" data-i18n="estimateNote">* Planning range only; final schedule depends on art fidelity, target platforms, concurrency and team size.</p>
+    </section>
+
+    <section class="section close">
+      <p class="eyebrow">CLIENT DECISION</p>
+      <h2 data-i18n="decisionTitle">พรุ่งนี้ต้องตัดสินใจ 4 เรื่อง</h2>
+      <div class="decision-grid">
+        <article><strong>01</strong><span data-i18n="decision1">PC first หรือ PC + Console?</span></article>
+        <article><strong>02</strong><span data-i18n="decision2">Visual fidelity ระดับไหน?</span></article>
+        <article><strong>03</strong><span data-i18n="decision3">Concurrency milestone แรกเท่าไร?</span></article>
+        <article><strong>04</strong><span data-i18n="decision4">Vertical Slice / Alpha / Full Program?</span></article>
+      </div>
+      <blockquote>“We are not selling only an idea. We are presenting a world, a validated systems contract, and a production path.”</blockquote>
+    </section>
+  </main>
+
+  <footer>
+    <span>PROJECT: NEON DRIVE · Client Demo v0.3</span>
+    <span>Presentation prototype — not a production MMORPG build</span>
+  </footer>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -28,40 +28,101 @@
 - [x] ADR: preserve starter-vehicle identity
 
 ## Phase 3 — Vertical-slice specification v0.2
-- [x] Lock Garage 17 + Foundry 9 vertical-slice spaces and race proof targets
-- [x] Expand MQ001–MQ012 to implementation acceptance criteria
-- [x] Define starter vehicle handling/physical target envelope
-- [x] Define player movement and interaction specification
-- [x] Define first-session UX from identity to First Ignition/Roadworthy
-- [x] Define reconnect/save semantics
-- [x] Define accessibility baseline
-- [x] Create graybox/content production checklist
-- [x] Add machine-readable vertical-slice proof catalog/schema
-- [x] Add executable reference contract model and tests
+- [x] Garage 17 + Foundry 9 spaces/race proof targets
+- [x] MQ001–MQ012 implementation acceptance criteria
+- [x] starter vehicle handling target envelope
+- [x] movement/interaction specification
+- [x] first-session UX through First Ignition/Roadworthy
+- [x] reconnect/save semantics
+- [x] accessibility baseline
+- [x] graybox/content checklist
+- [x] machine-readable vertical-slice proof catalog/schema
+- [x] executable reference contract model/tests
 
-## Phase 4 — Runtime prototype
-- [ ] Select engine/client technology by ADR
-- [ ] Select production server/runtime technology by ADR
-- [ ] Implement identity/session prototype against durable persistence
-- [ ] Implement one-character persistence
-- [ ] Implement one-vehicle persistence and build revisions
-- [ ] Implement inventory/blueprint prototype
-- [ ] Implement quest-state prototype
-- [ ] Implement authoritative race prototype
-- [ ] Implement relationship/faction-state prototype
-- [ ] Port reference contract tests to selected runtime
-- [ ] Automated integration/e2e tests
+## Client presentation readiness v0.3
+- [x] executive brief / Thai talk track
+- [x] offline interactive browser demo
+- [x] Thai/English presentation mode
+- [x] commercial scope + Q&A + runbook
+- [x] demo validation + manual Pages workflow
+- [x] production technology ADRs
 
-> The stdlib Python model is executable design evidence only; it does not complete Phase 4 production runtime selection or durable networking/persistence work.
+## Phase 4 — Runtime prototype / integration v1.3
+- [x] Select engine/client — Unreal Engine 5.8
+- [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
+- [x] Select PostgreSQL/Redis persistence/ephemeral direction
+- [x] Select phase-gated deployment strategy
+- [x] Create Unreal C++ project / Game / Editor / Server target baseline
+- [x] Add manual self-hosted UE 5.8 source-build workflow
+- [ ] Produce successful archived UE source-build evidence
+- [x] Implement prototype identity/session bootstrap against PostgreSQL
+- [x] Implement one-primary-character persistence
+- [x] Implement starter-vehicle persistence and immutable build revisions
+- [x] Implement optimistic/idempotent durable mutation semantics
+- [x] Implement inventory/blueprint prototype
+- [x] Implement sequential quest-state persistence
+- [x] Implement authoritative race instance/result runtime in Go/PostgreSQL
+- [x] Bind race instances to the exact active build revision + validation hash
+- [x] Enforce ordered/monotonic checkpoint acceptance and idempotent race writes
+- [x] Add bounded per-process token-bucket abuse controls for public/internal HTTP mutations
+- [x] Hash credential-derived limiter identities and bound limiter memory cardinality
+- [x] Add Redis-backed distributed rate-limit coordination for multi-process deployment
+- [x] Retain bounded per-process limiting as Redis-unavailable fallback
+- [x] Add credential-safe rate-limit rejection/fallback security events
+- [x] Implement trusted-proxy/ingress client identity policy and tests
+- [x] Fail closed on invalid proxy CIDR configuration and malformed forwarding chains
+- [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
+- [x] Add credential-safe race-integrity/auth rejection telemetry baseline
+- [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
+- [ ] Implement relationship/faction-state runtime
+- [x] Add Go unit tests
+- [x] Add PostgreSQL integration test suite
+- [x] Add Redis integration coverage for shared distributed limiter budget
+- [x] Commit deterministic Go module lock and enforce tidy-clean CI
+- [x] Add one-time gameplay ticket issue/redeem protocol
+- [x] Add server-only shared-key redemption boundary
+- [x] Add HTTP/PostgreSQL reconnect + gameplay-ticket E2E
+- [x] Add Unreal session subsystem + dedicated-server ticket redemption source
+- [x] Bind durable vehicle/build/Roadworthy state only on authority
+- [x] Enforce canonical part catalog on build mutations
+- [x] Make MQ004/MQ009 item grants idempotent and MQ005 blueprint unlock durable
+- [x] Make rebuild inventory consume/return atomic with immutable build revision
+- [ ] Complete Python-reference parity tests in Go
+- [ ] Produce live Unreal ↔ Go packaged/session E2E evidence
+- [ ] Produce live Unreal ↔ Go race lifecycle evidence
+
+## Repository documentation readiness
+- [x] GitHub governance / support / maintainers baseline
+- [x] canonical documentation index + evidence status language
+- [x] product requirements and brand guide
+- [x] API / data / networking contracts synchronized through race runtime v0.7
+- [x] gameplay authoring specs for quests, vehicles/races, world, factions, crews and companions
+- [x] threat model, testing strategy and performance-budget targets
+- [x] runtime security hardening v0.8 evidence/non-claim contract
+- [x] distributed abuse-controls v0.9 evidence/non-claim contract
+- [x] trusted-ingress identity v1.0 evidence/non-claim contract
+- [x] multi-replica HTTP load v1.1 CI evidence/non-claim contract
+- [x] race-integrity telemetry v1.2 evidence/non-claim contract
+- [x] observability metrics v1.3 source/unit evidence contract
+- [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
+- [x] accessibility, localization, content pipeline and economy/fairness policy
+- [x] moderation/player safety, privacy/data retention and live-ops policy
+- [x] release-readiness, asset/IP and glossary docs
+- [x] bug/documentation issue templates
+- [x] README 1280×640 banner asset
+- [x] documentation completeness + relative-link CI validator
+
+> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
 - [ ] Presence/social
 - [ ] Crew MVP
 - [ ] Match/event registration
-- [ ] Race anti-cheat telemetry
+- [x] Race rejection/auth telemetry baseline
+- [ ] Physics-derived race anti-cheat telemetry
 - [ ] Disconnect/rejoin behavior
-- [ ] Load and soak testing
+- [ ] Deployment-scale load and long-duration soak testing
 - [ ] Backup/restore drill
 
 ## Phase 6 — Content alpha
@@ -74,16 +135,31 @@
 - [ ] Localization pipeline
 
 ## Phase 7 — Production hardening
-- [ ] Threat model
-- [ ] Abuse/cheat model
-- [ ] SLOs and observability
-- [ ] Incident/rollback runbooks
-- [ ] Capacity model
-- [ ] Restore evidence
-- [ ] Security review
-- [ ] Privacy/data-retention review
+- [x] Threat-model baseline documented
+- [x] Per-process HTTP abuse limiter implemented and unit tested
+- [x] Redis-backed limiter coordination exercised across independent limiter instances
+- [x] Credential-safe rate-limit rejection/fallback events emitted
+- [x] Trusted-ingress identity handling implemented and unit exercised
+- [ ] Deployed ingress forwarding/sanitization configuration verified
+- [x] Distributed abuse controls verified under concurrent two-replica HTTP CI load
+- [ ] Deployment-scale distributed limiter load evidence
+- [ ] Long-duration soak evidence
+- [x] Authoritative race rejection + game-server auth telemetry emitted with hashed correlation buckets
+- [ ] Physics-derived impossible-state telemetry from live Unreal race samples
+- [x] Low-cardinality Go HTTP service metrics source/unit baseline
+- [ ] PostgreSQL/Redis/Unreal runtime metrics completed
+- [ ] Threat/abuse cases exercised against integrated runtime
+- [ ] SLOs/observability measured in deployed environment
+- [x] Incident/rollback runbook baseline documented
+- [ ] Incident/rollback exercise passed
+- [ ] Capacity model backed by load evidence
+- [x] Backup/restore/DR plan documented
+- [ ] Restore/DR evidence
+- [ ] Security review of complete runtime
+- [x] Privacy/data-retention baseline documented
+- [ ] Privacy/legal review for target launch regions
 - [ ] VIP fairness test suite in production runtime
-- [ ] Ranked race integrity test suite
+- [ ] Ranked race integrity / anti-cheat suite
 
 ## Phase 8 — Launch readiness
 - [ ] 100 main quests implemented and verified in runtime
@@ -96,4 +172,4 @@
 - [ ] Disaster-recovery evidence
 - [ ] Go/no-go release review
 
-**Rule:** do not mark playable runtime, production, HA, DR, anti-cheat, or live-ops items complete without executable evidence.
+**Rule:** do not mark playable content, production, HA, DR, anti-cheat, deployment-scale distributed abuse protection, production load/soak, measured SLOs, or live-ops complete without executable evidence.

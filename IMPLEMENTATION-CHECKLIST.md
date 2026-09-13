@@ -1,87 +1,213 @@
 # Implementation Checklist — PROJECT: NEON DRIVE
 
 ## Design baseline
-- [x] Story premise and NOVA CITY 2097
+- [x] Story premise / NOVA CITY 2097
 - [x] Garage 17 opening and starter prototype
-- [x] Maya Voss / Adrian Cross / Victor Kane / Luna anchors
+- [x] Maya / Adrian / Victor / Luna anchors
 - [x] PROJECT DRIVE ZERO conflict
-- [x] Seven campaign chapters
-- [x] Five endgame governance paths
-- [x] VIP fairness principle
-- [x] Social/crew and pet design
-- [x] 25-character launch catalog
-- [x] 100-main-quest graph
-- [x] World, faction, district, and part catalogs
-- [x] Automated catalog integrity checks
-- [x] Game Design Bible v0.2 canonical implementation rules
+- [x] seven campaign chapters / five endings
+- [x] VIP fairness, social/crew, pets
+- [x] 25 characters / 100 main quests / world catalogs
+- [x] automated design validation
+- [x] Game Design Bible v0.2
 
 ## Vertical-slice contract
 - [x] MQ001–MQ012 acceptance matrix
 - [x] Garage 17 / Foundry 9 graybox scope
-- [x] First-session UX path
-- [x] Starter handling target envelope
-- [x] Movement/interaction minimum
-- [x] Legal + underground race proof definitions
-- [x] Save/reconnect semantics
-- [x] Accessibility baseline
-- [x] Machine-readable slice catalog and schema
+- [x] first-session UX
+- [x] starter handling target
+- [x] movement/interaction minimum
+- [x] legal + underground race proof definitions
+- [x] save/reconnect semantics
+- [x] accessibility baseline
+- [x] machine-readable slice catalog/schema
 
 ## Executable reference authority
-- [x] One account → one primary character reference invariant
-- [x] Vehicle ownership authoritative reference invariant
-- [x] Append-only build revisions with optimistic conflict checks
-- [x] Quest reward idempotency
-- [x] Race result bound to accepted build revision
-- [x] Ordered checkpoint validation
-- [x] VIP capacity separated from competitive build signature
-- [x] Starter vehicle routine-deletion protection
-- [x] Unit tests for reference invariants
+- [x] Python contract oracle
+- [x] one account → one character
+- [x] vehicle ownership
+- [x] append-only build revisions
+- [x] quest reward idempotency
+- [x] race/build binding reference rule
+- [x] ordered checkpoint reference rule
+- [x] VIP separation reference rule
+- [x] starter deletion protection reference rule
+
+## Client meeting package
+- [x] executive brief / talk track
+- [x] interactive offline demo
+- [x] runbook / commercial scope / Q&A
+- [x] Thai/English toggle
+- [x] client-demo CI / manual Pages
+- [x] explicit evidence language
+
+## Production technology decisions
+- [x] Unreal Engine 5.8 gameplay ADR
+- [x] Go + PostgreSQL + Redis service-plane ADR
+- [x] phase-gated deployment ADR
+
+## Documentation / governance baseline
+- [x] complete documentation index
+- [x] product requirements
+- [x] API + durable data model docs through authoritative race v0.7
+- [x] multiplayer/networking authority spec
+- [x] threat-model baseline (production abuse testing still open)
+- [x] runtime security hardening v0.8 evidence boundary
+- [x] distributed abuse-controls v0.9 evidence boundary
+- [x] trusted-ingress identity v1.0 evidence boundary
+- [x] multi-replica HTTP load v1.1 CI evidence boundary
+- [x] race-integrity telemetry v1.2 evidence boundary
+- [x] observability metrics v1.3 source/unit evidence boundary
+- [x] testing strategy + performance-budget targets
+- [x] observability/SLO target contract (deployment measurement still open)
+- [x] deployment + backup/restore/DR plans (verification still open)
+- [x] incident-response runbook (exercise still open)
+- [x] accessibility + localization baselines
+- [x] content/quest/world/vehicle/faction/crew/companion authoring specs
+- [x] economy/fairness + moderation + privacy + live-ops policies
+- [x] governance + support + maintainers
+- [x] release-readiness + asset/IP + brand guidance
+- [x] documentation completeness + relative-link validator
+
+## Phase 4 runtime source
+- [x] Unreal .uproject baseline
+- [x] Unreal Game / Editor / dedicated Server targets
+- [x] server-authoritative replicated prototype pawn
+- [x] manual self-hosted UE source-build workflow
+- [ ] successful UE 5.8 source-build artifact
+- [x] Go 1.27 service binary
+- [x] PostgreSQL durable schema
+- [x] local Docker Compose PostgreSQL + Redis + API
+- [x] hashed resume/session credentials
+- [x] durable one-character bootstrap
+- [x] durable starter vehicle + immutable revisions
+- [x] idempotent quest/build operations
+- [x] MQ001–MQ100 prerequisite enforcement
+- [x] MQ012 Roadworthy transition
+- [x] Go unit tests
+- [x] PostgreSQL integration tests
+- [x] Redis distributed-limiter integration test
+- [x] concurrent two-replica HTTP integration test sharing one Redis limiter budget
+- [x] credential-safe race-integrity/auth rejection telemetry middleware
+- [x] bounded HTTP request/status-class/latency/in-flight metrics
+- [x] separate metrics listener with loopback-only Compose publication
+- [x] metrics unit coverage for label cardinality and secret/dynamic-ID non-disclosure
+- [x] committed go.mod/go.sum module lock
+- [x] one-time gameplay-ticket persistence and atomic redemption
+- [x] server-only shared-key internal redemption endpoint
+- [x] HTTP/PostgreSQL reconnect + ticket E2E
+- [x] Unreal session/resume subsystem source
+- [x] dedicated-server ticket redemption source
+- [x] authority-only durable VehicleID/build/parts/Roadworthy binding
+- [x] PostgreSQL inventory + blueprint persistence
+- [x] canonical vehicle-part catalog validation in Go runtime
+- [x] MQ004/MQ009 idempotent item grants
+- [x] MQ005 durable starter-rebuild blueprint unlock
+- [x] atomic inventory consume/return + immutable rebuild revision
+- [x] build operation replay bound to exact validation hash
+- [x] reconnect persistence for inventory/blueprints/rebuild state
+- [x] Unreal snapshot source parses inventory/blueprints
+- [x] PostgreSQL race instance/checkpoint/result persistence
+- [x] race start bound to owned Roadworthy vehicle + exact active build revision/hash
+- [x] race lifecycle endpoints restricted to dedicated-server shared-key boundary
+- [x] ordered checkpoint cursor + monotonic elapsed-time enforcement
+- [x] idempotent race start/checkpoint/finish operation semantics
+- [x] deterministic final result hash bound to authoritative build evidence
+- [x] bounded per-process token-bucket limiter wrapped around service HTTP API
+- [x] limiter covers bootstrap/state/tickets/quests/builds/internal race mutations
+- [x] raw bearer/session credentials excluded from limiter keys
+- [x] limiter bucket cardinality bounded with stale/oldest eviction
+- [x] 429 + Retry-After contract unit tested
+- [x] Redis-coordinated token bucket shares abuse budget across limiter instances
+- [x] Redis-unavailable path retains bounded local limiting rather than unbounded fail-open
+- [x] rate-limit rejection/fallback security events exclude raw credentials
+- [x] trusted-proxy/ingress client identity policy implemented and unit exercised
+- [x] direct/untrusted peers cannot spoof X-Forwarded-For identity
+- [x] multi-hop forwarding chain selects first untrusted hop from the right
+- [x] invalid proxy CIDRs fail startup; malformed XFF falls back to socket peer
+- [x] two HTTP replicas under concurrent CI traffic consume exactly one Redis-coordinated burst budget
+- [x] race rejection/auth telemetry hashes race-instance and peer identifiers before logging
+- [ ] deployed ingress sanitization/network-isolation evidence
+- [ ] deployment-scale distributed limiter load evidence
+- [ ] long-duration soak evidence
+- [ ] PostgreSQL query/pool metrics
+- [ ] Redis server metrics
+- [ ] Unreal server tick/replication metrics
+- [ ] full reference-oracle parity in Go
+- [ ] live packaged Unreal ↔ Go integration evidence
+- [ ] live packaged Unreal ↔ Go race lifecycle evidence
 
 ## Content production
-- [ ] Full dialogue/script for MQ001–MQ100
-- [ ] Side-quest narratives beyond seed records
-- [ ] Cinematic list and storyboard requirements
-- [ ] Environment storytelling asset list
-- [ ] Voice/localization style guides
-- [ ] Content sensitivity and age-rating review
+- [ ] Full dialogue/script MQ001–MQ100
+- [ ] Side-quest narratives
+- [ ] Cinematic/storyboard list
+- [ ] Environment storytelling assets
+- [ ] Voice/localization guide
+- [ ] Rating/sensitivity review
 
 ## Playable runtime vertical slice
-- [ ] Selected client engine ADR
-- [ ] Selected production server/runtime ADR
+- [x] selected client/server ADRs
+- [x] Unreal source project baseline
 - [ ] Garage 17 environment playable
-- [ ] First vehicle rebuild playable from broken state
-- [ ] First Ignition end-to-end in selected runtime
-- [ ] Foundry 9 traversal and jobs playable
-- [ ] One legal and one underground race playable
-- [ ] Maya relationship state transition visible in client
-- [ ] Luna discovery utility playable
-- [ ] Durable save/reconnect verified against selected persistence
+- [ ] first vehicle rebuild playable (durable service contract implemented; Unreal interaction/evidence still open)
+- [ ] First Ignition end-to-end in Unreal
+- [ ] Foundry 9 traversal/jobs
+- [ ] legal + underground race playable (service-plane race authority exists; live Unreal gameplay/evidence still open)
+- [ ] Maya relationship visible
+- [ ] Luna utility playable
+- [ ] durable Unreal save/reconnect verified
 
 ## Multiplayer and security
-- [ ] Threat model complete
-- [ ] Client trust boundaries tested over real transport
-- [ ] Rate limiting
-- [ ] Replay/idempotency protection in selected persistence/runtime
-- [ ] Cheat telemetry
+- [ ] Threat model complete and exercised
+- [x] Threat-model baseline documented
+- [x] Client cannot self-assert durable snapshot in v0.5 source contract
+- [x] One-time ticket replay rejected by service E2E
+- [x] Durable race result/build identity cannot be submitted directly by player-facing endpoints
+- [x] Ordered/monotonic race checkpoint acceptance enforced in PostgreSQL runtime
+- [x] Per-process HTTP abuse rate limiting implemented and unit tested
+- [x] Credential-derived rate-limit identities are hashed before bucket storage
+- [x] Health probes are exempt from player mutation rate limits
+- [x] Redis coordination shares limiter state across independent instances
+- [x] Rate-limit rejection/fallback security log events
+- [x] Trusted ingress/proxy identity source handling unit tested
+- [x] Multi-replica HTTP CI load evidence for distributed limiter
+- [x] Dedicated-server auth rejection telemetry/correlation baseline
+- [x] Authoritative race rejection telemetry baseline
+- [ ] Deployed proxy header sanitization + direct-bypass prevention verified
+- [ ] Client trust boundaries tested over live Unreal↔Go transport
+- [ ] Deployment-scale HTTP load evidence for distributed limiter
+- [ ] Physics-derived cheat telemetry from Unreal dedicated-server samples
 - [ ] Ranked impossible-state detection
-- [ ] Privileged admin/live-ops audit trail
-- [ ] Abuse/moderation model
+- [ ] Admin/live-ops audit trail
+- [ ] Abuse/moderation runtime
 
 ## Reliability
-- [ ] Load test target defined
-- [ ] Soak test passed
-- [ ] Backup verified
-- [ ] Restore drill passed
-- [ ] RPO/RTO defined
-- [ ] Reconnect/recovery tested under process/node failure
-- [ ] Duplicate rewards prevented on retry/failover
-- [ ] Content rollback tested
+- [x] Go HTTP metrics source/unit instrumentation baseline
+- [ ] Deployed metrics scrape/dashboard evidence
+- [ ] Load test executed against agreed deployment target
+- [ ] Long-duration soak test
+- [ ] Backup verification
+- [ ] Restore drill
+- [ ] RPO/RTO accepted and demonstrated
+- [ ] process/node reconnect recovery
+- [ ] duplicate-reward prevention under failover
+- [ ] content rollback
 
 ## Release evidence
-- [ ] Stack-specific CI green
-- [ ] Unit/integration/e2e suites for selected runtime
-- [ ] Security scans pass
-- [ ] Performance budgets pass
+- [ ] Stack-specific Unreal + Go CI all green
+- [x] Go HTTP/PostgreSQL runtime integration/e2e
+- [x] Redis shared limiter integration evidence
+- [x] Trusted-ingress identity source unit evidence
+- [x] Concurrent two-replica HTTP/Redis limiter CI evidence
+- [x] Race-integrity/auth telemetry source + unit evidence
+- [x] Go HTTP metrics source + unit evidence
+- [ ] Deployed ingress trust-boundary evidence
+- [ ] Deployed metrics/SLO evidence
+- [ ] Live Unreal/Go packaged integration/e2e
+- [ ] Live Unreal/Go race lifecycle e2e
+- [ ] Security scans pass for complete runtime surface
+- [ ] Distributed abuse controls verified under deployment-scale multi-replica HTTP load
+- [ ] Performance budgets measured/passed
 - [ ] Accessibility review
 - [ ] Privacy/data-retention review
 - [ ] Production deployment evidence

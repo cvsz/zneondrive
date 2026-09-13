@@ -19,16 +19,141 @@ All notable changes to zNeonDrive are documented here.
 - Vehicle part taxonomy and companion catalog
 - Quest and vehicle JSON schemas
 - Automated design integrity validator
-- Architecture Decision Records for authority, starter-vehicle identity, and executable reference contracts
-- Dependency-free executable reference domain model for ownership, build revisions, idempotent quest rewards, VIP fairness, and race validation
-- Unit tests covering seven authoritative domain invariants
+- Dependency-free executable reference domain model and unit tests
+- ADR-0004 selecting Unreal Engine 5.8 for playable client and dedicated gameplay servers
+- ADR-0005 selecting Go/PostgreSQL/Redis durable service-plane direction
+- ADR-0006 defining phase-gated deployment and observability
+- Offline interactive client presentation demo
+- Thai/English presentation mode
+- Executive brief, talk track, demo runbook, commercial scope options, and prepared client Q&A
+- Automated client-demo validation
+- Manual GitHub Pages deployment workflow
+- Runtime Prototype v0.4 documentation
+- Unreal Engine 5.8 C++ project with Game, Editor, and dedicated Server targets
+- Server-authoritative replicated prototype vehicle pawn
+- Manual self-hosted Unreal source-build workflow
+- Go 1.27 service-plane module and HTTP API
+- PostgreSQL durable schema for accounts, characters, vehicles, immutable builds, sessions, and quest completions
+- Hashed resume/session credential handling
+- Idempotent quest/build mutation semantics
+- Sequential MQ001–MQ100 durable quest gate and MQ012 Roadworthy transition
+- PostgreSQL integration tests and Go runtime CI workflow
+- Docker Compose local PostgreSQL 17 + Redis 8 + game API stack
+- Phase 4 static runtime validator
+- Runtime Integration v0.5 trust-boundary specification
+- Unreal GameInstance service subsystem for bootstrap/resume/state/quest/build flows
+- One-time 60-second gameplay ticket issue/redeem protocol
+- Server-only shared-key internal ticket redemption endpoint
+- Atomic single-use gameplay-ticket persistence and migration
+- Dedicated-server PlayerController ticket redemption and authority-only durable pawn binding
+- Replicated durable VehicleID, build revision, active parts, Roadworthy, and binding state
+- HTTP/PostgreSQL reconnect + single-use-ticket E2E test
+- Committed go.mod/go.sum dependency lock with tidy-clean CI enforcement
+- PostgreSQL advisory lock around concurrent schema setup
+- Runtime Inventory + Rebuild v0.6 contract and evidence documentation
+- PostgreSQL inventory item and character blueprint persistence
+- Canonical runtime vehicle-part allowlist checked against the design catalog
+- MQ004 idempotent salvage grant, MQ005 rebuild-blueprint unlock, and MQ009 idempotent recovered-part grant
+- Inventory-authoritative rebuild transaction with atomic consume/return accounting
+- Unreal inventory/blueprint snapshot parsing
+- PostgreSQL integration proof for duplicate-grant prevention, rebuild replay safety, unowned-part rejection, swap accounting, and reconnect persistence
+- Runtime Authoritative Race v0.7 contract and evidence documentation
+- PostgreSQL race-instance, ordered-checkpoint, and final-result persistence
+- Server-only race start/checkpoint/finish endpoints behind the dedicated-server shared-key boundary
+- Race start binding to the exact authoritative active vehicle build revision and validation hash
+- Strict checkpoint cursor + monotonic elapsed-time enforcement
+- Idempotent race start/checkpoint/finish operations and deterministic build-bound result hashes
+- PostgreSQL integration proof for Roadworthy gating, immutable race/build binding, out-of-order rejection, replay safety, finish persistence, and post-finish mutation rejection
+- Runtime Security Hardening v0.8 evidence/non-claim documentation
+- Bounded per-process token-bucket middleware for public and internal service-plane request classes
+- Credential-safe hashed rate-limit identities, bounded limiter bucket cardinality, and HTTP 429 + Retry-After behavior
+- Unit coverage for limiter refill, memory bounds, identity isolation, credential non-disclosure, rejection behavior, and health-probe exemption
+- Runtime Distributed Abuse Controls v0.9 evidence/non-claim documentation
+- Atomic Redis Lua token bucket for shared multi-process abuse budgets with expiring bucket state
+- Redis-unavailable bounded local fallback instead of unbounded fail-open behavior
+- Credential-safe rate-limit rejection/fallback security log events
+- Redis integration test proving independent limiter instances consume the same shared budget
+- Runtime Go CI Redis service alongside PostgreSQL integration coverage
+- Runtime Trusted Ingress Identity v1.0 evidence/non-claim documentation
+- Explicit `TRUSTED_PROXY_CIDRS` allowlist with startup rejection for invalid entries
+- Trusted-proxy `X-Forwarded-For` resolution from right to left with fail-closed malformed-chain handling
+- Unit coverage for spoof resistance, multi-hop proxy chains, exact-IP/CIDR configuration, malformed headers, and distinct client buckets behind one ingress
+- Runtime Multi-Replica HTTP Load Evidence v1.1 documentation
+- Concurrent HTTP integration test with two independent service replicas sharing one Redis limiter budget
+- CI assertion that a 32-request shared burst allows exactly 32 of 128 concurrent requests across both replicas and rejects the remainder with HTTP 429
+- Runtime Race Integrity Telemetry v1.2 evidence/non-claim documentation
+- Credential-safe `race_integrity_rejected` telemetry for authoritative checkpoint/finish HTTP 400/409 outcomes
+- Credential-safe `game_server_auth_rejected` telemetry for unauthorized internal game-server calls
+- Unit coverage proving raw race-instance IDs and peer addresses are absent from security telemetry
+- Runtime Observability Metrics v1.3 source/unit evidence documentation
+- Low-cardinality HTTP request totals by bounded route scope and status class
+- Fixed-bucket HTTP request-duration histogram and current in-flight request gauge
+- Separate `METRICS_LISTEN_ADDR` listener with loopback-only Docker Compose host publication
+- Unit coverage proving metrics exclude authorization values and dynamic vehicle/race identifiers
+
+- Repository documentation index and status-language contract
+- Product requirements and brand guide
+- API contract synchronized through authoritative race runtime v0.7
+- Durable PostgreSQL data-model documentation including race instances/checkpoints/results
+- Multiplayer/networking authority specification
+- Threat model and security-production exit criteria
+- Testing strategy and performance-budget targets
+- Observability/SLO target contract
+- Deployment, backup/restore/DR, and incident-response runbooks
+- Accessibility and localization baselines
+- Content pipeline, quest authoring, world-streaming, vehicle/race-integrity, faction/relationship, crew/social, and companion specs
+- Economy/monetization fairness, moderation/player-safety, privacy/data-retention, and live-ops policies
+- Release-readiness checklist, asset/IP policy, glossary, governance, support, and maintainers documents
+- GitHub bug-report and documentation issue templates
+- Repository 1280×640 SVG README banner asset
+- Documentation completeness and relative-link validator
 
 ### Changed
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
 - Advanced Phase 3 vertical-slice specification to complete while keeping playable/runtime claims evidence-gated
-- Extended CI to validate JSON design catalogs, cross-reference invariants, reference-runtime tests, and Python compilation
-- Reframed repository status around evidence-gated design, prototype, alpha, and production milestones
+- Extended CI to validate JSON design catalogs, client-demo integrity, reference-runtime tests, runtime source structure, and Python compilation
+- Advanced Phase 4 from technology selection into executable Unreal/Go/PostgreSQL source
+- Reframed repository status around evidence-gated design, presentation, runtime prototype, alpha, and production milestones
+- Local runtime ports default to 55432/56379/18080 to reduce collisions with common PostgreSQL/Redis/dev ports
+- Advanced Phase 4.1 to source-level Unreal↔Go integration while keeping live Unreal build/session evidence open
+- Advanced Phase 4.2 to durable inventory/blueprint and rebuild-state integration without claiming playable Garage 17 evidence
+- Advanced Phase 4.3 to durable server-authoritative race lifecycle persistence without claiming live Unreal race or anti-cheat evidence
+- Advanced the service-plane source baseline to v0.8 abuse resistance while keeping distributed Redis limiting, telemetry, anti-cheat and multi-replica evidence open
+- Advanced the service-plane source baseline to v0.9 with Redis-coordinated limiter state and credential-safe security events while keeping trusted-ingress, real multi-replica load, anti-cheat and production evidence open
+- Advanced the service-plane source baseline to v1.0 with explicit trusted-ingress client identity resolution while keeping deployed ingress verification, real multi-replica load, anti-cheat and production evidence open
+- Advanced the evidence baseline to v1.1 with concurrent two-replica HTTP/Redis limiter verification while keeping deployment-scale load, long-duration soak, deployed ingress verification, anti-cheat and production evidence open
+- Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
+- Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
-- Rewardable reference mutations require idempotency semantics and races bind results to the accepted build revision
+- Rewardable mutations require idempotency semantics
+- Resume keys and session tokens are stored as hashes in PostgreSQL
+- Vehicle build mutations use optimistic revision checks and row locking
+- Unreal driving inputs are clamped on the authority before movement
+- Clients never receive or read the gameplay-server shared key
+- Durable snapshots are redeemed by the dedicated server rather than accepted from a client RPC
+- Gameplay tickets are hashed, short-lived, and single-use
+- Vehicle builds reject unknown catalog IDs, locked blueprints, and parts not owned in inventory
+- Inventory consumption/returns and build revision activation commit atomically
+- Replayed build operation IDs must match the original vehicle and build validation hash
+- Race lifecycle writes are internal-only, dedicated-server authenticated, and derive build identity from PostgreSQL rather than client input
+- Race checkpoints reject skipped/out-of-order indices and elapsed-time regression before durable acceptance
+- Final race result hashes bind the exact accepted build revision/hash and authoritative checkpoint cursor
+- Service-plane bootstrap/state/ticket/quest/build/race traffic is protected by bounded token-bucket controls
+- Rate-limit bucket identities hash bearer credentials rather than retaining raw secrets
+- Rate-limit state has bounded local cardinality with stale/oldest eviction to resist attacker-controlled memory growth
+- Redis coordinates shared token-bucket state across API instances using atomic Lua decisions and expiring keys
+- Redis failure retains the bounded process-local limiter and emits a fallback security event
+- Forwarded client identity is ignored unless the immediate socket peer is explicitly trusted
+- Trusted `X-Forwarded-For` chains are evaluated from right to left so client-supplied left-most spoof values do not override the first untrusted hop
+- Malformed forwarding chains fail closed to the socket peer and log no supplied header value
+- Invalid trusted-proxy CIDR configuration fails startup rather than silently widening trust
+- Concurrent two-replica HTTP integration evidence verifies Redis prevents per-process burst multiplication for one trusted-ingress-derived identity
+- Race-integrity and game-server-auth rejection telemetry uses hashed race/peer correlation buckets and bounded static route scopes
+- Security telemetry observes existing authoritative outcomes and does not override or weaken race acceptance decisions
+- HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
+- Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
+- Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection and ranked anti-cheat remain explicit production gates
+- Client presentation demo has no external CDN, analytics, API key, or network dependency

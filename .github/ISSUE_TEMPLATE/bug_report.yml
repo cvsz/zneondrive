@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible repository, runtime, content, or documentation defect
+title: "[Bug]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report exploitable security vulnerabilities here. Follow SECURITY.md instead.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Unreal gameplay/runtime
+        - Go service plane/API
+        - PostgreSQL/data
+        - Design/content
+        - CI/tooling
+        - Demo/client presentation
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit / version
+      description: Commit SHA, branch, tag, or build identifier.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal deterministic steps.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs / screenshots / evidence
+      description: Remove credentials, tokens, personal data, and other secrets.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Unreal/Go version, database, hardware or deployment context as relevant.
