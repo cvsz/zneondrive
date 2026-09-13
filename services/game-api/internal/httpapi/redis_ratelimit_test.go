@@ -32,6 +32,7 @@ func TestReadRESPIntegerArray(t *testing.T) {
 }
 
 func TestDistributedLimiterFallsBackToLocalWhenRedisUnavailable(t *testing.T) {
+	before := redisRateLimitStatsSnapshot()
 	nextCalls := 0
 	next := http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		nextCalls++
@@ -61,5 +62,14 @@ func TestDistributedLimiterFallsBackToLocalWhenRedisUnavailable(t *testing.T) {
 	}
 	if nextCalls != bootstrapRatePolicy.Burst {
 		t.Fatalf("limited fallback request reached handler: %d", nextCalls)
+	}
+
+	after := redisRateLimitStatsSnapshot()
+	wantErrors := before.Errors + uint64(bootstrapRatePolicy.Burst+1)
+	if after.Errors != wantErrors {
+		t.Fatalf("Redis backend failures must be observable: got errors=%d want=%d", after.Errors, wantErrors)
+	}
+	if after.Allowed != before.Allowed || after.Rejected != before.Rejected {
+		t.Fatalf("failed Redis decisions must not be counted as successful Redis outcomes: before=%+v after=%+v", before, after)
 	}
 }

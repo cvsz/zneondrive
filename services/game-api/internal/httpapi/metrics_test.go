@@ -130,6 +130,37 @@ func TestHTTPMetricsExposeBoundedPostgresPoolStats(t *testing.T) {
 	}
 }
 
+func TestHTTPMetricsExposeBoundedRedisLimiterOutcomes(t *testing.T) {
+	original := redisRateLimitStatsSnapshot()
+	redisRateLimitCounters.allowed.Store(17)
+	redisRateLimitCounters.rejected.Store(5)
+	redisRateLimitCounters.errors.Store(3)
+	t.Cleanup(func() {
+		redisRateLimitCounters.allowed.Store(original.Allowed)
+		redisRateLimitCounters.rejected.Store(original.Rejected)
+		redisRateLimitCounters.errors.Store(original.Errors)
+	})
+
+	metrics := NewHTTPMetrics()
+	metricsRec := httptest.NewRecorder()
+	metrics.Handler().ServeHTTP(metricsRec, httptest.NewRequest(http.MethodGet, "/metrics", nil))
+	body := metricsRec.Body.String()
+	for _, want := range []string{
+		`zneondrive_redis_rate_limit_decisions_total{outcome="allowed"} 17`,
+		`zneondrive_redis_rate_limit_decisions_total{outcome="rejected"} 5`,
+		`zneondrive_redis_rate_limit_decisions_total{outcome="error"} 3`,
+	} {
+		if !strings.Contains(body, want) {
+			t.Fatalf("missing bounded Redis limiter metric %q: %s", want, body)
+		}
+	}
+	for _, forbidden := range []string{"bucket=", "Authorization", "Bearer", "session-token", "race-id", "203.0.113."} {
+		if strings.Contains(body, forbidden) {
+			t.Fatalf("Redis limiter metrics exposed forbidden identity/credential token %q: %s", forbidden, body)
+		}
+	}
+}
+
 func TestMetricsRouteCardinalityIsStatic(t *testing.T) {
 	cases := []struct {
 		method string
