@@ -58,9 +58,10 @@
 - [x] multi-replica HTTP load v1.1 CI evidence boundary
 - [x] race-integrity telemetry v1.2 evidence boundary
 - [x] observability metrics v1.3 source/unit evidence boundary
+- [x] PostgreSQL restore drill v1.4 CI evidence boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
-- [x] deployment + backup/restore/DR plans (verification still open)
+- [x] deployment + backup/restore/DR plans (production verification still open)
 - [x] incident-response runbook (exercise still open)
 - [x] accessibility + localization baselines
 - [x] content/quest/world/vehicle/faction/crew/companion authoring specs
@@ -92,6 +93,10 @@
 - [x] bounded HTTP request/status-class/latency/in-flight metrics
 - [x] separate metrics listener with loopback-only Compose publication
 - [x] metrics unit coverage for label cardinality and secret/dynamic-ID non-disclosure
+- [x] PostgreSQL 17 isolated pg_dump/pg_restore CI drill
+- [x] restore assertions for account/progression/vehicle/build/inventory/blueprint/quest/race state and operation IDs
+- [x] restore-time replay of all canonical migrations
+- [x] retained CI restore report + dump artifact
 - [x] committed go.mod/go.sum module lock
 - [x] one-time gameplay-ticket persistence and atomic redemption
 - [x] server-only shared-key internal redemption endpoint
@@ -186,8 +191,11 @@
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
 - [ ] Long-duration soak test
-- [ ] Backup verification
-- [ ] Restore drill
+- [x] PostgreSQL 17 CI backup archive verification
+- [x] Isolated PostgreSQL CI restore drill
+- [x] Representative durable-state + idempotency validation after restore
+- [ ] Production backup verification / off-host retention evidence
+- [ ] Production restore drill against agreed deployment target
 - [ ] RPO/RTO accepted and demonstrated
 - [ ] process/node reconnect recovery
 - [ ] duplicate-reward prevention under failover
@@ -201,6 +209,7 @@
 - [x] Concurrent two-replica HTTP/Redis limiter CI evidence
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
+- [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [ ] Deployed ingress trust-boundary evidence
 - [ ] Deployed metrics/SLO evidence
 - [ ] Live Unreal/Go packaged integration/e2e
@@ -211,7 +220,7 @@
 - [ ] Accessibility review
 - [ ] Privacy/data-retention review
 - [ ] Production deployment evidence
-- [ ] DR evidence
+- [ ] Production DR evidence
 - [ ] Go/no-go approval
 
 Unchecked production claims must not be represented as complete without evidence.
