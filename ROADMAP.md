@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.8
+## Phase 4 — Runtime prototype / integration v1.9
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -75,6 +75,7 @@
 - [x] Implement trusted-proxy/ingress client identity policy and tests
 - [x] Fail closed on invalid proxy CIDR configuration and malformed forwarding chains
 - [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
+- [x] Add repeated two-replica Redis limiter stability evidence across 12 CI cycles
 - [x] Add integrated PostgreSQL + Redis trust-boundary abuse-path evidence
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
@@ -117,6 +118,7 @@
 - [x] Redis server observability v1.6 source/unit evidence/non-claim contract
 - [x] PostgreSQL server observability v1.7 source/integration evidence/non-claim contract
 - [x] integrated trust-boundary v1.8 PostgreSQL/Redis CI evidence/non-claim contract
+- [x] repeated multi-replica stability v1.9 CI evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -157,6 +159,7 @@
 - [x] Trusted-ingress identity handling implemented and unit exercised
 - [ ] Deployed ingress forwarding/sanitization configuration verified
 - [x] Distributed abuse controls verified under concurrent two-replica HTTP CI load
+- [x] Repeated two-replica limiter stability verified across 12 CI cycles / 768 requests
 - [ ] Deployment-scale distributed limiter load evidence
 - [ ] Long-duration soak evidence
 - [x] Authoritative race rejection + game-server auth telemetry emitted with hashed correlation buckets
