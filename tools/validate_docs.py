@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
+from validate_evidence_status_sync import main as validate_evidence_status_sync
+
 ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED_DOCS = [
@@ -75,7 +77,6 @@ def normalized_target(raw: str) -> str:
     if raw.startswith("<") and raw.endswith(">"):
         raw = raw[1:-1].strip()
 
-    # Markdown links may append a quoted title after the path.
     if ' "' in raw:
         raw = raw.split(' "', 1)[0].strip()
     elif " '" in raw:
@@ -90,7 +91,6 @@ def validate_link(source: Path, raw: str) -> str | None:
     if not target or target.startswith(IGNORE_PREFIXES):
         return None
 
-    # Scheme-relative/external-ish links.
     if target.startswith("//") or "://" in target:
         return None
 
@@ -116,11 +116,7 @@ def main() -> int:
         if not (ROOT / rel).exists():
             errors.append(f"missing required documentation asset: {rel}")
 
-    markdown_files = [
-        path
-        for path in ROOT.rglob("*.md")
-        if ".git" not in path.parts
-    ]
+    markdown_files = [path for path in ROOT.rglob("*.md") if ".git" not in path.parts]
 
     checked = 0
     for path in markdown_files:
@@ -136,6 +132,8 @@ def main() -> int:
         for error in errors:
             print(f"- {error}", file=sys.stderr)
         return 1
+
+    validate_evidence_status_sync()
 
     print(
         f"documentation validation OK: "
