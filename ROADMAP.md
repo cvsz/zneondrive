@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v2.2
+## Phase 4 — Runtime prototype / integration v2.3
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -85,6 +85,7 @@
 - [x] Add Unreal dedicated-server aggregate tick/session/input-clamp/ticket-redemption telemetry source baseline
 - [x] Add Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source baseline
 - [x] Add authority-side displacement envelope telemetry with durable-bind baseline reset and static placement validation
+- [x] Add authority-side rotation envelope telemetry with wrap-safe yaw delta, durable-bind baseline reset and static placement validation
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
@@ -125,6 +126,7 @@
 - [x] Unreal dedicated-server observability v2.0 source/static-validation evidence/non-claim contract
 - [x] Unreal authority activity observability v2.1 source/static-validation evidence/non-claim contract
 - [x] Unreal displacement-envelope telemetry v2.2 source/static-validation evidence/non-claim contract
+- [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -143,6 +145,7 @@
 - [ ] Match/event registration
 - [x] Race rejection/auth telemetry baseline
 - [x] Source-level authority displacement envelope telemetry baseline
+- [x] Source-level authority rotation envelope telemetry baseline
 - [ ] Physics-derived race anti-cheat telemetry from live UE samples
 - [ ] Disconnect/rejoin behavior
 - [ ] Deployment-scale load and long-duration soak testing
@@ -171,6 +174,7 @@
 - [ ] Long-duration soak evidence
 - [x] Authoritative race rejection + game-server auth telemetry emitted with hashed correlation buckets
 - [x] Source/static authority displacement envelope telemetry implemented
+- [x] Source/static authority rotation envelope telemetry implemented
 - [ ] Physics-derived impossible-state telemetry verified from live Unreal race samples
 - [x] Low-cardinality Go HTTP service metrics source/unit baseline
 - [x] Bounded PostgreSQL connection-pool metrics source/unit baseline
