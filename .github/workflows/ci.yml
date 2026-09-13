@@ -62,6 +62,7 @@ jobs:
             design/schemas/vertical-slice.schema.json
             src/zneondrive/domain.py
             tests/test_reference_runtime.py
+            tests/test_ue_linux_tooling.py
             tools/validate_design.py
             tools/validate_docs.py
             tools/validate_client_demo.py
@@ -69,7 +70,9 @@ jobs:
             tools/validate_runtime_v0_5.py
             tools/validate_runtime_v0_6.py
             tools/validate_control_surface.py
+            tools/validate_unreal_evidence_workflow.py
             tools/zneondrive-control.sh
+            tools/ue-linux.sh
             tools/install-client.ps1
             docs/control-panel.md
             demo/index.html
@@ -146,10 +149,12 @@ jobs:
       - name: Validate runtime inventory/rebuild v0.6
         run: python3 tools/validate_runtime_v0_6.py
 
-      - name: Validate full-stack control surface
+      - name: Validate full-stack and Unreal evidence control surfaces
         run: |
           python3 tools/validate_control_surface.py
+          python3 tools/validate_unreal_evidence_workflow.py
           bash -n tools/zneondrive-control.sh
+          bash -n tools/ue-linux.sh
           make help >/dev/null
 
       - name: Run executable reference contract tests
