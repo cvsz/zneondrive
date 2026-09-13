@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.3
+## Phase 4 — Runtime prototype / integration v1.4
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -74,6 +74,7 @@
 - [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
+- [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -104,6 +105,7 @@
 - [x] multi-replica HTTP load v1.1 CI evidence/non-claim contract
 - [x] race-integrity telemetry v1.2 evidence/non-claim contract
 - [x] observability metrics v1.3 source/unit evidence contract
+- [x] PostgreSQL restore drill v1.4 CI evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -112,7 +114,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -123,7 +125,8 @@
 - [ ] Physics-derived race anti-cheat telemetry
 - [ ] Disconnect/rejoin behavior
 - [ ] Deployment-scale load and long-duration soak testing
-- [ ] Backup/restore drill
+- [x] Isolated PostgreSQL backup/restore CI drill
+- [ ] Production backup/restore drill against an agreed deployment target
 
 ## Phase 6 — Content alpha
 - [ ] Chapter 1 fully playable in selected runtime
@@ -154,7 +157,8 @@
 - [ ] Incident/rollback exercise passed
 - [ ] Capacity model backed by load evidence
 - [x] Backup/restore/DR plan documented
-- [ ] Restore/DR evidence
+- [x] PostgreSQL 17 isolated CI backup/restore drill with retained artifact/report
+- [ ] Production restore/DR evidence
 - [ ] Security review of complete runtime
 - [x] Privacy/data-retention baseline documented
 - [ ] Privacy/legal review for target launch regions
