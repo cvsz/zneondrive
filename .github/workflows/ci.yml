@@ -45,6 +45,7 @@ jobs:
             docs/runtime-integration-v0.5.md
             docs/runtime-inventory-rebuild-v0.6.md
             docs/runtime-authoritative-race-v0.7.md
+            docs/runtime-postgres-exporter-v3.2.md
             docs/architecture.md
             docs/content-contracts.md
             docs/adr/0003-executable-reference-runtime.md
@@ -76,6 +77,7 @@ jobs:
             tools/validate_unreal_evidence_workflow.py
             tools/validate_unreal_package_evidence_workflow.py
             tools/validate_threat_exercise.py
+            tools/validate_postgres_exporter.py
             tools/zneondrive-control.sh
             tools/ue-linux.sh
             tools/install-client.ps1
@@ -152,6 +154,9 @@ jobs:
 
       - name: Validate threat-model exercise evidence
         run: python3 tools/validate_threat_exercise.py
+
+      - name: Validate PostgreSQL exporter evidence boundary
+        run: python3 tools/validate_postgres_exporter.py
 
       - name: Validate client presentation package
         run: python3 tools/validate_client_demo.py
