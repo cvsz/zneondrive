@@ -71,6 +71,7 @@ jobs:
             tools/validate_runtime_v0_4.py
             tools/validate_runtime_v0_5.py
             tools/validate_runtime_v0_6.py
+            tools/validate_unreal_server_observability.py
             tools/validate_control_surface.py
             tools/validate_unreal_evidence_workflow.py
             tools/validate_unreal_package_evidence_workflow.py
@@ -91,6 +92,10 @@ jobs:
             game/Source/NeonDrive/NDVehiclePawn.cpp
             game/Source/NeonDrive/NDServiceSubsystem.cpp
             game/Source/NeonDrive/NDPlayerController.cpp
+            game/Source/NeonDrive/NDServerTelemetry.cpp
+            game/Source/NeonDrive/NDServerTelemetry.h
+            game/Source/NeonDrive/NeonDriveGameModeBase.cpp
+            game/Source/NeonDrive/NeonDriveGameModeBase.h
             game/Source/NeonDriveServer.Target.cs
             game/Source/NeonDriveClient.Target.cs
             services/game-api/go.mod
@@ -151,6 +156,9 @@ jobs:
 
       - name: Validate runtime inventory/rebuild v0.6
         run: python3 tools/validate_runtime_v0_6.py
+
+      - name: Validate Unreal dedicated-server observability source contract
+        run: python3 tools/validate_unreal_server_observability.py
 
       - name: Validate full-stack and Unreal evidence control surfaces
         run: |

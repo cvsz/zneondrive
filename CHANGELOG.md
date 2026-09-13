@@ -122,6 +122,9 @@ All notable changes to zNeonDrive are documented here.
 - Runtime Multi-Replica Stability Evidence v1.9 documentation
 - Repeated two-replica HTTP/Redis integration scenario covering 12 fresh-client rounds and 768 requests
 - Per-round assertions requiring exactly one shared 16-request Redis budget plus 48 HTTP 429 responses with `Retry-After`, preventing intermittent per-process burst multiplication from passing unnoticed
+- Runtime Unreal Dedicated-Server Observability v2.0 source/static-validation documentation
+- Bounded Unreal server aggregate telemetry for active sessions, joins/leaves, tick timing, authoritative input clamps, and gameplay-ticket redemption outcomes
+- Static CI validator requiring the Unreal telemetry hooks and rejecting string/dynamic identifiers or credential/endpoint reads in the aggregate telemetry contract
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -162,6 +165,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the observability source baseline to v1.7 with bounded current-database PostgreSQL server metrics while keeping query-level/external exporter coverage, deployed dashboards/SLOs, Unreal runtime metrics, load/soak, HA/DR and production evidence open
 - Advanced the integrated security evidence baseline to v1.8 with PostgreSQL + Redis trust-boundary abuse-path verification while keeping deployed ingress, live Unreal transport, physics anti-cheat, load/soak, HA/DR and production evidence open
 - Advanced the CI stability evidence baseline to v1.9 with repeated two-replica Redis coordination verification while keeping deployment-scale load, long-duration soak, deployed SLO/capacity claims, live Unreal integration, HA/DR and production evidence open
+- Advanced the Unreal observability source baseline to v2.0 with aggregate dedicated-server session/tick/input/ticket telemetry while keeping successful real UE 5.8 build/package evidence, replication/race/correction telemetry, deployed scrape/log shipping, live Unreal↔Go E2E, load/soak, HA/DR and production evidence open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -203,10 +207,12 @@ All notable changes to zNeonDrive are documented here.
 - Redis server metrics probing is read-only and cannot alter rate-limit, PostgreSQL, or gameplay authority decisions
 - PostgreSQL server metrics query only bounded current-database numeric counters and size; database names, SQL text, query fingerprints, relation names, URLs, credentials and raw errors are not exported
 - PostgreSQL server metrics are observational/read-only and cannot alter persistence, progression, race acceptance, rate limiting or gameplay authority
+- Unreal dedicated-server telemetry stores/exports only aggregate numeric session/tick/input/ticket counters and never retains player, vehicle, race, ticket, credential, endpoint or peer identifiers
+- Unreal telemetry is observational only and cannot authorize gameplay, mutate durable state, weaken server-side input clamps, or bypass server-only gameplay-ticket redemption
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/external exporter coverage, deployed Redis HA/failover monitoring evidence, Unreal runtime metrics, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/external exporter coverage, deployed Redis HA/failover monitoring evidence, live Unreal replication/runtime metrics, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

@@ -87,6 +87,7 @@ validate-runtime:
 	python3 tools/validate_runtime_v0_4.py
 	python3 tools/validate_runtime_v0_5.py
 	python3 tools/validate_runtime_v0_6.py
+	python3 tools/validate_unreal_server_observability.py
 
 validate-control:
 	python3 tools/validate_control_surface.py

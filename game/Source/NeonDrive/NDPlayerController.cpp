@@ -3,6 +3,7 @@
 #include "Dom/JsonObject.h"
 #include "HAL/PlatformMisc.h"
 #include "HttpModule.h"
+#include "NDServerTelemetry.h"
 #include "NDServiceSubsystem.h"
 #include "NDVehiclePawn.h"
 #include "Serialization/JsonReader.h"
@@ -59,10 +60,13 @@ void ANDPlayerController::ServerSubmitGameTicket_Implementation(const FString& T
         return;
     }
 
+    FNDServerTelemetry::RecordTicketRedeemAttempt();
+
     FString GameServerKey = FPlatformMisc::GetEnvironmentVariable(TEXT("ZNEON_GAME_SERVER_KEY"));
     GameServerKey.TrimStartAndEndInline();
     if (GameServerKey.Len() < 32)
     {
+        FNDServerTelemetry::RecordTicketRedeemFailure();
         UE_LOG(LogTemp, Error, TEXT("ZNEON_GAME_SERVER_KEY is missing or too short; gameplay binding denied"));
         return;
     }
@@ -93,6 +97,7 @@ void ANDPlayerController::ServerSubmitGameTicket_Implementation(const FString& T
 
     if (!Request->ProcessRequest())
     {
+        FNDServerTelemetry::RecordTicketRedeemFailure();
         UE_LOG(LogTemp, Error, TEXT("Failed to start gameplay ticket redemption request"));
     }
 }
@@ -104,6 +109,7 @@ void ANDPlayerController::HandleTicketRedeemed(
 {
     if (!HasAuthority() || !bSucceeded || !Response.IsValid() || Response->GetResponseCode() != 200)
     {
+        FNDServerTelemetry::RecordTicketRedeemFailure();
         UE_LOG(LogTemp, Warning, TEXT("Gameplay ticket redemption rejected"));
         return;
     }
@@ -112,6 +118,7 @@ void ANDPlayerController::HandleTicketRedeemed(
     TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
     if (!FJsonSerializer::Deserialize(Reader, Root) || !Root.IsValid())
     {
+        FNDServerTelemetry::RecordTicketRedeemFailure();
         UE_LOG(LogTemp, Warning, TEXT("Gameplay ticket redemption returned invalid JSON"));
         return;
     }
@@ -119,6 +126,7 @@ void ANDPlayerController::HandleTicketRedeemed(
     FString VehicleID;
     if (!Root->TryGetStringField(TEXT("vehicle_id"), VehicleID) || VehicleID.IsEmpty())
     {
+        FNDServerTelemetry::RecordTicketRedeemFailure();
         UE_LOG(LogTemp, Warning, TEXT("Gameplay ticket snapshot is missing vehicle_id"));
         return;
     }
@@ -147,9 +155,11 @@ void ANDPlayerController::HandleTicketRedeemed(
     ANDVehiclePawn* VehiclePawn = Cast<ANDVehiclePawn>(GetPawn());
     if (!VehiclePawn)
     {
+        FNDServerTelemetry::RecordTicketRedeemFailure();
         UE_LOG(LogTemp, Warning, TEXT("Gameplay ticket redeemed before vehicle pawn was available"));
         return;
     }
 
     VehiclePawn->ApplyDurableIdentity(VehicleID, BuildRevision, PartIDs, bRoadworthy);
+    FNDServerTelemetry::RecordTicketRedeemSuccess();
 }

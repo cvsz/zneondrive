@@ -5,6 +5,7 @@
 #include "Components/InputComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "NDServerTelemetry.h"
 #include "Net/UnrealNetwork.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -106,8 +107,14 @@ void ANDVehiclePawn::PushDrivingInput()
 
 void ANDVehiclePawn::ServerSetDrivingInput_Implementation(float Throttle, float Steering)
 {
-    AuthoritativeThrottle = FMath::Clamp(Throttle, -1.0f, 1.0f);
-    AuthoritativeSteering = FMath::Clamp(Steering, -1.0f, 1.0f);
+    const float ClampedThrottle = FMath::Clamp(Throttle, -1.0f, 1.0f);
+    const float ClampedSteering = FMath::Clamp(Steering, -1.0f, 1.0f);
+    if (!FMath::IsNearlyEqual(Throttle, ClampedThrottle) || !FMath::IsNearlyEqual(Steering, ClampedSteering))
+    {
+        FNDServerTelemetry::RecordInputClamp();
+    }
+    AuthoritativeThrottle = ClampedThrottle;
+    AuthoritativeSteering = ClampedSteering;
 }
 
 void ANDVehiclePawn::ApplyDurableIdentity(

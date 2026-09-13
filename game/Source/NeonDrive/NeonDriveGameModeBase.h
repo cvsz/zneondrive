@@ -11,4 +11,8 @@ class NEONDRIVE_API ANeonDriveGameModeBase : public AGameModeBase
 
 public:
     ANeonDriveGameModeBase();
+
+    virtual void Tick(float DeltaSeconds) override;
+    virtual void PostLogin(APlayerController* NewPlayer) override;
+    virtual void Logout(AController* Exiting) override;
 };
