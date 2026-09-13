@@ -61,6 +61,7 @@
 - [x] PostgreSQL restore drill v1.4 CI evidence boundary
 - [x] PostgreSQL pool observability v1.5 source/unit evidence boundary
 - [x] Redis server observability v1.6 source/unit evidence boundary
+- [x] PostgreSQL server observability v1.7 source/integration evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -104,6 +105,9 @@
 - [x] PostgreSQL pool metrics unit coverage and credential/URL non-disclosure assertions
 - [x] bounded Redis INFO server metrics with short probe deadlines
 - [x] Redis server metrics unit/TCP RESP coverage and error/address non-disclosure assertions
+- [x] bounded current-database PostgreSQL server metrics
+- [x] PostgreSQL server metrics unit/error non-disclosure coverage
+- [x] PostgreSQL 17 server metrics integration coverage
 - [x] PostgreSQL 17 isolated pg_dump/pg_restore CI drill
 - [x] restore assertions for account/progression/vehicle/build/inventory/blueprint/quest/race state and operation IDs
 - [x] restore-time replay of all canonical migrations
@@ -147,7 +151,8 @@
 - [ ] deployment-scale distributed limiter load evidence
 - [ ] long-duration soak evidence
 - [x] PostgreSQL pool connection/acquire metrics source + unit evidence
-- [ ] PostgreSQL query-level/server exporter metrics
+- [x] PostgreSQL current-database server metrics source + integration evidence
+- [ ] PostgreSQL query-level/external exporter metrics
 - [x] Redis server metrics source + unit evidence
 - [ ] Unreal server tick/replication metrics
 - [ ] full reference-oracle parity in Go
@@ -202,7 +207,8 @@
 - [x] Go HTTP metrics source/unit instrumentation baseline
 - [x] PostgreSQL pool connection/acquire metrics source/unit baseline
 - [x] Redis server metrics source/unit baseline
-- [ ] PostgreSQL query-level/server exporter metrics
+- [x] PostgreSQL current-database server metrics source/integration baseline
+- [ ] PostgreSQL query-level/external exporter metrics
 - [ ] Unreal server tick/replication metrics
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
@@ -227,6 +233,7 @@
 - [x] Go HTTP metrics source + unit evidence
 - [x] PostgreSQL pool metrics source + unit evidence
 - [x] Redis server metrics source + unit evidence
+- [x] PostgreSQL server metrics source + PostgreSQL 17 integration evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract

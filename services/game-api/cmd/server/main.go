@@ -76,9 +76,10 @@ func main() {
 
 	var metricsServer *http.Server
 	if metricsListenAddr != "" {
+		metricsHandler := httpapi.NewPostgresServerMetricsHandler(metrics.Handler(), db)
 		metricsServer = &http.Server{
 			Addr:              metricsListenAddr,
-			Handler:           metrics.Handler(),
+			Handler:           metricsHandler,
 			ReadHeaderTimeout: 3 * time.Second,
 			ReadTimeout:       5 * time.Second,
 			WriteTimeout:      5 * time.Second,
