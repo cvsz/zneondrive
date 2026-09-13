@@ -54,25 +54,48 @@ powershell -ExecutionPolicy Bypass -File tools/install-client.ps1 `
   -ApiUrl https://api.example.com
 ```
 
-### Unreal source-development client
+### Unreal Linux development client/server
 
-Linux:
+Linux supports both a full source tree and a precompiled installed-build layout. The latter may not contain a root-level `GenerateProjectFiles.sh`; in that case the repository invokes `UnrealBuildTool.dll -projectfiles` through Unreal's bundled `dotnet` runtime.
 
 ```bash
 export UE_ROOT=/opt/UnrealEngine-5.8
 make deps-client
+make ue-detect
 make client-generate
 make client-build
+make game-server-build
 ```
 
-Windows:
+The helper requires `Engine/Build/BatchFiles/Linux/Build.sh`. Project generation uses this order:
+
+1. root `GenerateProjectFiles.sh` when present and executable;
+2. `Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.dll` with a bundled `Engine/Binaries/ThirdParty/DotNet/*/linux/dotnet`;
+3. system `dotnet` only when the bundled runtime is unavailable.
+
+For non-standard mount points, override the detection roots without changing the build root itself:
+
+```bash
+UE_SEARCH_ROOTS=/opt:$HOME:/mnt/zworkforce-storage make ue-detect
+```
+
+Packaging uses the same `UE_ROOT` and requires `Engine/Build/BatchFiles/RunUAT.sh`:
+
+```bash
+make client-package-linux
+make game-server-package-linux
+# or both
+make package-all-linux
+```
+
+Windows source development remains:
 
 ```powershell
 $env:UE_ROOT = "D:\UnrealEngine-5.8"
 powershell -ExecutionPolicy Bypass -File tools/install-client.ps1 -Mode source
 ```
 
-The explicit `NeonDriveClient` target is a Client target. A successful source build is still not equivalent to archived packaged-play evidence.
+The explicit `NeonDriveClient` target remains a Client target. Tooling compatibility and fixture tests are not successful UE 5.8 build/package evidence; that gate requires a real retained Client/Server build artifact from the selected engine installation.
 
 ## Dedicated gameplay server
 
@@ -105,6 +128,8 @@ The menu provides:
 - full-stack status,
 - repository CI,
 - guarded local database/Redis reset.
+
+The Makefile's UE build/package targets use `tools/ue-linux.sh` so installed builds without a root `GenerateProjectFiles.sh` are supported. The older interactive control-panel source-build menu remains operational for source-tree layouts; use the Make targets above for installed-build development until that menu is unified with the helper.
 
 ## Full-stack lifecycle
 
@@ -146,8 +171,8 @@ It destroys the local PostgreSQL and Redis Compose volumes. It is not a producti
 
 These tools improve installation and operation only. They do **not** make the following claims green by themselves:
 
-- successful archived UE 5.8 source build,
-- packaged Unreal client/server E2E,
+- successful archived UE 5.8 Client/Server build/package,
+- packaged Unreal client/server ↔ Go E2E,
 - Garage 17 playability,
 - First Ignition playability,
 - load/soak,
