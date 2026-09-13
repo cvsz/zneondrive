@@ -46,10 +46,9 @@ jobs:
           grep -qi '^Content-Security-Policy:' <<<"$headers"
           grep -qi '^X-Frame-Options: DENY' <<<"$headers"
           grep -qi '^X-Content-Type-Options: nosniff' <<<"$headers"
-          test "$(curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:18081/api/v1/state)" = "200" || true
-          # nginx only defines an exact /api/healthz proxy; arbitrary /api routes must not reach game-api.
-          body="$(curl -fsS http://127.0.0.1:18081/api/not-public || true)"
-          ! grep -qi 'authorization' <<<"$body"
+          # Only the exact /api/healthz path is proxied. Other /api paths must resolve to the static SPA, not game-api.
+          body="$(curl -fsS http://127.0.0.1:18081/api/not-public)"
+          grep -q 'zNeonDrive' <<<"$body"
       - name: Show service status on failure
         if: failure()
         run: docker compose ps && docker compose logs --no-color --tail=200 web game-api postgres redis
