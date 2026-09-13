@@ -6,12 +6,14 @@ on:
     paths:
       - 'services/game-api/**'
       - 'tools/postgres-restore-drill.sh'
+      - 'tools/validate_postgres_exporter.py'
       - 'compose.yaml'
       - '.github/workflows/runtime-go.yml'
   pull_request:
     paths:
       - 'services/game-api/**'
       - 'tools/postgres-restore-drill.sh'
+      - 'tools/validate_postgres_exporter.py'
       - 'compose.yaml'
       - '.github/workflows/runtime-go.yml'
 
@@ -77,6 +79,34 @@ jobs:
           TEST_DATABASE_URL: postgres://zneondrive:zneondrive-test@127.0.0.1:5432/zneondrive_test?sslmode=disable
           TEST_REDIS_ADDR: 127.0.0.1:6379
         run: go test -tags=integration ./...
+
+      - name: External PostgreSQL exporter integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          cid=$(docker run -d --network host \
+            -e DATA_SOURCE_URI='127.0.0.1:5432/zneondrive_test?sslmode=disable' \
+            -e DATA_SOURCE_USER='zneondrive' \
+            -e DATA_SOURCE_PASS='zneondrive-test' \
+            -e PG_EXPORTER_COLLECTION_TIMEOUT=5s \
+            quay.io/prometheuscommunity/postgres-exporter:v0.19.1)
+          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          metrics_file=$(mktemp)
+          ready=0
+          for _ in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:9187/metrics >"$metrics_file"; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          grep -Eq '^pg_up(\{[^}]*\})? 1$' "$metrics_file"
+          grep -q '^pg_stat_database_' "$metrics_file"
+          if grep -Fq 'zneondrive-test' "$metrics_file"; then
+            echo 'exporter metrics leaked the database password'
+            exit 1
+          fi
 
       - name: PostgreSQL isolated backup and restore drill
         env:
