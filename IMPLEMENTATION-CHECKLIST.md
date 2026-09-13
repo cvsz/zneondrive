@@ -63,6 +63,7 @@
 - [x] Redis server observability v1.6 source/unit evidence boundary
 - [x] PostgreSQL server observability v1.7 source/integration evidence boundary
 - [x] integrated trust-boundary v1.8 PostgreSQL/Redis CI evidence boundary
+- [x] repeated multi-replica stability v1.9 CI evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -98,6 +99,7 @@
 - [x] PostgreSQL integration tests
 - [x] Redis distributed-limiter integration test
 - [x] concurrent two-replica HTTP integration test sharing one Redis limiter budget
+- [x] repeated two-replica HTTP stability test across 12 fresh client budgets / 768 requests
 - [x] integrated PostgreSQL + Redis trust-boundary abuse-path test
 - [x] credential-safe race-integrity/auth rejection telemetry middleware
 - [x] bounded HTTP request/status-class/latency/in-flight metrics
@@ -148,6 +150,7 @@
 - [x] multi-hop forwarding chain selects first untrusted hop from the right
 - [x] invalid proxy CIDRs fail startup; malformed XFF falls back to socket peer
 - [x] two HTTP replicas under concurrent CI traffic consume exactly one Redis-coordinated burst budget
+- [x] repeated fresh-client cycles preserve exact Redis-coordinated budget and Retry-After semantics
 - [x] integrated middleware rejects forged sessions, wrong game-server keys and one-time ticket replay
 - [x] race rejection/auth telemetry hashes race-instance and peer identifiers before logging
 - [ ] deployed ingress sanitization/network-isolation evidence
@@ -196,6 +199,7 @@
 - [x] Rate-limit rejection/fallback security log events
 - [x] Trusted ingress/proxy identity source handling unit tested
 - [x] Multi-replica HTTP CI load evidence for distributed limiter
+- [x] Repeated multi-replica Redis limiter stability CI evidence
 - [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
 - [x] Dedicated-server auth rejection telemetry/correlation baseline
 - [x] Authoritative race rejection telemetry baseline
@@ -212,6 +216,7 @@
 - [x] PostgreSQL pool connection/acquire metrics source/unit baseline
 - [x] Redis server metrics source/unit baseline
 - [x] PostgreSQL current-database server metrics source/integration baseline
+- [x] Repeated two-replica Redis limiter CI stability evidence
 - [ ] PostgreSQL query-level/external exporter metrics
 - [ ] Unreal server tick/replication metrics
 - [ ] Deployed metrics scrape/dashboard evidence
@@ -233,6 +238,7 @@
 - [x] Redis shared limiter integration evidence
 - [x] Trusted-ingress identity source unit evidence
 - [x] Concurrent two-replica HTTP/Redis limiter CI evidence
+- [x] Repeated two-replica Redis limiter stability CI evidence
 - [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
