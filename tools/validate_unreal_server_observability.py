@@ -17,6 +17,10 @@ required_telemetry = {
     "join counter": "joins_total=%llu",
     "leave counter": "leaves_total=%llu",
     "input clamp counter": "input_clamps_total=%llu",
+    "authority movement ticks": "authority_movement_ticks_total=%llu",
+    "identity gate blocks": "identity_gate_blocks_total=%llu",
+    "collision blocks": "collision_blocks_total=%llu",
+    "net update requests": "net_update_requests_total=%llu",
     "ticket attempts": "ticket_redeem_attempts_total=%llu",
     "ticket successes": "ticket_redeem_successes_total=%llu",
     "ticket failures": "ticket_redeem_failures_total=%llu",
@@ -42,8 +46,20 @@ for label, token in {
     if token not in controller:
         raise SystemExit(f"missing gameplay-ticket telemetry hook: {label}")
 
-if "FNDServerTelemetry::RecordInputClamp()" not in pawn:
-    raise SystemExit("missing authoritative input-clamp telemetry hook")
+for label, token in {
+    "authoritative input clamp": "FNDServerTelemetry::RecordInputClamp()",
+    "authority movement tick": "FNDServerTelemetry::RecordAuthorityMovementTick()",
+    "durable identity gate": "FNDServerTelemetry::RecordIdentityGateBlock()",
+    "collision block": "FNDServerTelemetry::RecordCollisionBlock()",
+    "explicit replication update request": "FNDServerTelemetry::RecordNetUpdateRequest()",
+}.items():
+    if token not in pawn:
+        raise SystemExit(f"missing authoritative vehicle telemetry hook: {label}")
+
+if "Hit.bBlockingHit" not in pawn:
+    raise SystemExit("collision telemetry must derive from authoritative swept movement result")
+if "ForceNetUpdate();" not in pawn:
+    raise SystemExit("net update telemetry must remain paired with an actual ForceNetUpdate request")
 
 forbidden_metric_tokens = (
     "%s",
