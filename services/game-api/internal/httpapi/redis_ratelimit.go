@@ -9,6 +9,7 @@ import (
 	"net"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 )
 
@@ -19,6 +20,18 @@ type redisRateLimiter struct {
 	addr        string
 	dialTimeout time.Duration
 	ioTimeout   time.Duration
+}
+
+type redisRateLimitStats struct {
+	Allowed  uint64
+	Rejected uint64
+	Errors   uint64
+}
+
+var redisRateLimitCounters struct {
+	allowed  atomic.Uint64
+	rejected atomic.Uint64
+	errors   atomic.Uint64
 }
 
 const redisRateLimitScript = `
@@ -60,7 +73,26 @@ func newRedisRateLimiter(addr string) *redisRateLimiter {
 	}
 }
 
-func (r *redisRateLimiter) allow(ctx context.Context, key string, policy rateLimitPolicy, now time.Time) (bool, time.Duration, error) {
+func redisRateLimitStatsSnapshot() redisRateLimitStats {
+	return redisRateLimitStats{
+		Allowed:  redisRateLimitCounters.allowed.Load(),
+		Rejected: redisRateLimitCounters.rejected.Load(),
+		Errors:   redisRateLimitCounters.errors.Load(),
+	}
+}
+
+func (r *redisRateLimiter) allow(ctx context.Context, key string, policy rateLimitPolicy, now time.Time) (allowed bool, retry time.Duration, err error) {
+	defer func() {
+		switch {
+		case err != nil:
+			redisRateLimitCounters.errors.Add(1)
+		case allowed:
+			redisRateLimitCounters.allowed.Add(1)
+		default:
+			redisRateLimitCounters.rejected.Add(1)
+		}
+	}()
+
 	if r == nil || r.addr == "" {
 		return false, 0, errors.New("redis rate limiter is not configured")
 	}
@@ -111,7 +143,7 @@ func (r *redisRateLimiter) allow(ctx context.Context, key string, policy rateLim
 	if values[0] == 1 {
 		return true, 0, nil
 	}
-	retry := time.Duration(values[1]) * time.Millisecond
+	retry = time.Duration(values[1]) * time.Millisecond
 	if retry < time.Second {
 		retry = time.Second
 	}
