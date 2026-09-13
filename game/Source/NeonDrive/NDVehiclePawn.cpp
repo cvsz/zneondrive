@@ -62,6 +62,17 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
 
     FNDServerTelemetry::RecordAuthorityMovementTick();
 
+    const FVector CurrentAuthorityLocation = GetActorLocation();
+    const float MaxExpectedDisplacementCm = FMath::Max(0.0f, MaxSpeedCmPerSecond * DeltaSeconds) + AuthorityDisplacementSlackCm;
+    if (bAuthorityLocationBaselineValid)
+    {
+        const float ObservedDisplacementCm = FVector::Dist(CurrentAuthorityLocation, LastAuthorityLocation);
+        if (ObservedDisplacementCm > MaxExpectedDisplacementCm)
+        {
+            FNDServerTelemetry::RecordImpossibleDisplacement();
+        }
+    }
+
     const float ClampedThrottle = FMath::Clamp(AuthoritativeThrottle, -1.0f, 1.0f);
     const float ClampedSteering = FMath::Clamp(AuthoritativeSteering, -1.0f, 1.0f);
 
@@ -78,6 +89,9 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
     {
         FNDServerTelemetry::RecordCollisionBlock();
     }
+
+    LastAuthorityLocation = GetActorLocation();
+    bAuthorityLocationBaselineValid = true;
 }
 
 void ANDVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -140,6 +154,8 @@ void ANDVehiclePawn::ApplyDurableIdentity(
     DurablePartIDs = PartIDs;
     bDurableRoadworthy = bRoadworthy;
     bDurableIdentityBound = true;
+    LastAuthorityLocation = GetActorLocation();
+    bAuthorityLocationBaselineValid = true;
     ForceNetUpdate();
     FNDServerTelemetry::RecordNetUpdateRequest();
 }

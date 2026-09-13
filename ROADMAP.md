@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v2.1
+## Phase 4 — Runtime prototype / integration v2.2
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -84,6 +84,7 @@
 - [x] Add bounded current-database PostgreSQL server metrics with PostgreSQL 17 integration evidence
 - [x] Add Unreal dedicated-server aggregate tick/session/input-clamp/ticket-redemption telemetry source baseline
 - [x] Add Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source baseline
+- [x] Add authority-side displacement envelope telemetry with durable-bind baseline reset and static placement validation
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
@@ -123,6 +124,7 @@
 - [x] repeated multi-replica stability v1.9 CI evidence/non-claim contract
 - [x] Unreal dedicated-server observability v2.0 source/static-validation evidence/non-claim contract
 - [x] Unreal authority activity observability v2.1 source/static-validation evidence/non-claim contract
+- [x] Unreal displacement-envelope telemetry v2.2 source/static-validation evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -132,7 +134,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -140,7 +142,8 @@
 - [ ] Crew MVP
 - [ ] Match/event registration
 - [x] Race rejection/auth telemetry baseline
-- [ ] Physics-derived race anti-cheat telemetry
+- [x] Source-level authority displacement envelope telemetry baseline
+- [ ] Physics-derived race anti-cheat telemetry from live UE samples
 - [ ] Disconnect/rejoin behavior
 - [ ] Deployment-scale load and long-duration soak testing
 - [x] Isolated PostgreSQL backup/restore CI drill
@@ -167,7 +170,8 @@
 - [ ] Deployment-scale distributed limiter load evidence
 - [ ] Long-duration soak evidence
 - [x] Authoritative race rejection + game-server auth telemetry emitted with hashed correlation buckets
-- [ ] Physics-derived impossible-state telemetry from live Unreal race samples
+- [x] Source/static authority displacement envelope telemetry implemented
+- [ ] Physics-derived impossible-state telemetry verified from live Unreal race samples
 - [x] Low-cardinality Go HTTP service metrics source/unit baseline
 - [x] Bounded PostgreSQL connection-pool metrics source/unit baseline
 - [x] Bounded Redis server metrics source/unit baseline
@@ -201,4 +205,4 @@
 - [ ] Disaster-recovery evidence
 - [ ] Go/no-go release review
 
-**Rule:** do not mark playable content, production, HA, DR, anti-cheat, deployment-scale distributed abuse protection, production load/soak, measured SLOs, complete observability, or live-ops complete without executable evidence.
+**Rule:** do not mark playable content, production, HA, DR, ranked anti-cheat, deployment-scale distributed abuse protection, production load/soak, measured SLOs, complete observability, or live-ops complete without executable evidence.
