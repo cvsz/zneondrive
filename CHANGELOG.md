@@ -95,6 +95,9 @@ All notable changes to zNeonDrive are documented here.
 - Restore assertions covering account/progression, starter vehicle, immutable build + operation ID, quest + operation ID, inventory, blueprint, and authoritative race result state
 - Canonical migration replay after restore to detect schema/application incompatibility
 - 30-day retained GitHub Actions dump/report evidence without treating the drill as production RPO/RTO or DR proof
+- UE Linux tooling v1.5 support for both source-tree and precompiled installed-build layouts
+- Installed-build project generation via `UnrealBuildTool.dll -projectfiles` using Unreal's bundled dotnet before system fallback
+- CI fixture coverage for installed/source project generation, Client build invocation, Server package invocation, and UE root detection
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -130,6 +133,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
 - Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
 - Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
+- Routed Linux Unreal generate/build/package Make targets through the installed-build-aware helper without changing the UE 5.8 + Go 1.27 + PostgreSQL + Redis architecture or closing the real UE build/package evidence gate
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -161,6 +165,7 @@ All notable changes to zNeonDrive are documented here.
 - HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
+- UE installed-build tooling changes only host-side project generation/build invocation and do not alter player/server secret boundaries or authoritative state ownership
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
 - Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
