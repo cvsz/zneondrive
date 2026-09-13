@@ -29,6 +29,10 @@ class BuildConflictError(DomainError):
     """Raised when optimistic build revision preconditions do not match."""
 
 
+class OperationConflictError(DomainError):
+    """Raised when an idempotency key is reused for a different mutation."""
+
+
 class RaceValidationError(DomainError):
     """Raised when a race result cannot be proven against accepted state."""
 
@@ -105,8 +109,18 @@ def _build_hash(part_ids: Iterable[str]) -> str:
     return sha256(canonical.encode("utf-8")).hexdigest()
 
 
+def _operation_fingerprint(kind: str, payload: dict[str, Any]) -> str:
+    canonical = json.dumps(
+        {"kind": kind, "payload": payload},
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+    )
+    return sha256(canonical.encode("utf-8")).hexdigest()
+
+
 class WorldState:
-    """In-memory reference authority with idempotent mutation receipts."""
+    """In-memory reference authority with payload-bound idempotent receipts."""
 
     def __init__(self) -> None:
         self.accounts: dict[str, Account] = {}
@@ -115,6 +129,26 @@ class WorldState:
         self.race_registrations: dict[str, RaceRegistration] = {}
         self.race_results: dict[str, RaceResult] = {}
         self._operation_receipts: dict[str, Any] = {}
+        self._operation_fingerprints: dict[str, str] = {}
+
+    def _replay_operation(
+        self, operation_id: str, kind: str, payload: dict[str, Any]
+    ) -> tuple[bool, Any]:
+        fingerprint = _operation_fingerprint(kind, payload)
+        if operation_id not in self._operation_receipts:
+            return False, fingerprint
+        if self._operation_fingerprints.get(operation_id) != fingerprint:
+            raise OperationConflictError(
+                f"operation_id already used for different mutation: {operation_id}"
+            )
+        return True, self._operation_receipts[operation_id]
+
+    def _record_operation(
+        self, operation_id: str, fingerprint: str, receipt: Any
+    ) -> Any:
+        self._operation_fingerprints[operation_id] = fingerprint
+        self._operation_receipts[operation_id] = receipt
+        return receipt
 
     def create_account(
         self,
@@ -141,20 +175,31 @@ class WorldState:
         starter_lineage: bool = False,
         operation_id: str,
     ) -> Vehicle:
-        if operation_id in self._operation_receipts:
-            return self._operation_receipts[operation_id]
+        parts = tuple(sorted(set(part_ids)))
+        replayed, replay_or_fingerprint = self._replay_operation(
+            operation_id,
+            "grant_vehicle",
+            {
+                "account_id": account_id,
+                "vehicle_id": vehicle_id,
+                "part_ids": parts,
+                "starter_lineage": starter_lineage,
+            },
+        )
+        if replayed:
+            return replay_or_fingerprint
         account, character = self._owned_character(account_id)
         if len(character.vehicle_ids) >= account.entitlements.garage_slots:
             raise CapacityError("garage slot capacity exceeded")
         if vehicle_id in self.vehicles:
             raise DomainError(f"vehicle already exists: {vehicle_id}")
-        parts = tuple(sorted(set(part_ids)))
         initial = BuildRevision(1, parts, _build_hash(parts))
         vehicle = Vehicle(vehicle_id, character.character_id, starter_lineage, [initial])
         self.vehicles[vehicle_id] = vehicle
         character.vehicle_ids.append(vehicle_id)
-        self._operation_receipts[operation_id] = vehicle
-        return vehicle
+        return self._record_operation(
+            operation_id, replay_or_fingerprint, vehicle
+        )
 
     def revise_build(
         self,
@@ -165,18 +210,29 @@ class WorldState:
         expected_revision: int,
         operation_id: str,
     ) -> BuildRevision:
-        if operation_id in self._operation_receipts:
-            return self._operation_receipts[operation_id]
+        parts = tuple(sorted(set(part_ids)))
+        replayed, replay_or_fingerprint = self._replay_operation(
+            operation_id,
+            "revise_build",
+            {
+                "account_id": account_id,
+                "vehicle_id": vehicle_id,
+                "part_ids": parts,
+                "expected_revision": expected_revision,
+            },
+        )
+        if replayed:
+            return replay_or_fingerprint
         vehicle = self._owned_vehicle(account_id, vehicle_id)
         if vehicle.active_build.revision != expected_revision:
             raise BuildConflictError(
                 f"expected revision {expected_revision}, current is {vehicle.active_build.revision}"
             )
-        parts = tuple(sorted(set(part_ids)))
         revision = BuildRevision(expected_revision + 1, parts, _build_hash(parts))
         vehicle.build_history.append(revision)
-        self._operation_receipts[operation_id] = revision
-        return revision
+        return self._record_operation(
+            operation_id, replay_or_fingerprint, revision
+        )
 
     def complete_quest(
         self,
@@ -188,13 +244,25 @@ class WorldState:
         reputation: int = 0,
         operation_id: str,
     ) -> dict[str, int | str]:
-        if operation_id in self._operation_receipts:
-            return self._operation_receipts[operation_id]
+        replayed, replay_or_fingerprint = self._replay_operation(
+            operation_id,
+            "complete_quest",
+            {
+                "account_id": account_id,
+                "quest_id": quest_id,
+                "money": money,
+                "xp": xp,
+                "reputation": reputation,
+            },
+        )
+        if replayed:
+            return replay_or_fingerprint
         _, character = self._owned_character(account_id)
         if quest_id in character.completed_quests:
             receipt = {"quest_id": quest_id, "money": 0, "xp": 0, "reputation": 0}
-            self._operation_receipts[operation_id] = receipt
-            return receipt
+            return self._record_operation(
+                operation_id, replay_or_fingerprint, receipt
+            )
         if min(money, xp, reputation) < 0:
             raise DomainError("quest rewards cannot be negative")
         character.completed_quests.add(quest_id)
@@ -207,8 +275,9 @@ class WorldState:
             "xp": xp,
             "reputation": reputation,
         }
-        self._operation_receipts[operation_id] = receipt
-        return receipt
+        return self._record_operation(
+            operation_id, replay_or_fingerprint, receipt
+        )
 
     def register_race(
         self,
@@ -240,8 +309,19 @@ class WorldState:
         checkpoint_times_ms: Iterable[int],
         operation_id: str,
     ) -> RaceResult:
-        if operation_id in self._operation_receipts:
-            return self._operation_receipts[operation_id]
+        times = tuple(checkpoint_times_ms)
+        replayed, replay_or_fingerprint = self._replay_operation(
+            operation_id,
+            "submit_race_result",
+            {
+                "account_id": account_id,
+                "race_id": race_id,
+                "build_revision": build_revision,
+                "checkpoint_times_ms": times,
+            },
+        )
+        if replayed:
+            return replay_or_fingerprint
         registration = self.race_registrations.get(race_id)
         if registration is None:
             raise RaceValidationError("unknown race registration")
@@ -253,7 +333,6 @@ class WorldState:
         )
         if accepted is None or accepted.validation_hash != registration.accepted_build_hash:
             raise RaceValidationError("accepted build provenance cannot be verified")
-        times = tuple(checkpoint_times_ms)
         if len(times) != len(registration.ordered_checkpoints):
             raise RaceValidationError("checkpoint count does not match race ruleset")
         if any(t <= 0 for t in times) or any(b <= a for a, b in zip(times, times[1:])):
@@ -266,8 +345,9 @@ class WorldState:
             checkpoint_times_ms=times,
         )
         self.race_results[race_id] = result
-        self._operation_receipts[operation_id] = result
-        return result
+        return self._record_operation(
+            operation_id, replay_or_fingerprint, result
+        )
 
     def delete_vehicle(self, account_id: str, vehicle_id: str) -> None:
         vehicle = self._owned_vehicle(account_id, vehicle_id)
