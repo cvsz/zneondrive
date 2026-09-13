@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
     "Makefile",
     "tools/zneondrive-control.sh",
+    "tools/ue-linux.sh",
     "tools/install-client.ps1",
     "game/Source/NeonDriveClient.Target.cs",
     "docs/control-panel.md",
@@ -29,16 +30,18 @@ def main() -> int:
 
     make = (ROOT / "Makefile").read_text(encoding="utf-8")
     shell = (ROOT / "tools/zneondrive-control.sh").read_text(encoding="utf-8")
+    ue = (ROOT / "tools/ue-linux.sh").read_text(encoding="utf-8")
     ps1 = (ROOT / "tools/install-client.ps1").read_text(encoding="utf-8")
     target = (ROOT / "game/Source/NeonDriveClient.Target.cs").read_text(encoding="utf-8")
     cpp = (ROOT / "game/Source/NeonDrive/NDServiceSubsystem.cpp").read_text(encoding="utf-8")
 
     for token in [
         "control-panel:", "ue-detect:", "server-install:", "server-up:", "server-down:",
-        "client-install:", "client-build:", "client-package-linux:", "client-play:",
-        "game-server-package-linux:", "package-all-linux:",
+        "client-install:", "client-generate:", "client-build:", "client-package-linux:", "client-play:",
+        "game-server-build:", "game-server-package-linux:", "package-all-linux:",
         "game-server-install:", "game-server-start:", "game-server-stop:",
         "full-install:", "full-up:", "full-down:", "status:",
+        "UE_TOOL := bash tools/ue-linux.sh",
     ]:
         require(make, token, "Makefile", errors)
 
@@ -50,6 +53,14 @@ def main() -> int:
         "CONFIRM_RESET", "ZNEON_GAME_API_URL", "ZNEON_GAME_SERVER_KEY",
     ]:
         require(shell, token, "Linux control panel", errors)
+
+    for token in [
+        "Build.version", "Unreal Engine 5.8.x required", "UnrealBuildTool.dll",
+        "-projectfiles", "find_dotnet()", "package-client", "package-server", "build-target",
+    ]:
+        require(ue, token, "UE Linux tooling", errors)
+    if "ZNEON_GAME_SERVER_KEY" in ue or "GAME_SERVER_SHARED_KEY" in ue:
+        errors.append("UE build/package tooling must not accept or embed the dedicated-server shared key.")
 
     require(ps1, "Server shared keys are intentionally not accepted", "Windows installer", errors)
     if "GAME_SERVER_SHARED_KEY" in ps1 or "ZNEON_GAME_SERVER_KEY" in ps1:
