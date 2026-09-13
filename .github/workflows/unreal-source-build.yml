@@ -1,4 +1,4 @@
-name: Unreal Source Build
+name: Unreal Build Evidence
 
 on:
   workflow_dispatch:
@@ -9,39 +9,100 @@ permissions:
 jobs:
   validate-and-build:
     runs-on: [self-hosted, linux, unreal-5.8]
-    timeout-minutes: 120
+    timeout-minutes: 180
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate runtime structure
+      - name: Validate repository and Unreal tooling
+        shell: bash
         run: |
+          set -euo pipefail
           python3 tools/validate_runtime_v0_4.py
           python3 tools/validate_control_surface.py
+          python3 tools/validate_unreal_evidence_workflow.py
           bash -n tools/zneondrive-control.sh
+          bash -n tools/ue-linux.sh
+          python3 -m unittest tests.test_ue_linux_tooling -v
 
-      - name: Validate Unreal source tree
+      - name: Initialize evidence directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          rm -rf "$evidence"
+          mkdir -p "$evidence/logs"
+          {
+            printf 'repository=%s\n' "$GITHUB_REPOSITORY"
+            printf 'commit=%s\n' "$GITHUB_SHA"
+            printf 'run_id=%s\n' "$GITHUB_RUN_ID"
+            printf 'run_attempt=%s\n' "$GITHUB_RUN_ATTEMPT"
+            printf 'runner_name=%s\n' "$RUNNER_NAME"
+            printf 'runner_os=%s\n' "$RUNNER_OS"
+            printf 'started_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > "$evidence/run.txt"
+
+      - name: Validate Unreal Engine 5.8 installation
         shell: bash
         run: |
           set -euo pipefail
           test -n "${UE_ROOT:-}" || { echo "UE_ROOT is required"; exit 1; }
-          test -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          bash tools/ue-linux.sh info | tee "$evidence/engine-info.txt"
+          cp "$UE_ROOT/Engine/Build/Build.version" "$evidence/Build.version"
 
-      - name: Build editor target
+      - name: Generate project files
         shell: bash
         run: |
-          "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"             NeonDriveEditor Linux Development             "$GITHUB_WORKSPACE/game/NeonDrive.uproject"             -WaitMutex
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          bash tools/ue-linux.sh generate 2>&1 | tee "$evidence/logs/project-generation.log"
 
       - name: Build player client target
         shell: bash
         run: |
-          "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" \
-            NeonDriveClient Linux Development \
-            "$GITHUB_WORKSPACE/game/NeonDrive.uproject" \
-            -WaitMutex
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          bash tools/ue-linux.sh build-target NeonDriveClient 2>&1 | tee "$evidence/logs/client-build.log"
 
       - name: Build dedicated server target
         shell: bash
         run: |
-          "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"             NeonDriveServer Linux Development             "$GITHUB_WORKSPACE/game/NeonDrive.uproject"             -WaitMutex
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          bash tools/ue-linux.sh build-target NeonDriveServer 2>&1 | tee "$evidence/logs/server-build.log"
+
+      - name: Collect target manifests and checksums
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          mkdir -p "$evidence"
+          {
+            printf 'finished_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            printf 'commit=%s\n' "$GITHUB_SHA"
+          } >> "$evidence/run.txt"
+
+          find "$GITHUB_WORKSPACE/game/Binaries/Linux" -maxdepth 2 -type f \
+            \( -name 'NeonDriveClient*' -o -name 'NeonDriveServer*' \) \
+            -printf '%P\t%s bytes\n' 2>/dev/null | sort > "$evidence/target-files.txt" || true
+
+          : > "$evidence/sha256sums.txt"
+          while IFS= read -r file; do
+            sha256sum "$file" >> "$evidence/sha256sums.txt"
+          done < <(
+            find "$GITHUB_WORKSPACE/game/Binaries/Linux" -maxdepth 2 -type f \
+              \( -name 'NeonDriveClient*' -o -name 'NeonDriveServer*' \) \
+              -print 2>/dev/null | sort
+          )
+
+      - name: Upload Unreal build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ue-build-evidence-${{ github.sha }}
+          path: .runtime/ue-build-evidence/
+          if-no-files-found: error
+          retention-days: 30
