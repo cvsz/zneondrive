@@ -34,6 +34,9 @@ All notable changes to zNeonDrive are documented here.
 - Manual self-hosted Unreal source-build workflow
 - Linux UE 5.8 helper supporting source trees and precompiled installed builds without requiring a repository-external `GenerateProjectFiles.sh` shim
 - Deterministic tests for UE 5.8 version enforcement, installed-build UnrealBuildTool project generation, target delegation, and separate Client/Server packaging paths
+- Manual Unreal Build Evidence workflow that records real UE 5.8 engine metadata, project-generation/build logs, Client/Server target inventory, SHA-256 hashes, and a 30-day retained evidence artifact
+- Static validator that prevents the build-evidence workflow from embedding runtime secrets or silently claiming package evidence
+- UE build-evidence v1.6 documentation separating workflow readiness from successful real-engine build/package evidence
 - Go 1.27 service-plane module and HTTP API
 - PostgreSQL durable schema for accounts, characters, vehicles, immutable builds, sessions, and quest completions
 - Hashed resume/session credential handling
@@ -133,6 +136,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
 - Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
+- Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation
@@ -164,6 +168,7 @@ All notable changes to zNeonDrive are documented here.
 - HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
+- Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
 - Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
