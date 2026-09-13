@@ -87,7 +87,7 @@ jobs:
         run: |
           set -euo pipefail
           monitor_password='zneondrive-monitor-test'
-          docker run --rm --network host \
+          docker run --rm -i --network host \
             -e PGPASSWORD='zneondrive-test' \
             postgres:17-alpine \
             psql -v ON_ERROR_STOP=1 \
