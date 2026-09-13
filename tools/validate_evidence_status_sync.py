@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Fail CI when top-level production-readiness evidence status drifts.
 
-This validator intentionally checks evidence language, not implementation maturity.
-It prevents documentation from silently promoting UE build/package/live integration
-claims before retained evidence exists and ensures newer reference-parity increments
-are recorded without changing the evidence-gated runtime phase.
+This validator checks promoted evidence status rather than treating every test-harness
+increment as a runtime milestone. It prevents documentation from silently closing
+real UE build/package/live-integration gates before retained evidence exists.
 """
 from pathlib import Path
 
@@ -26,6 +25,14 @@ def main() -> None:
     checklist = read("IMPLEMENTATION-CHECKLIST.md")
     changelog = read("CHANGELOG.md")
 
+    # The promoted repository status is still Phase 4.19 / Runtime v2.3.
+    require(readme, "Phase-4.19%20Unreal%20Rotation%20Envelope", "README phase badge")
+    require(readme, "Runtime-v2.3", "README runtime badge")
+    require(readme, "Phase 4.19 Unreal Rotation Envelope v2.3", "README current phase")
+    require(roadmap, "Phase 4 — Runtime prototype / integration v2.3", "ROADMAP runtime phase")
+    require(checklist, "Unreal rotation-envelope telemetry v2.3", "checklist promoted evidence")
+    require(changelog, "Runtime Unreal Authority Rotation Envelope v2.3", "CHANGELOG promoted evidence")
+
     # Public status must remain evidence-gated until retained real-engine evidence exists.
     require(readme, "Production%20Readiness-Evidence%20Gated", "README production badge")
     require(readme, "UE%20Source%20Build-Evidence%20Pending", "README UE evidence badge")
@@ -36,10 +43,6 @@ def main() -> None:
     require(checklist, "[ ] successful real UE 5.8 dedicated Server build evidence artifact", "checklist Server build gate")
     require(checklist, "[ ] successful retained UE 5.8 Client/Server package/cook evidence", "checklist package gate")
     require(checklist, "[ ] live packaged Unreal ↔ Go integration evidence", "checklist live integration gate")
-
-    # Reference-parity increments are evidence improvements, not runtime-phase promotion.
-    for version in ("v2.4", "v2.5", "v2.6"):
-        require(changelog, version, f"CHANGELOG {version} evidence entry")
 
     print("evidence status synchronization: ok")
 
