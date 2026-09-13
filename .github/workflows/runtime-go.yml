@@ -110,14 +110,20 @@ jobs:
             postgres:17-alpine \
             psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
               -c "SELECT (NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls)::text FROM pg_roles WHERE rolname='zneondrive_monitor'")
-          test "$role_privileges_ok" = 'true'
+          if [ "$role_privileges_ok" != 'true' ]; then
+            echo "unexpected monitoring privilege assertion: $role_privileges_ok"
+            exit 1
+          fi
 
           membership=$(docker run --rm --network host \
             -e PGPASSWORD='zneondrive-test' \
             postgres:17-alpine \
             psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
               -c "SELECT pg_has_role('zneondrive_monitor', 'pg_monitor', 'member')")
-          test "$membership" = 't'
+          if [ "$membership" != 't' ]; then
+            echo "monitoring role is not a pg_monitor member: $membership"
+            exit 1
+          fi
 
           cid=$(docker run -d --network host \
             -e DATA_SOURCE_URI='127.0.0.1:5432/zneondrive_test?sslmode=disable' \
@@ -135,9 +141,21 @@ jobs:
             fi
             sleep 1
           done
-          test "$ready" -eq 1
-          grep -Eq '^pg_up(\{[^}]*\})? 1$' "$metrics_file"
-          grep -q '^pg_stat_database_' "$metrics_file"
+          if [ "$ready" -ne 1 ]; then
+            echo 'postgres exporter never became scrape-ready'
+            docker logs "$cid" 2>&1 | sed -E 's/(password|pass)=([^ ]+)/\1=[REDACTED]/gi' || true
+            exit 1
+          fi
+          if ! grep -Eq '^pg_up(\{[^}]*\})? 1$' "$metrics_file"; then
+            echo 'postgres exporter reported pg_up != 1'
+            grep '^pg_up' "$metrics_file" || true
+            docker logs "$cid" 2>&1 | sed -E 's/(password|pass)=([^ ]+)/\1=[REDACTED]/gi' || true
+            exit 1
+          fi
+          if ! grep -q '^pg_stat_database_' "$metrics_file"; then
+            echo 'postgres exporter did not expose pg_stat_database metrics'
+            exit 1
+          fi
           if grep -Fq 'zneondrive-test' "$metrics_file" || grep -Fq "$monitor_password" "$metrics_file"; then
             echo 'exporter metrics leaked a database credential'
             exit 1
