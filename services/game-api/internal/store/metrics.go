@@ -26,20 +26,33 @@ type PostgresPoolStats struct {
 // counters plus the current database size. It deliberately excludes database
 // names, SQL text, query fingerprints, credentials, relations and user data.
 type PostgresServerStats struct {
-	Backends          int64
-	TransactionsCommit int64
+	Backends             int64
+	TransactionsCommit   int64
 	TransactionsRollback int64
-	BlocksRead        int64
-	BlocksHit         int64
-	TuplesReturned    int64
-	TuplesFetched     int64
-	TuplesInserted    int64
-	TuplesUpdated     int64
-	TuplesDeleted     int64
-	Deadlocks         int64
-	TempFiles         int64
-	TempBytes         int64
-	DatabaseSizeBytes int64
+	BlocksRead           int64
+	BlocksHit            int64
+	TuplesReturned       int64
+	TuplesFetched        int64
+	TuplesInserted       int64
+	TuplesUpdated        int64
+	TuplesDeleted        int64
+	Deadlocks            int64
+	TempFiles            int64
+	TempBytes            int64
+	DatabaseSizeBytes    int64
+}
+
+// PostgresQueryActivityStats is a bounded, query-text-free snapshot of
+// pg_stat_activity for the current database. It exposes only aggregate numeric
+// pressure signals; query text, fingerprints, user names, application names,
+// client addresses and backend identifiers are intentionally excluded.
+type PostgresQueryActivityStats struct {
+	ActiveQueries             int64
+	WaitingQueries            int64
+	IdleInTransaction         int64
+	LongRunningQueries        int64
+	OldestActiveQuerySeconds  float64
+	OldestTransactionSeconds  float64
 }
 
 // PostgresPoolStats returns a point-in-time pgx pool snapshot for operational
@@ -91,6 +104,34 @@ func (p *Postgres) PostgresServerStats(ctx context.Context) (PostgresServerStats
 		&stats.TempFiles,
 		&stats.TempBytes,
 		&stats.DatabaseSizeBytes,
+	)
+	return stats, err
+}
+
+// PostgresQueryActivityStats returns aggregate current-database query pressure
+// from pg_stat_activity. The fixed query deliberately never selects query text,
+// query identifiers, user names, application names, client addresses or PIDs.
+func (p *Postgres) PostgresQueryActivityStats(ctx context.Context) (PostgresQueryActivityStats, error) {
+	if p == nil || p.pool == nil {
+		return PostgresQueryActivityStats{}, nil
+	}
+	const query = `SELECT
+		COUNT(*) FILTER (WHERE state = 'active' AND pid <> pg_backend_pid()),
+		COUNT(*) FILTER (WHERE wait_event_type IS NOT NULL AND pid <> pg_backend_pid()),
+		COUNT(*) FILTER (WHERE state = 'idle in transaction'),
+		COUNT(*) FILTER (WHERE state = 'active' AND pid <> pg_backend_pid() AND query_start < clock_timestamp() - interval '5 seconds'),
+		COALESCE(MAX(EXTRACT(EPOCH FROM (clock_timestamp() - query_start))) FILTER (WHERE state = 'active' AND pid <> pg_backend_pid()), 0),
+		COALESCE(MAX(EXTRACT(EPOCH FROM (clock_timestamp() - xact_start))) FILTER (WHERE xact_start IS NOT NULL AND pid <> pg_backend_pid()), 0)
+	FROM pg_stat_activity
+	WHERE datname = current_database()`
+	var stats PostgresQueryActivityStats
+	err := p.pool.QueryRow(ctx, query).Scan(
+		&stats.ActiveQueries,
+		&stats.WaitingQueries,
+		&stats.IdleInTransaction,
+		&stats.LongRunningQueries,
+		&stats.OldestActiveQuerySeconds,
+		&stats.OldestTransactionSeconds,
 	)
 	return stats, err
 }

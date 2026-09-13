@@ -33,4 +33,15 @@ func TestPostgresServerStatsIntegration(t *testing.T) {
 	if stats.TransactionsCommit < 0 || stats.TransactionsRollback < 0 || stats.BlocksRead < 0 || stats.BlocksHit < 0 || stats.Deadlocks < 0 {
 		t.Fatalf("unexpected negative PostgreSQL counters: %+v", stats)
 	}
+
+	activity, err := db.PostgresQueryActivityStats(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activity.ActiveQueries < 0 || activity.WaitingQueries < 0 || activity.IdleInTransaction < 0 || activity.LongRunningQueries < 0 {
+		t.Fatalf("unexpected negative PostgreSQL query activity counters: %+v", activity)
+	}
+	if activity.OldestActiveQuerySeconds < 0 || activity.OldestTransactionSeconds < 0 {
+		t.Fatalf("unexpected negative PostgreSQL query activity ages: %+v", activity)
+	}
 }
