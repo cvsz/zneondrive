@@ -29,5 +29,22 @@
     {"quest_id": "MQ101", "valid": false, "previous": null},
     {"quest_id": "MQ01", "valid": false, "previous": null},
     {"quest_id": "Q001", "valid": false, "previous": null}
+  ],
+  "race_id_cases": [
+    {"name": "canonical", "race_id": "race_garage17_001", "valid": true, "normalized": "race_garage17_001"},
+    {"name": "trim_outer_space", "race_id": "  race_garage17_001  ", "valid": true, "normalized": "race_garage17_001"},
+    {"name": "hyphen_suffix", "race_id": "race_nova-01", "valid": true, "normalized": "race_nova-01"},
+    {"name": "missing_prefix", "race_id": "event_garage17", "valid": false, "normalized": null},
+    {"name": "uppercase", "race_id": "race_Garage17", "valid": false, "normalized": null},
+    {"name": "too_short", "race_id": "race_", "valid": false, "normalized": null},
+    {"name": "slash", "race_id": "race_bad/slash", "valid": false, "normalized": null}
+  ],
+  "race_checkpoint_cases": [
+    {"name": "first_minimum", "index": 0, "elapsed_ms": 1, "valid": true},
+    {"name": "maximum_boundary", "index": 1024, "elapsed_ms": 86400000, "valid": true},
+    {"name": "negative_index", "index": -1, "elapsed_ms": 1, "valid": false},
+    {"name": "index_overflow", "index": 1025, "elapsed_ms": 1, "valid": false},
+    {"name": "zero_elapsed", "index": 0, "elapsed_ms": 0, "valid": false},
+    {"name": "elapsed_overflow", "index": 0, "elapsed_ms": 86400001, "valid": false}
   ]
 }

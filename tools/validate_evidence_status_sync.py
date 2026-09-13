@@ -36,12 +36,14 @@ def main() -> None:
     require(changelog, "Runtime Unreal Authority Rotation Envelope v2.3", "CHANGELOG promoted evidence")
 
     # Post-baseline reference-parity evidence is test-harness evidence, not a promoted
-    # runtime milestone, but it must remain discoverable from the canonical docs index.
+    # runtime milestone, but it must remain discoverable and historically recorded.
     require(docs_index, "runtime-reference-parity-v2.4.md", "docs index parity v2.4")
     require(docs_index, "runtime-reference-parity-integrity-v2.5.md", "docs index parity v2.5")
     require(docs_index, "runtime-reference-operation-parity-v2.6.md", "docs index parity v2.6")
     require(docs_index, "runtime-reference-rebuild-parity-v2.7.md", "docs index parity v2.7")
     require(docs_index, "runtime-reference-parity-index-v2.8.md", "docs index parity evidence index v2.8")
+    require(docs_index, "runtime-reference-race-parity-v2.9.md", "docs index race parity v2.9")
+    require(changelog, "Runtime Reference Race Input Parity v2.9", "CHANGELOG race parity v2.9")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
 
     # Public status must remain evidence-gated until retained real-engine evidence exists.

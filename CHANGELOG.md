@@ -136,6 +136,12 @@ All notable changes to zNeonDrive are documented here.
 - Server-side pre-movement yaw envelope derived from authoritative turn rate, server tick delta, and bounded angular slack
 - Aggregate `impossible_rotations_total` telemetry with wrap-safe yaw delta, durable-bind baseline reset, and post-rotation baseline update
 - Static validation proving the rotation envelope remains behind authority/durable-identity gates and cannot retain client or credential identifiers
+- Runtime Reference Parity v2.4 shared Python/Go canonical build-hash and quest-ID vectors
+- Runtime Reference Parity Integrity v2.5 fixture-integrity guards for duplicate/empty vectors and canonical SHA-256 expectations
+- Runtime Reference Operation Parity v2.6 payload-bound idempotency/conflict semantics in the Python executable oracle
+- Runtime Reference Rebuild Parity v2.7 Garage 17 inventory/blueprint/rebuild semantics in the Python executable oracle
+- Reference Parity Evidence Index v2.8 canonical discoverability and non-claim boundary for post-v2.3 parity evidence
+- Runtime Reference Race Input Parity v2.9 shared Python/Go vectors for bounded race-ID normalization and checkpoint index/elapsed-time validation
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -180,6 +186,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the Unreal observability source baseline to v2.1 with authority movement, durable-identity gate, collision-block and explicit net-update activity counters while keeping NetDriver packet/byte metrics, live race-validation/final-physics correction telemetry, successful real UE 5.8 build/package evidence and production gates open
 - Advanced the Unreal integrity source baseline to v2.2 with server-side impossible-displacement envelope telemetry while keeping live UE 5.8 calibration, acceleration/teleport envelopes for final physics, sanctions/ranked anti-cheat, build/package evidence and production gates open
 - Advanced the Unreal integrity source baseline to v2.3 with a wrap-safe server-side impossible-rotation envelope while keeping real UE 5.8 runtime calibration, final-physics angular/acceleration envelopes, sanctions/ranked anti-cheat, build/package evidence and production gates open
+- Extended post-baseline reference parity through v2.9 with shared build/quest/race-input vectors, fixture integrity, payload-bound idempotency, and Garage 17 rebuild semantics while keeping full reference-oracle parity, live Unreal race transport, real UE build/package, and production gates open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
