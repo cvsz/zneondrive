@@ -50,19 +50,58 @@ ubt_dll() {
   [[ -f "$dll" ]] && printf '%s\n' "$dll"
 }
 
+projectfiles_mode() {
+  if [[ -x "$UE_ROOT/GenerateProjectFiles.sh" ]]; then
+    printf 'source-script\n'
+  elif [[ -n "$(ubt_dll || true)" ]]; then
+    printf 'installed-ubt\n'
+  else
+    printf 'unavailable\n'
+  fi
+}
+
 engine_info() {
-  local version
+  local version mode
   version="$(version_json)"
+  mode="$(projectfiles_mode)"
   printf 'UE_ROOT=%s\n' "$UE_ROOT"
   printf 'UE_VERSION=%s\n' "$version"
-  if [[ -x "$UE_ROOT/GenerateProjectFiles.sh" ]]; then
-    printf 'UE_PROJECTFILES_MODE=source-script\n'
-  elif [[ -n "$(ubt_dll || true)" ]]; then
-    printf 'UE_PROJECTFILES_MODE=installed-ubt\n'
-  else
-    printf 'UE_PROJECTFILES_MODE=unavailable\n'
-    return 1
+  printf 'UE_PROJECTFILES_MODE=%s\n' "$mode"
+  [[ "$mode" != "unavailable" ]]
+}
+
+preflight() {
+  local version mode dotnet_bin min_free_gb min_free_bytes free_bytes
+  version="$(version_json)"
+  mode="$(projectfiles_mode)"
+  [[ "$mode" != "unavailable" ]] || fail "No GenerateProjectFiles.sh or UnrealBuildTool.dll found under UE_ROOT."
+
+  command -v python3 >/dev/null 2>&1 || fail "python3 is required on the Unreal runner."
+  command -v bash >/dev/null 2>&1 || fail "bash is required on the Unreal runner."
+  command -v df >/dev/null 2>&1 || fail "df is required for runner disk preflight."
+
+  if [[ "$mode" == "installed-ubt" ]]; then
+    dotnet_bin="$(find_dotnet)"
+    [[ -n "$dotnet_bin" && -x "$dotnet_bin" ]] || fail "Installed UE build requires bundled/system dotnet to run UnrealBuildTool."
   fi
+
+  [[ -f "$ROOT/game/Source/NeonDriveClient.Target.cs" ]] || fail "Missing Unreal client target: game/Source/NeonDriveClient.Target.cs"
+  [[ -f "$ROOT/game/Source/NeonDriveServer.Target.cs" ]] || fail "Missing Unreal server target: game/Source/NeonDriveServer.Target.cs"
+
+  min_free_gb="${UE_MIN_FREE_GB:-20}"
+  [[ "$min_free_gb" =~ ^[0-9]+$ ]] || fail "UE_MIN_FREE_GB must be a non-negative integer."
+  min_free_bytes=$((min_free_gb * 1024 * 1024 * 1024))
+  free_bytes="$(df -Pk "$ROOT" | awk 'NR==2 {print $4 * 1024}')"
+  [[ "$free_bytes" =~ ^[0-9]+$ ]] || fail "Unable to determine runner free disk bytes."
+  (( free_bytes >= min_free_bytes )) || fail "Insufficient runner disk: ${free_bytes} bytes free; need at least ${min_free_bytes}."
+
+  printf 'PREFLIGHT_STATUS=ok\n'
+  printf 'UE_VERSION=%s\n' "$version"
+  printf 'UE_PROJECTFILES_MODE=%s\n' "$mode"
+  printf 'UE_FREE_DISK_BYTES=%s\n' "$free_bytes"
+  printf 'UE_MIN_FREE_DISK_BYTES=%s\n' "$min_free_bytes"
+  printf 'UE_CLIENT_TARGET=present\n'
+  printf 'UE_SERVER_TARGET=present\n'
 }
 
 projectfiles() {
@@ -127,6 +166,7 @@ ue_detect() {
 cmd="${1:-help}"; shift || true
 case "$cmd" in
   info) engine_info ;;
+  preflight) preflight ;;
   detect) ue_detect ;;
   generate) projectfiles ;;
   build-target) build_target "${1:-}" ;;
@@ -134,7 +174,7 @@ case "$cmd" in
   package-server) package_server ;;
   package-all) package_client; package_server ;;
   help|-h|--help)
-    printf '%s\n' 'usage: bash tools/ue-linux.sh {info|detect|generate|build-target TARGET|package-client|package-server|package-all}'
+    printf '%s\n' 'usage: bash tools/ue-linux.sh {info|preflight|detect|generate|build-target TARGET|package-client|package-server|package-all}'
     ;;
   *) fail "Unknown command: $cmd" ;;
 esac
