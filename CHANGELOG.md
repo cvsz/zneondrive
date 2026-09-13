@@ -115,6 +115,10 @@ All notable changes to zNeonDrive are documented here.
 - Bounded current-database `pg_stat_database` metrics for backends, transactions, block reads/cache hits, tuple activity, deadlocks, temporary files/bytes, and database size
 - Fixed-enum PostgreSQL metric labels with no database name, SQL text, query fingerprint, relation, connection URL, credential, player/race identifier, or raw query error exposure
 - PostgreSQL 17 integration evidence requiring a live backend count, positive database size, and non-negative cumulative counters
+- Runtime Integrated Trust-Boundary Evidence v1.8 documentation
+- PostgreSQL + Redis integration coverage proving direct clients cannot evade rate limits by rotating forwarding headers
+- Integrated rejection evidence for forged session credentials and incorrect game-server shared keys
+- Integrated one-time gameplay-ticket redemption/replay evidence preserving the PostgreSQL-authoritative snapshot
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -153,6 +157,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the observability source baseline to v1.5 with bounded PostgreSQL connection-pool metrics while keeping query-level/server-exporter metrics, Redis/Unreal metrics, deployed dashboards/SLOs, load/soak, HA/DR and production evidence open
 - Advanced the observability source baseline to v1.6 with bounded Redis server INFO metrics while keeping deployed Redis monitoring/HA evidence, PostgreSQL server/query exporter coverage, Unreal runtime metrics, deployed SLOs, load/soak, HA/DR and production evidence open
 - Advanced the observability source baseline to v1.7 with bounded current-database PostgreSQL server metrics while keeping query-level/external exporter coverage, deployed dashboards/SLOs, Unreal runtime metrics, load/soak, HA/DR and production evidence open
+- Advanced the integrated security evidence baseline to v1.8 with PostgreSQL + Redis trust-boundary abuse-path verification while keeping deployed ingress, live Unreal transport, physics anti-cheat, load/soak, HA/DR and production evidence open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -182,6 +187,9 @@ All notable changes to zNeonDrive are documented here.
 - Malformed forwarding chains fail closed to the socket peer and log no supplied header value
 - Invalid trusted-proxy CIDR configuration fails startup rather than silently widening trust
 - Concurrent two-replica HTTP integration evidence verifies Redis prevents per-process burst multiplication for one trusted-ingress-derived identity
+- Integrated PostgreSQL + Redis evidence verifies rotating forwarding headers cannot bypass an untrusted peer's shared rate-limit budget
+- Integrated middleware evidence verifies forged bearer credentials and incorrect game-server keys remain rejected after ingress/limiter processing
+- Integrated one-time ticket evidence verifies a valid server-only redemption returns the PostgreSQL-authoritative identity and replay is rejected
 - Race-integrity and game-server-auth rejection telemetry uses hashed race/peer correlation buckets and bounded static route scopes
 - Security telemetry observes existing authoritative outcomes and does not override or weaken race acceptance decisions
 - HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
