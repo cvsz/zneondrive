@@ -13,6 +13,9 @@ def main() -> int:
     required = {
         "manual trigger": "workflow_dispatch:",
         "self-hosted UE runner": "runs-on: [self-hosted, linux, unreal-5.8]",
+        "runner preflight": "bash tools/ue-linux.sh preflight",
+        "runner disk floor": 'UE_MIN_FREE_GB: "20"',
+        "runner preflight evidence": "runner-preflight.txt",
         "installed-build info": "bash tools/ue-linux.sh info",
         "project generation": "bash tools/ue-linux.sh generate",
         "client build": "bash tools/ue-linux.sh build-target NeonDriveClient",
@@ -37,6 +40,9 @@ def main() -> int:
     for token in forbidden:
         if token in text:
             errors.append(f"workflow must not embed runtime secret/authority material: {token}")
+
+    if text.count("bash tools/ue-linux.sh preflight") != 1:
+        errors.append("build-evidence workflow must run runner preflight exactly once")
 
     if "package-client" in text or "package-server" in text:
         errors.append(
