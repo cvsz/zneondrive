@@ -32,6 +32,8 @@ All notable changes to zNeonDrive are documented here.
 - Unreal Engine 5.8 C++ project with Game, Editor, and dedicated Server targets
 - Server-authoritative replicated prototype vehicle pawn
 - Manual self-hosted Unreal source-build workflow
+- Linux UE 5.8 helper supporting source trees and precompiled installed builds without requiring a repository-external `GenerateProjectFiles.sh` shim
+- Deterministic tests for UE 5.8 version enforcement, installed-build UnrealBuildTool project generation, target delegation, and separate Client/Server packaging paths
 - Go 1.27 service-plane module and HTTP API
 - PostgreSQL durable schema for accounts, characters, vehicles, immutable builds, sessions, and quest completions
 - Hashed resume/session credential handling
@@ -130,6 +132,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
 - Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
 - Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
+- Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 
 ### Security
 - Player clients, client clocks, rewards, build legality, and race results are explicitly untrusted until authoritative validation

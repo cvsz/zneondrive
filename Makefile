@@ -1,6 +1,7 @@
 SHELL := /bin/bash
 
 CONTROL := bash tools/zneondrive-control.sh
+UE_TOOL := bash tools/ue-linux.sh
 CLIENT_PACKAGE ?=
 SERVER_PACKAGE ?=
 SERVICE ?=
@@ -22,7 +23,7 @@ help:
 	  '' \
 	  'Bootstrap / control' \
 	  '  make doctor                 Check host/runtime prerequisites' \
-	  '  make ue-detect              Search common paths for UE source root' \
+	  '  make ue-detect              Search common paths for usable UE 5.8 source/installed builds' \
 	  '  make env-init               Create .env + unique local server key' \
 	  '  make deps-server            Install base Ubuntu/Debian server dependencies' \
 	  '  make deps-client            Install base Linux client/dev dependencies (not UE itself)' \
@@ -38,6 +39,7 @@ help:
 	  '' \
 	  'Player client' \
 	  '  make client-install CLIENT_PACKAGE=/path/client.zip' \
+	  '  make client-generate        Generate project files for UE 5.8 source or installed builds' \
 	  '  make client-build           Build NeonDriveClient with UE_ROOT on Linux' \
 	  '  make client-package-linux   Cook/stage/archive a Linux player package' \
 	  '  make client-play            Launch installed client; ZNEON_GAME_API_URL may override API' \
@@ -61,7 +63,7 @@ doctor:
 	@$(CONTROL) doctor
 
 ue-detect:
-	@$(CONTROL) ue-detect
+	@$(UE_TOOL) detect
 
 env-init:
 	@$(CONTROL) env-init
@@ -89,6 +91,7 @@ validate-runtime:
 validate-control:
 	python3 tools/validate_control_surface.py
 	bash -n tools/zneondrive-control.sh
+	bash -n tools/ue-linux.sh
 
 check-json:
 	python3 -c 'import json,pathlib; [json.loads(p.read_text(encoding="utf-8")) for p in pathlib.Path("design").rglob("*.json")]; json.loads(pathlib.Path("game/NeonDrive.uproject").read_text(encoding="utf-8")); print("JSON OK")'
@@ -156,16 +159,16 @@ redis-cli:
 	@$(CONTROL) redis-cli
 
 client-generate:
-	@$(CONTROL) client-generate
+	@$(UE_TOOL) generate
 
 client-build:
-	@$(CONTROL) client-build
+	@$(UE_TOOL) build-target NeonDriveClient
 
 client-package-linux:
-	@$(CONTROL) client-package-linux
+	@$(UE_TOOL) package-client
 
 editor-build:
-	@$(CONTROL) editor-build
+	@$(UE_TOOL) build-target NeonDriveEditor
 
 client-install:
 	@CLIENT_PACKAGE="$(CLIENT_PACKAGE)" $(CONTROL) client-install "$(CLIENT_PACKAGE)"
@@ -181,13 +184,13 @@ else
 endif
 
 game-server-build:
-	@$(CONTROL) game-server-build
+	@$(UE_TOOL) build-target NeonDriveServer
 
 game-server-package-linux:
-	@$(CONTROL) game-server-package-linux
+	@$(UE_TOOL) package-server
 
 package-all-linux:
-	@$(CONTROL) package-all-linux
+	@$(UE_TOOL) package-all
 
 game-server-install:
 	@SERVER_PACKAGE="$(SERVER_PACKAGE)" $(CONTROL) game-server-install "$(SERVER_PACKAGE)"
