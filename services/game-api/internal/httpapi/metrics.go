@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"sort"
@@ -24,11 +25,18 @@ type postgresStatsProvider interface {
 	PostgresPoolStats() store.PostgresPoolStats
 }
 
+type redisServerMetricSnapshot struct {
+	configured bool
+	stats      RedisServerStats
+	err        error
+}
+
 type HTTPMetrics struct {
 	mu            sync.RWMutex
 	routes        map[string]*routeMetrics
 	inFlight      int64
 	postgresStats postgresStatsProvider
+	redisStats    RedisServerStatsProvider
 }
 
 func NewHTTPMetrics(postgresStats ...postgresStatsProvider) *HTTPMetrics {
@@ -37,6 +45,13 @@ func NewHTTPMetrics(postgresStats ...postgresStatsProvider) *HTTPMetrics {
 		metrics.postgresStats = postgresStats[0]
 	}
 	return metrics
+}
+
+func (m *HTTPMetrics) SetRedisServerStatsProvider(provider RedisServerStatsProvider) {
+	if m == nil {
+		return
+	}
+	m.redisStats = provider
 }
 
 func (m *HTTPMetrics) Wrap(next http.Handler) http.Handler {
@@ -56,10 +71,10 @@ func (m *HTTPMetrics) Wrap(next http.Handler) http.Handler {
 }
 
 func (m *HTTPMetrics) Handler() http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-store")
-		_, _ = w.Write([]byte(m.render()))
+		_, _ = w.Write([]byte(m.render(r.Context())))
 	})
 }
 
@@ -115,7 +130,13 @@ func (m *HTTPMetrics) observe(route string, status int, elapsed time.Duration) {
 	rm.durationSum += seconds
 }
 
-func (m *HTTPMetrics) render() string {
+func (m *HTTPMetrics) render(ctx context.Context) string {
+	redisSnapshot := redisServerMetricSnapshot{}
+	if m.redisStats != nil {
+		redisSnapshot.configured = true
+		redisSnapshot.stats, redisSnapshot.err = m.redisStats.RedisServerStats(ctx)
+	}
+
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -160,6 +181,7 @@ func (m *HTTPMetrics) render() string {
 
 	m.renderPostgresMetrics(&b)
 	renderRedisRateLimitMetrics(&b)
+	renderRedisServerMetrics(redisSnapshot, &b)
 	return b.String()
 }
 
@@ -201,6 +223,34 @@ func renderRedisRateLimitMetrics(b *strings.Builder) {
 	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"allowed\"} %d\n", stats.Allowed)
 	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"rejected\"} %d\n", stats.Rejected)
 	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"error\"} %d\n", stats.Errors)
+}
+
+func renderRedisServerMetrics(snapshot redisServerMetricSnapshot, b *strings.Builder) {
+	if !snapshot.configured {
+		return
+	}
+	b.WriteString("# HELP zneondrive_redis_up Whether the configured Redis server metrics probe succeeded.\n")
+	b.WriteString("# TYPE zneondrive_redis_up gauge\n")
+	if snapshot.err != nil {
+		b.WriteString("zneondrive_redis_up 0\n")
+		return
+	}
+	stats := snapshot.stats
+	b.WriteString("zneondrive_redis_up 1\n")
+	b.WriteString("# HELP zneondrive_redis_connected_clients Connected Redis clients.\n# TYPE zneondrive_redis_connected_clients gauge\n")
+	fmt.Fprintf(b, "zneondrive_redis_connected_clients %d\n", stats.ConnectedClients)
+	b.WriteString("# HELP zneondrive_redis_memory_bytes Redis memory bytes by bounded kind.\n# TYPE zneondrive_redis_memory_bytes gauge\n")
+	fmt.Fprintf(b, "zneondrive_redis_memory_bytes{kind=\"used\"} %d\n", stats.UsedMemoryBytes)
+	fmt.Fprintf(b, "zneondrive_redis_memory_bytes{kind=\"peak\"} %d\n", stats.UsedMemoryPeakBytes)
+	b.WriteString("# HELP zneondrive_redis_rejected_connections_total Redis rejected connections.\n# TYPE zneondrive_redis_rejected_connections_total counter\n")
+	fmt.Fprintf(b, "zneondrive_redis_rejected_connections_total %d\n", stats.RejectedConnectionsTotal)
+	b.WriteString("# HELP zneondrive_redis_evicted_keys_total Redis evicted keys.\n# TYPE zneondrive_redis_evicted_keys_total counter\n")
+	fmt.Fprintf(b, "zneondrive_redis_evicted_keys_total %d\n", stats.EvictedKeysTotal)
+	b.WriteString("# HELP zneondrive_redis_keyspace_total Redis keyspace hits and misses by bounded outcome.\n# TYPE zneondrive_redis_keyspace_total counter\n")
+	fmt.Fprintf(b, "zneondrive_redis_keyspace_total{outcome=\"hit\"} %d\n", stats.KeyspaceHitsTotal)
+	fmt.Fprintf(b, "zneondrive_redis_keyspace_total{outcome=\"miss\"} %d\n", stats.KeyspaceMissesTotal)
+	b.WriteString("# HELP zneondrive_redis_instantaneous_ops_per_second Redis instantaneous operations per second.\n# TYPE zneondrive_redis_instantaneous_ops_per_second gauge\n")
+	fmt.Fprintf(b, "zneondrive_redis_instantaneous_ops_per_second %d\n", stats.InstantaneousOpsPerSecond)
 }
 
 func metricsRoute(r *http.Request) string {

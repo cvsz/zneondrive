@@ -61,6 +61,9 @@ func main() {
 	}
 
 	metrics := httpapi.NewHTTPMetrics(db)
+	if redisAddr != "" {
+		metrics.SetRedisServerStatsProvider(httpapi.NewRedisServerStatsProvider(redisAddr))
+	}
 	observedHandler := metrics.Wrap(rateLimitedHandler)
 	server := &http.Server{
 		Addr:              listenAddr,

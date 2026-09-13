@@ -60,6 +60,7 @@
 - [x] observability metrics v1.3 source/unit evidence boundary
 - [x] PostgreSQL restore drill v1.4 CI evidence boundary
 - [x] PostgreSQL pool observability v1.5 source/unit evidence boundary
+- [x] Redis server observability v1.6 source/unit evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -101,6 +102,8 @@
 - [x] metrics unit coverage for label cardinality and secret/dynamic-ID non-disclosure
 - [x] bounded PostgreSQL pgx pool connection/acquire metrics
 - [x] PostgreSQL pool metrics unit coverage and credential/URL non-disclosure assertions
+- [x] bounded Redis INFO server metrics with short probe deadlines
+- [x] Redis server metrics unit/TCP RESP coverage and error/address non-disclosure assertions
 - [x] PostgreSQL 17 isolated pg_dump/pg_restore CI drill
 - [x] restore assertions for account/progression/vehicle/build/inventory/blueprint/quest/race state and operation IDs
 - [x] restore-time replay of all canonical migrations
@@ -145,7 +148,7 @@
 - [ ] long-duration soak evidence
 - [x] PostgreSQL pool connection/acquire metrics source + unit evidence
 - [ ] PostgreSQL query-level/server exporter metrics
-- [ ] Redis server metrics
+- [x] Redis server metrics source + unit evidence
 - [ ] Unreal server tick/replication metrics
 - [ ] full reference-oracle parity in Go
 - [ ] live packaged Unreal ↔ Go integration evidence
@@ -198,6 +201,9 @@
 ## Reliability
 - [x] Go HTTP metrics source/unit instrumentation baseline
 - [x] PostgreSQL pool connection/acquire metrics source/unit baseline
+- [x] Redis server metrics source/unit baseline
+- [ ] PostgreSQL query-level/server exporter metrics
+- [ ] Unreal server tick/replication metrics
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
 - [ ] Long-duration soak test
@@ -220,6 +226,7 @@
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
 - [x] PostgreSQL pool metrics source + unit evidence
+- [x] Redis server metrics source + unit evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract

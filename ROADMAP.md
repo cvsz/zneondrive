@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.5
+## Phase 4 — Runtime prototype / integration v1.6
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -78,6 +78,7 @@
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
 - [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
+- [x] Add bounded Redis server INFO metrics on the private metrics listener
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
@@ -111,6 +112,7 @@
 - [x] observability metrics v1.3 source/unit evidence contract
 - [x] PostgreSQL restore drill v1.4 CI evidence/non-claim contract
 - [x] PostgreSQL pool observability v1.5 source/unit evidence/non-claim contract
+- [x] Redis server observability v1.6 source/unit evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -157,7 +159,9 @@
 - [ ] Physics-derived impossible-state telemetry from live Unreal race samples
 - [x] Low-cardinality Go HTTP service metrics source/unit baseline
 - [x] Bounded PostgreSQL connection-pool metrics source/unit baseline
-- [ ] PostgreSQL query/server, Redis and Unreal runtime metrics completed
+- [x] Bounded Redis server metrics source/unit baseline
+- [ ] PostgreSQL query/server exporter metrics completed
+- [ ] Unreal runtime metrics completed
 - [ ] Threat/abuse cases exercised against integrated runtime
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
