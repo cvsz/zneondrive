@@ -73,6 +73,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Prototype Driving")
     float TurnRateDegreesPerSecond = 75.0f;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Prototype Driving|Integrity")
+    float AuthorityDisplacementSlackCm = 150.0f;
+
+    FVector LastAuthorityLocation = FVector::ZeroVector;
+    bool bAuthorityLocationBaselineValid = false;
+
     void InputThrottle(float Value);
     void InputSteering(float Value);
     void PushDrivingInput();
