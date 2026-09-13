@@ -13,6 +13,14 @@ import json
 from typing import Any, Iterable
 
 
+STARTER_REBUILD_BLUEPRINT = "bp_starter_rebuild"
+QUEST_ITEM_GRANTS = {
+    "MQ004": "part_brakes_track_i",
+    "MQ009": "part_tires_street_i",
+}
+QUEST_BLUEPRINT_GRANTS = {"MQ005": STARTER_REBUILD_BLUEPRINT}
+
+
 class DomainError(RuntimeError):
     """Base error for rejected authoritative state transitions."""
 
@@ -27,6 +35,14 @@ class CapacityError(DomainError):
 
 class BuildConflictError(DomainError):
     """Raised when optimistic build revision preconditions do not match."""
+
+
+class BlueprintRequiredError(DomainError):
+    """Raised when a rebuild requires a blueprint the character has not unlocked."""
+
+
+class InsufficientInventoryError(DomainError):
+    """Raised when a rebuild requires parts the character does not own."""
 
 
 class OperationConflictError(DomainError):
@@ -77,6 +93,8 @@ class Character:
     xp: int = 0
     reputation: int = 0
     completed_quests: set[str] = field(default_factory=set)
+    inventory: dict[str, int] = field(default_factory=dict)
+    blueprints: set[str] = field(default_factory=set)
 
 
 @dataclass(slots=True)
@@ -197,9 +215,7 @@ class WorldState:
         vehicle = Vehicle(vehicle_id, character.character_id, starter_lineage, [initial])
         self.vehicles[vehicle_id] = vehicle
         character.vehicle_ids.append(vehicle_id)
-        return self._record_operation(
-            operation_id, replay_or_fingerprint, vehicle
-        )
+        return self._record_operation(operation_id, replay_or_fingerprint, vehicle)
 
     def revise_build(
         self,
@@ -230,9 +246,69 @@ class WorldState:
             )
         revision = BuildRevision(expected_revision + 1, parts, _build_hash(parts))
         vehicle.build_history.append(revision)
-        return self._record_operation(
-            operation_id, replay_or_fingerprint, revision
+        return self._record_operation(operation_id, replay_or_fingerprint, revision)
+
+    def rebuild_vehicle(
+        self,
+        account_id: str,
+        vehicle_id: str,
+        part_ids: Iterable[str],
+        *,
+        expected_revision: int,
+        operation_id: str,
+    ) -> BuildRevision:
+        """Apply the inventory-authoritative Garage 17 rebuild reference contract.
+
+        This mirrors the Go/PostgreSQL service-plane semantics without replacing them:
+        the starter rebuild blueprint is mandatory, newly equipped parts are consumed,
+        removed parts are returned, and the immutable build revision advances atomically.
+        """
+        parts = tuple(sorted(set(part_ids)))
+        replayed, replay_or_fingerprint = self._replay_operation(
+            operation_id,
+            "rebuild_vehicle",
+            {
+                "account_id": account_id,
+                "vehicle_id": vehicle_id,
+                "part_ids": parts,
+                "expected_revision": expected_revision,
+            },
         )
+        if replayed:
+            return replay_or_fingerprint
+
+        _, character = self._owned_character(account_id)
+        vehicle = self._owned_vehicle(account_id, vehicle_id)
+        if STARTER_REBUILD_BLUEPRINT not in character.blueprints:
+            raise BlueprintRequiredError("starter rebuild blueprint is required")
+        if vehicle.active_build.revision != expected_revision:
+            raise BuildConflictError(
+                f"expected revision {expected_revision}, current is {vehicle.active_build.revision}"
+            )
+
+        previous_parts = set(vehicle.active_build.part_ids)
+        next_parts = set(parts)
+        added_parts = sorted(next_parts - previous_parts)
+        removed_parts = sorted(previous_parts - next_parts)
+        missing_parts = [part_id for part_id in added_parts if character.inventory.get(part_id, 0) < 1]
+        if missing_parts:
+            raise InsufficientInventoryError(
+                f"insufficient inventory for rebuild: {','.join(missing_parts)}"
+            )
+
+        # Validate every precondition before mutating inventory or build history.
+        for part_id in added_parts:
+            remaining = character.inventory.get(part_id, 0) - 1
+            if remaining:
+                character.inventory[part_id] = remaining
+            else:
+                character.inventory.pop(part_id, None)
+        for part_id in removed_parts:
+            character.inventory[part_id] = character.inventory.get(part_id, 0) + 1
+
+        revision = BuildRevision(expected_revision + 1, parts, _build_hash(parts))
+        vehicle.build_history.append(revision)
+        return self._record_operation(operation_id, replay_or_fingerprint, revision)
 
     def complete_quest(
         self,
@@ -257,27 +333,35 @@ class WorldState:
         )
         if replayed:
             return replay_or_fingerprint
-        _, character = self._owned_character(account_id)
+        account, character = self._owned_character(account_id)
         if quest_id in character.completed_quests:
             receipt = {"quest_id": quest_id, "money": 0, "xp": 0, "reputation": 0}
-            return self._record_operation(
-                operation_id, replay_or_fingerprint, receipt
-            )
+            return self._record_operation(operation_id, replay_or_fingerprint, receipt)
         if min(money, xp, reputation) < 0:
             raise DomainError("quest rewards cannot be negative")
+
+        blueprint_id = QUEST_BLUEPRINT_GRANTS.get(quest_id)
+        if blueprint_id and blueprint_id not in character.blueprints:
+            if len(character.blueprints) >= account.entitlements.blueprint_slots:
+                raise CapacityError("blueprint slot capacity exceeded")
+
         character.completed_quests.add(quest_id)
         character.money += money
         character.xp += xp
         character.reputation += reputation
+        item_id = QUEST_ITEM_GRANTS.get(quest_id)
+        if item_id:
+            character.inventory[item_id] = character.inventory.get(item_id, 0) + 1
+        if blueprint_id:
+            character.blueprints.add(blueprint_id)
+
         receipt = {
             "quest_id": quest_id,
             "money": money,
             "xp": xp,
             "reputation": reputation,
         }
-        return self._record_operation(
-            operation_id, replay_or_fingerprint, receipt
-        )
+        return self._record_operation(operation_id, replay_or_fingerprint, receipt)
 
     def register_race(
         self,
@@ -345,9 +429,7 @@ class WorldState:
             checkpoint_times_ms=times,
         )
         self.race_results[race_id] = result
-        return self._record_operation(
-            operation_id, replay_or_fingerprint, result
-        )
+        return self._record_operation(operation_id, replay_or_fingerprint, result)
 
     def delete_vehicle(self, account_id: str, vehicle_id: str) -> None:
         vehicle = self._owned_vehicle(account_id, vehicle_id)
