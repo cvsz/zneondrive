@@ -13,11 +13,14 @@ REQUIRED = [
     "bash tools/ue-linux.sh generate",
     "bash tools/ue-linux.sh package-client",
     "bash tools/ue-linux.sh package-server",
+    "for kind in client server",
+    'dist/packages/${kind}-linux',
     "client-manifest.txt",
     "server-manifest.txt",
     "client-sha256sums.txt",
     "server-sha256sums.txt",
     "Assert package evidence exists",
+    "if: success()",
     "if: always()",
     "actions/upload-artifact@v4",
     "retention-days: 30",
@@ -42,10 +45,10 @@ def main() -> int:
         for token in FORBIDDEN:
             if token in text:
                 errors.append(f"package evidence workflow must not contain runtime secret/data-plane token {token!r}")
-        if "dist/packages/client-linux" not in text or "dist/packages/server-linux" not in text:
-            errors.append("client/server package roots must remain separate")
-        if "if: success()" not in text:
-            errors.append("successful runs must assert non-empty retained package manifests/checksums")
+        if text.count('dist/packages/${kind}-linux') != 1:
+            errors.append("package inventory must derive exactly one root per explicit client/server kind")
+        if "package-client" == "package-server":
+            errors.append("client/server package commands must remain distinct")
 
     if errors:
         print("Unreal package evidence workflow validation FAILED", file=sys.stderr)
