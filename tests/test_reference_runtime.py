@@ -5,6 +5,7 @@ from zneondrive.domain import (
     CapacityError,
     DomainError,
     Entitlements,
+    OperationConflictError,
     RaceValidationError,
     WorldState,
 )
@@ -73,6 +74,34 @@ class WorldStateTests(unittest.TestCase):
                 operation_id="stale-build",
             )
 
+    def test_build_operation_replay_requires_same_semantic_payload(self) -> None:
+        first = self.world.revise_build(
+            "acct-1",
+            "veh-1",
+            STARTER_PARTS + ["part_brakes_track_i"],
+            expected_revision=1,
+            operation_id="build-replay",
+        )
+        replay = self.world.revise_build(
+            "acct-1",
+            "veh-1",
+            list(reversed(STARTER_PARTS + ["part_brakes_track_i"])),
+            expected_revision=1,
+            operation_id="build-replay",
+        )
+        self.assertEqual(first, replay)
+        self.assertEqual(self.vehicle.active_build.revision, 2)
+
+        with self.assertRaises(OperationConflictError):
+            self.world.revise_build(
+                "acct-1",
+                "veh-1",
+                STARTER_PARTS + ["part_suspension_street_i"],
+                expected_revision=1,
+                operation_id="build-replay",
+            )
+        self.assertEqual(self.vehicle.active_build.revision, 2)
+
     def test_quest_reward_is_idempotent(self) -> None:
         first = self.world.complete_quest(
             "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
@@ -81,6 +110,22 @@ class WorldStateTests(unittest.TestCase):
             "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
         )
         self.assertEqual(first, second)
+        character = self.world.characters["char-1"]
+        self.assertEqual((character.money, character.xp, character.reputation), (500, 100, 5))
+
+    def test_quest_operation_replay_rejects_changed_reward_payload(self) -> None:
+        self.world.complete_quest(
+            "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-conflict"
+        )
+        with self.assertRaises(OperationConflictError):
+            self.world.complete_quest(
+                "acct-1",
+                "MQ011",
+                money=5000,
+                xp=100,
+                reputation=5,
+                operation_id="q-conflict",
+            )
         character = self.world.characters["char-1"]
         self.assertEqual((character.money, character.xp, character.reputation), (500, 100, 5))
 
@@ -93,6 +138,24 @@ class WorldStateTests(unittest.TestCase):
         )
         self.assertEqual(receipt["money"], 0)
         self.assertEqual(self.world.characters["char-1"].money, 500)
+
+    def test_vehicle_grant_operation_replay_rejects_changed_vehicle(self) -> None:
+        vip = WorldState()
+        vip.create_account(
+            "acct-vip", "char-vip", entitlements=Entitlements(garage_slots=3)
+        )
+        first = vip.grant_vehicle(
+            "acct-vip", "veh-a", STARTER_PARTS, operation_id="grant-replay"
+        )
+        replay = vip.grant_vehicle(
+            "acct-vip", "veh-a", list(reversed(STARTER_PARTS)), operation_id="grant-replay"
+        )
+        self.assertIs(first, replay)
+        with self.assertRaises(OperationConflictError):
+            vip.grant_vehicle(
+                "acct-vip", "veh-b", STARTER_PARTS, operation_id="grant-replay"
+            )
+        self.assertEqual(vip.characters["char-vip"].vehicle_ids, ["veh-a"])
 
     def test_race_result_is_bound_to_registered_build_and_checkpoint_order(self) -> None:
         registration = self.world.register_race(
@@ -113,6 +176,48 @@ class WorldStateTests(unittest.TestCase):
                 build_revision=registration.accepted_build_revision,
                 checkpoint_times_ms=[100, 5000, 4999],
                 operation_id="race-result-bad",
+            )
+
+    def test_race_result_operation_replay_rejects_changed_timing_payload(self) -> None:
+        registration = self.world.register_race(
+            "acct-1", "race-replay", "veh-1", ["start", "mid", "finish"]
+        )
+        first = self.world.submit_race_result(
+            "acct-1",
+            "race-replay",
+            build_revision=registration.accepted_build_revision,
+            checkpoint_times_ms=[100, 5000, 10000],
+            operation_id="race-replay-op",
+        )
+        replay = self.world.submit_race_result(
+            "acct-1",
+            "race-replay",
+            build_revision=registration.accepted_build_revision,
+            checkpoint_times_ms=[100, 5000, 10000],
+            operation_id="race-replay-op",
+        )
+        self.assertEqual(first, replay)
+        with self.assertRaises(OperationConflictError):
+            self.world.submit_race_result(
+                "acct-1",
+                "race-replay",
+                build_revision=registration.accepted_build_revision,
+                checkpoint_times_ms=[100, 5000, 9999],
+                operation_id="race-replay-op",
+            )
+        self.assertEqual(self.world.race_results["race-replay"], first)
+
+    def test_operation_id_cannot_cross_mutation_types(self) -> None:
+        self.world.complete_quest(
+            "acct-1", "MQ011", money=1, operation_id="cross-kind-op"
+        )
+        with self.assertRaises(OperationConflictError):
+            self.world.revise_build(
+                "acct-1",
+                "veh-1",
+                STARTER_PARTS + ["part_brakes_track_i"],
+                expected_revision=1,
+                operation_id="cross-kind-op",
             )
 
     def test_starter_vehicle_cannot_be_routine_deleted(self) -> None:
