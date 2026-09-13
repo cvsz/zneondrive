@@ -5,10 +5,12 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zneondrive}
       POSTGRES_USER: ${POSTGRES_USER:-zneondrive}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zneondrive-local}
+      POSTGRES_EXPORTER_PASSWORD: ${POSTGRES_EXPORTER_PASSWORD:-zneondrive-monitor-local}
     ports:
       - "${POSTGRES_PORT:-55432}:5432"
     volumes:
       - zneondrive-postgres:/var/lib/postgresql/data
+      - ./deploy/postgres/init-monitoring.sh:/docker-entrypoint-initdb.d/20-monitoring.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-zneondrive} -d ${POSTGRES_DB:-zneondrive}"]
       interval: 5s
@@ -19,8 +21,8 @@ services:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.19.1
     environment:
       DATA_SOURCE_URI: postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable
-      DATA_SOURCE_USER: ${POSTGRES_USER:-zneondrive}
-      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD:-zneondrive-local}
+      DATA_SOURCE_USER: ${POSTGRES_EXPORTER_USER:-zneondrive_monitor}
+      DATA_SOURCE_PASS: ${POSTGRES_EXPORTER_PASSWORD:-zneondrive-monitor-local}
       PG_EXPORTER_COLLECTION_TIMEOUT: 5s
     ports:
       - "127.0.0.1:${POSTGRES_EXPORTER_PORT:-19187}:9187"
