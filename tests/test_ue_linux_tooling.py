@@ -36,13 +36,16 @@ class UELinuxToolingTests(unittest.TestCase):
         path.write_text(content, encoding="utf-8")
         path.chmod(0o755)
 
-    def _run(self, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+    def _run(self, *args: str, check: bool = True, extra_env=None) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
         env.update(
             UE_ROOT=str(self.engine),
             ZNEON_UE_PROJECT=str(PROJECT),
             CALLS_LOG=str(self.calls),
+            UE_MIN_FREE_GB="0",
         )
+        if extra_env:
+            env.update(extra_env)
         return subprocess.run(
             ["bash", str(SCRIPT), *args],
             env=env,
@@ -62,6 +65,19 @@ class UELinuxToolingTests(unittest.TestCase):
         self.assertIn("NeonDrive.uproject", text)
         self.assertIn(" -game", text)
 
+    def test_source_tree_preflight_reports_build_readiness(self) -> None:
+        self._write_exe(
+            self.engine / "GenerateProjectFiles.sh",
+            '#!/usr/bin/env bash\nexit 0\n',
+        )
+        result = self._run("preflight")
+        self.assertIn("PREFLIGHT_STATUS=ok", result.stdout)
+        self.assertIn("UE_VERSION=5.8.2", result.stdout)
+        self.assertIn("UE_PROJECTFILES_MODE=source-script", result.stdout)
+        self.assertIn("UE_CLIENT_TARGET=present", result.stdout)
+        self.assertIn("UE_SERVER_TARGET=present", result.stdout)
+        self.assertRegex(result.stdout, r"UE_FREE_DISK_BYTES=\d+")
+
     def test_installed_build_uses_bundled_dotnet_and_ubt(self) -> None:
         dll = self.engine / "Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.dll"
         dll.write_text("fixture", encoding="utf-8")
@@ -76,6 +92,36 @@ class UELinuxToolingTests(unittest.TestCase):
         text = self.calls.read_text(encoding="utf-8")
         self.assertIn("UnrealBuildTool.dll -projectfiles", text)
         self.assertIn("-game -engine", text)
+
+    def test_installed_build_preflight_requires_dotnet(self) -> None:
+        dll = self.engine / "Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.dll"
+        dll.write_text("fixture", encoding="utf-8")
+        env = os.environ.copy()
+        env.update(
+            UE_ROOT=str(self.engine),
+            ZNEON_UE_PROJECT=str(PROJECT),
+            CALLS_LOG=str(self.calls),
+            UE_MIN_FREE_GB="0",
+            PATH="/usr/bin:/bin",
+        )
+        result = subprocess.run(
+            ["bash", str(SCRIPT), "preflight"],
+            env=env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("requires bundled/system dotnet", result.stderr)
+
+    def test_preflight_rejects_invalid_disk_threshold(self) -> None:
+        self._write_exe(
+            self.engine / "GenerateProjectFiles.sh",
+            '#!/usr/bin/env bash\nexit 0\n',
+        )
+        result = self._run("preflight", check=False, extra_env={"UE_MIN_FREE_GB": "many"})
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("UE_MIN_FREE_GB must be a non-negative integer", result.stderr)
 
     def test_wrong_engine_minor_is_rejected(self) -> None:
         (self.engine / "Engine/Build/Build.version").write_text(
