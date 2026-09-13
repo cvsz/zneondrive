@@ -7,6 +7,8 @@ All notable changes to zNeonDrive are documented here.
 ### Added
 - Security Threat Exercise v3.0 machine-checked partial abuse matrix tying selected credential replay, ingress identity, distributed rate-limit, race-integrity, rebuild-authority, and reward-idempotency scenarios to concrete CI evidence while retaining live/deployment blockers as open
 - CI validator for the threat-exercise manifest that pins the Unreal Engine 5.8 + Go 1.27 + PostgreSQL + Redis authority model, requires core abuse categories, verifies evidence markers, and rejects silent promotion of open production-security scenarios
+- Runtime PostgreSQL Query Activity Evidence v3.1 with bounded query-text-free `pg_stat_activity` pressure metrics and PostgreSQL 17 integration coverage
+- Runtime PostgreSQL External Exporter Evidence v3.2 with version-pinned `postgres_exporter`, loopback-only local publication, static configuration validation, and live PostgreSQL 17 CI scrape evidence
 - Canonical Game Design Bible v0.1
 - Game Design Bible v0.2 implementation contract layer
 - NOVA CITY world bible and gameplay systems specification
@@ -190,6 +192,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the Unreal integrity source baseline to v2.2 with server-side impossible-displacement envelope telemetry while keeping live UE 5.8 calibration, acceleration/teleport envelopes for final physics, sanctions/ranked anti-cheat, build/package evidence and production gates open
 - Advanced the Unreal integrity source baseline to v2.3 with a wrap-safe server-side impossible-rotation envelope while keeping real UE 5.8 runtime calibration, final-physics angular/acceleration envelopes, sanctions/ranked anti-cheat, build/package evidence and production gates open
 - Extended post-baseline reference parity through v2.9 with shared build/quest/race-input vectors, fixture integrity, payload-bound idempotency, and Garage 17 rebuild semantics while keeping full reference-oracle parity, live Unreal race transport, real UE build/package, and production gates open
+- Advanced PostgreSQL observability through v3.1 with bounded query-activity pressure metrics and v3.2 with an external exporter process exercised in CI, while keeping `pg_stat_statements`, least-privilege production monitoring credentials, deployed scrape/dashboard/SLO evidence, load/soak, HA/DR, and production gates open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -239,5 +242,5 @@ All notable changes to zNeonDrive are documented here.
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/external exporter coverage, deployed Redis HA/failover monitoring evidence, live Unreal replication-byte/rate and race-validation metrics, deployment-scale multi-replica load, long-duration soak, live calibration of physics-derived displacement/rotation/acceleration envelopes, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL statement-level/deployed exporter coverage, deployed Redis HA/failover monitoring evidence, live Unreal replication-byte/rate and race-validation metrics, deployment-scale multi-replica load, long-duration soak, live calibration of physics-derived displacement/rotation/acceleration envelopes, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
