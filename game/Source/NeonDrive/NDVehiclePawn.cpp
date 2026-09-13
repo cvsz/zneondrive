@@ -56,8 +56,11 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
 
     if (!bDurableIdentityBound && GetNetMode() != NM_Standalone)
     {
+        FNDServerTelemetry::RecordIdentityGateBlock();
         return;
     }
+
+    FNDServerTelemetry::RecordAuthorityMovementTick();
 
     const float ClampedThrottle = FMath::Clamp(AuthoritativeThrottle, -1.0f, 1.0f);
     const float ClampedSteering = FMath::Clamp(AuthoritativeSteering, -1.0f, 1.0f);
@@ -71,6 +74,10 @@ void ANDVehiclePawn::Tick(float DeltaSeconds)
     const FVector Delta = GetActorForwardVector() * ClampedThrottle * MaxSpeedCmPerSecond * DeltaSeconds;
     FHitResult Hit;
     AddActorWorldOffset(Delta, true, &Hit);
+    if (Hit.bBlockingHit)
+    {
+        FNDServerTelemetry::RecordCollisionBlock();
+    }
 }
 
 void ANDVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -134,6 +141,7 @@ void ANDVehiclePawn::ApplyDurableIdentity(
     bDurableRoadworthy = bRoadworthy;
     bDurableIdentityBound = true;
     ForceNetUpdate();
+    FNDServerTelemetry::RecordNetUpdateRequest();
 }
 
 void ANDVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
