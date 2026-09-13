@@ -25,6 +25,12 @@ type postgresStatsProvider interface {
 	PostgresPoolStats() store.PostgresPoolStats
 }
 
+type redisServerMetricSnapshot struct {
+	configured bool
+	stats      RedisServerStats
+	err        error
+}
+
 type HTTPMetrics struct {
 	mu            sync.RWMutex
 	routes        map[string]*routeMetrics
@@ -125,6 +131,12 @@ func (m *HTTPMetrics) observe(route string, status int, elapsed time.Duration) {
 }
 
 func (m *HTTPMetrics) render(ctx context.Context) string {
+	redisSnapshot := redisServerMetricSnapshot{}
+	if m.redisStats != nil {
+		redisSnapshot.configured = true
+		redisSnapshot.stats, redisSnapshot.err = m.redisStats.RedisServerStats(ctx)
+	}
+
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -169,7 +181,7 @@ func (m *HTTPMetrics) render(ctx context.Context) string {
 
 	m.renderPostgresMetrics(&b)
 	renderRedisRateLimitMetrics(&b)
-	m.renderRedisServerMetrics(ctx, &b)
+	renderRedisServerMetrics(redisSnapshot, &b)
 	return b.String()
 }
 
@@ -213,17 +225,17 @@ func renderRedisRateLimitMetrics(b *strings.Builder) {
 	fmt.Fprintf(b, "zneondrive_redis_rate_limit_decisions_total{outcome=\"error\"} %d\n", stats.Errors)
 }
 
-func (m *HTTPMetrics) renderRedisServerMetrics(ctx context.Context, b *strings.Builder) {
-	if m.redisStats == nil {
+func renderRedisServerMetrics(snapshot redisServerMetricSnapshot, b *strings.Builder) {
+	if !snapshot.configured {
 		return
 	}
-	stats, err := m.redisStats.RedisServerStats(ctx)
 	b.WriteString("# HELP zneondrive_redis_up Whether the configured Redis server metrics probe succeeded.\n")
 	b.WriteString("# TYPE zneondrive_redis_up gauge\n")
-	if err != nil {
+	if snapshot.err != nil {
 		b.WriteString("zneondrive_redis_up 0\n")
 		return
 	}
+	stats := snapshot.stats
 	b.WriteString("zneondrive_redis_up 1\n")
 	b.WriteString("# HELP zneondrive_redis_connected_clients Connected Redis clients.\n# TYPE zneondrive_redis_connected_clients gauge\n")
 	fmt.Fprintf(b, "zneondrive_redis_connected_clients %d\n", stats.ConnectedClients)
