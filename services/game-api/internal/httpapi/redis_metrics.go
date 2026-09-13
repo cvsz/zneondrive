@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net"
 	"strconv"
 	"strings"
@@ -62,7 +63,7 @@ func (p *redisServerStatsProbe) RedisServerStats(ctx context.Context) (RedisServ
 	if err := conn.SetDeadline(deadline); err != nil {
 		return RedisServerStats{}, fmt.Errorf("set redis metrics deadline: %w", err)
 	}
-	if err := writeRESPCommand(conn, []string{"INFO", "server", "clients", "memory", "stats"}); err != nil {
+	if err := writeRESPCommand(conn, []string{"INFO"}); err != nil {
 		return RedisServerStats{}, fmt.Errorf("write redis INFO: %w", err)
 	}
 	payload, err := readRESPBulkString(bufio.NewReader(conn))
@@ -88,7 +89,7 @@ func readRESPBulkString(r *bufio.Reader) (string, error) {
 		return "", fmt.Errorf("invalid RESP bulk length %q", line)
 	}
 	buf := make([]byte, length+2)
-	if _, err := r.Read(buf); err != nil {
+	if _, err := io.ReadFull(r, buf); err != nil {
 		return "", err
 	}
 	if string(buf[length:]) != "\r\n" {
