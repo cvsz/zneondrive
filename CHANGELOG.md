@@ -119,6 +119,9 @@ All notable changes to zNeonDrive are documented here.
 - PostgreSQL + Redis integration coverage proving direct clients cannot evade rate limits by rotating forwarding headers
 - Integrated rejection evidence for forged session credentials and incorrect game-server shared keys
 - Integrated one-time gameplay-ticket redemption/replay evidence preserving the PostgreSQL-authoritative snapshot
+- Runtime Multi-Replica Stability Evidence v1.9 documentation
+- Repeated two-replica HTTP/Redis integration scenario covering 12 fresh-client rounds and 768 requests
+- Per-round assertions requiring exactly one shared 16-request Redis budget plus 48 HTTP 429 responses with `Retry-After`, preventing intermittent per-process burst multiplication from passing unnoticed
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -158,6 +161,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the observability source baseline to v1.6 with bounded Redis server INFO metrics while keeping deployed Redis monitoring/HA evidence, PostgreSQL server/query exporter coverage, Unreal runtime metrics, deployed SLOs, load/soak, HA/DR and production evidence open
 - Advanced the observability source baseline to v1.7 with bounded current-database PostgreSQL server metrics while keeping query-level/external exporter coverage, deployed dashboards/SLOs, Unreal runtime metrics, load/soak, HA/DR and production evidence open
 - Advanced the integrated security evidence baseline to v1.8 with PostgreSQL + Redis trust-boundary abuse-path verification while keeping deployed ingress, live Unreal transport, physics anti-cheat, load/soak, HA/DR and production evidence open
+- Advanced the CI stability evidence baseline to v1.9 with repeated two-replica Redis coordination verification while keeping deployment-scale load, long-duration soak, deployed SLO/capacity claims, live Unreal integration, HA/DR and production evidence open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -187,6 +191,7 @@ All notable changes to zNeonDrive are documented here.
 - Malformed forwarding chains fail closed to the socket peer and log no supplied header value
 - Invalid trusted-proxy CIDR configuration fails startup rather than silently widening trust
 - Concurrent two-replica HTTP integration evidence verifies Redis prevents per-process burst multiplication for one trusted-ingress-derived identity
+- Repeated two-replica stability evidence verifies the exact Redis-coordinated burst and `Retry-After` behavior remain consistent across 12 fresh-client concurrent cycles
 - Integrated PostgreSQL + Redis evidence verifies rotating forwarding headers cannot bypass an untrusted peer's shared rate-limit budget
 - Integrated middleware evidence verifies forged bearer credentials and incorrect game-server keys remain rejected after ingress/limiter processing
 - Integrated one-time ticket evidence verifies a valid server-only redemption returns the PostgreSQL-authoritative identity and replay is rejected
