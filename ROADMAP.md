@@ -54,7 +54,8 @@
 - [x] Select phase-gated deployment strategy
 - [x] Create Unreal C++ project / Game / Editor / Server target baseline
 - [x] Add manual self-hosted UE 5.8 source-build workflow
-- [ ] Produce successful archived UE source-build evidence
+- [x] Add Linux UE source-tree + installed-build project-generation/build/package helper with CI fixture coverage
+- [ ] Produce successful archived UE 5.8 Client/Server build/package evidence
 - [x] Implement prototype identity/session bootstrap against PostgreSQL
 - [x] Implement one-primary-character persistence
 - [x] Implement starter-vehicle persistence and immutable build revisions
@@ -106,6 +107,7 @@
 - [x] race-integrity telemetry v1.2 evidence/non-claim contract
 - [x] observability metrics v1.3 source/unit evidence contract
 - [x] PostgreSQL restore drill v1.4 CI evidence/non-claim contract
+- [x] UE installed-build tooling compatibility evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -114,7 +116,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as UE source build, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
