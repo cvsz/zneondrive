@@ -4,13 +4,22 @@
 
 Use Unreal Engine 5.8.x. The repository targets the UE 5.8 API line; prefer the current 5.8 hotfix after regression testing.
 
+The Linux tooling supports both:
+- a UE 5.8 source tree with `GenerateProjectFiles.sh`, and
+- a precompiled/installed UE 5.8 build that provides `UnrealBuildTool.dll`, `Build.sh`, `RunUAT.sh`, and a bundled/system `dotnet` runtime.
+
+`tools/ue-linux.sh` validates `Engine/Build/Build.version` and rejects non-5.8 engine roots before build/package commands run.
+
 ## Generate project files
 
-Linux source build:
+Recommended Linux path:
 
 ```bash
-"$UE_ROOT/GenerateProjectFiles.sh" -project="$PWD/game/NeonDrive.uproject" -game
+export UE_ROOT=/opt/UnrealEngine-5.8
+make client-generate
 ```
+
+For source trees the helper delegates to `$UE_ROOT/GenerateProjectFiles.sh`. For installed builds without that script, it invokes `UnrealBuildTool.dll -projectfiles` using the engine-bundled Linux `dotnet` when available. A local shim is not required.
 
 Windows:
 
@@ -23,9 +32,33 @@ Windows:
 Linux:
 
 ```bash
-"$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" NeonDriveEditor Linux Development "$PWD/game/NeonDrive.uproject" -WaitMutex
-"$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" NeonDriveServer Linux Development "$PWD/game/NeonDrive.uproject" -WaitMutex
+export UE_ROOT=/opt/UnrealEngine-5.8
+make editor-build
+make client-build
+make game-server-build
 ```
+
+The Make targets route through `tools/ue-linux.sh`, which calls the engine's canonical `Engine/Build/BatchFiles/Linux/Build.sh` for the selected target.
+
+To inspect a candidate engine root without compiling:
+
+```bash
+UE_ROOT=/opt/UnrealEngine-5.8 bash tools/ue-linux.sh info
+make ue-detect
+```
+
+## Package
+
+After Client and Server targets build successfully:
+
+```bash
+make client-package-linux
+make game-server-package-linux
+# or both, sequentially
+make package-all-linux
+```
+
+Packages are archived separately under `dist/packages/client-linux` and `dist/packages/server-linux` through the engine's `RunUAT.sh BuildCookRun` path.
 
 ## Prototype driving
 
@@ -39,11 +72,10 @@ The pawn is intentionally simple. Client input is clamped on the server and move
 
 `.github/workflows/unreal-source-build.yml` is manual and requires a self-hosted Linux runner with:
 - label `unreal-5.8`,
-- `UE_ROOT` pointing at a built UE 5.8 source tree,
+- `UE_ROOT` pointing at a usable UE 5.8 source or installed build,
 - sufficient disk/RAM for Unreal C++ builds.
 
-A workflow file is not build evidence by itself. Keep the roadmap build-evidence item open until a run succeeds and artifacts/logs are retained.
-
+A workflow file, engine detection, or successful project-file generation is not build evidence by itself. Keep the roadmap build-evidence item open until Client/Server builds complete successfully and retained artifacts/logs exist.
 
 ## v0.5 service-plane binding
 
@@ -60,10 +92,9 @@ The server redeems the ticket directly with the Go service plane and binds the r
 
 Do not package `ZNEON_GAME_SERVER_KEY` in a client build. Plain HTTP is local-development only; production transport remains an explicit security gate.
 
-
 ## Player client target and runtime endpoint
 
-The repository includes an explicit `NeonDriveClient` target for client-only source builds.
+The repository includes an explicit `NeonDriveClient` target for client-only builds.
 
 Linux:
 
