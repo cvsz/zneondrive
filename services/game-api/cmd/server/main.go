@@ -60,7 +60,7 @@ func main() {
 		log.Printf("WARN: REDIS_ADDR is not configured; rate limiting is process-local only")
 	}
 
-	metrics := httpapi.NewHTTPMetrics()
+	metrics := httpapi.NewHTTPMetrics(db)
 	observedHandler := metrics.Wrap(rateLimitedHandler)
 	server := &http.Server{
 		Addr:              listenAddr,

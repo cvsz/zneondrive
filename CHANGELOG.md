@@ -103,6 +103,10 @@ All notable changes to zNeonDrive are documented here.
 - Restore assertions covering account/progression, starter vehicle, immutable build + operation ID, quest + operation ID, inventory, blueprint, and authoritative race result state
 - Canonical migration replay after restore to detect schema/application incompatibility
 - 30-day retained GitHub Actions dump/report evidence without treating the drill as production RPO/RTO or DR proof
+- Runtime PostgreSQL Observability v1.5 source/unit evidence documentation
+- Bounded pgx/PostgreSQL pool connection gauges for max/total/idle/acquired/constructing states
+- PostgreSQL pool acquire, empty-acquire, canceled-acquire, new-connection counters and cumulative acquire duration
+- Unit coverage proving the PostgreSQL pool metric surface excludes database URLs, SQL text, credentials, and player-controlled identifiers
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -138,6 +142,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the security evidence baseline to v1.2 with authoritative race rejection/auth telemetry while keeping physics-derived impossible-state detection, live Unreal anti-cheat, deployed observability and production evidence open
 - Advanced the observability source baseline to v1.3 with bounded HTTP service metrics while keeping deployed SLO measurement, data-service/Unreal metrics, load/soak, HA/DR and production evidence open
 - Advanced the recovery evidence baseline to v1.4 with isolated PostgreSQL 17 backup/restore verification while keeping production backup custody, PITR, RPO/RTO, HA and regional DR explicitly open
+- Advanced the observability source baseline to v1.5 with bounded PostgreSQL connection-pool metrics while keeping query-level/server-exporter metrics, Redis/Unreal metrics, deployed dashboards/SLOs, load/soak, HA/DR and production evidence open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -170,10 +175,11 @@ All notable changes to zNeonDrive are documented here.
 - Race-integrity and game-server-auth rejection telemetry uses hashed race/peer correlation buckets and bounded static route scopes
 - Security telemetry observes existing authoritative outcomes and does not override or weaken race acceptance decisions
 - HTTP metrics use only fixed route scopes/status classes and never use credentials, player-controlled IDs, or peer addresses as labels
+- PostgreSQL pool metrics use only fixed connection-state labels and numeric pgx counters/durations; no connection string, SQL text, database name, credential, or player-controlled identifier is exported
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/server-exporter coverage, Redis/Unreal metrics, deployment-scale multi-replica load, long-duration soak, physics-derived impossible-state detection, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency

@@ -47,7 +47,7 @@
 - [x] demo validation + manual Pages workflow
 - [x] production technology ADRs
 
-## Phase 4 — Runtime prototype / integration v1.4
+## Phase 4 — Runtime prototype / integration v1.5
 - [x] Select engine/client — Unreal Engine 5.8
 - [x] Select gameplay/service-plane architecture — UE dedicated servers + Go
 - [x] Select PostgreSQL/Redis persistence/ephemeral direction
@@ -77,6 +77,7 @@
 - [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
+- [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
@@ -109,6 +110,7 @@
 - [x] race-integrity telemetry v1.2 evidence/non-claim contract
 - [x] observability metrics v1.3 source/unit evidence contract
 - [x] PostgreSQL restore drill v1.4 CI evidence/non-claim contract
+- [x] PostgreSQL pool observability v1.5 source/unit evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
@@ -118,7 +120,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, physics-derived anti-cheat, deployment-scale load/soak, deployed SLO measurement, complete PostgreSQL/Redis/Unreal observability, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -154,7 +156,8 @@
 - [x] Authoritative race rejection + game-server auth telemetry emitted with hashed correlation buckets
 - [ ] Physics-derived impossible-state telemetry from live Unreal race samples
 - [x] Low-cardinality Go HTTP service metrics source/unit baseline
-- [ ] PostgreSQL/Redis/Unreal runtime metrics completed
+- [x] Bounded PostgreSQL connection-pool metrics source/unit baseline
+- [ ] PostgreSQL query/server, Redis and Unreal runtime metrics completed
 - [ ] Threat/abuse cases exercised against integrated runtime
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
@@ -180,4 +183,4 @@
 - [ ] Disaster-recovery evidence
 - [ ] Go/no-go release review
 
-**Rule:** do not mark playable content, production, HA, DR, anti-cheat, deployment-scale distributed abuse protection, production load/soak, measured SLOs, or live-ops complete without executable evidence.
+**Rule:** do not mark playable content, production, HA, DR, anti-cheat, deployment-scale distributed abuse protection, production load/soak, measured SLOs, complete observability, or live-ops complete without executable evidence.
