@@ -132,6 +132,10 @@ All notable changes to zNeonDrive are documented here.
 - Server-side pre-movement displacement envelope derived from authoritative max speed, server tick delta, and bounded slack
 - Aggregate `impossible_displacements_total` telemetry with baseline reset on durable identity binding and baseline update only after authoritative movement
 - Static validation proving the envelope remains behind authority/durable-identity gates, before movement, and retains no player/vehicle/race/credential identifiers
+- Runtime Unreal Authority Rotation Envelope v2.3 source/static-validation documentation
+- Server-side pre-movement yaw envelope derived from authoritative turn rate, server tick delta, and bounded angular slack
+- Aggregate `impossible_rotations_total` telemetry with wrap-safe yaw delta, durable-bind baseline reset, and post-rotation baseline update
+- Static validation proving the rotation envelope remains behind authority/durable-identity gates and cannot retain client or credential identifiers
 
 - Repository documentation index and status-language contract
 - Product requirements and brand guide
@@ -175,6 +179,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the Unreal observability source baseline to v2.0 with aggregate dedicated-server session/tick/input/ticket telemetry while keeping successful real UE 5.8 build/package evidence, replication/race/correction telemetry, deployed scrape/log shipping, live Unreal↔Go E2E, load/soak, HA/DR and production evidence open
 - Advanced the Unreal observability source baseline to v2.1 with authority movement, durable-identity gate, collision-block and explicit net-update activity counters while keeping NetDriver packet/byte metrics, live race-validation/final-physics correction telemetry, successful real UE 5.8 build/package evidence and production gates open
 - Advanced the Unreal integrity source baseline to v2.2 with server-side impossible-displacement envelope telemetry while keeping live UE 5.8 calibration, acceleration/teleport envelopes for final physics, sanctions/ranked anti-cheat, build/package evidence and production gates open
+- Advanced the Unreal integrity source baseline to v2.3 with a wrap-safe server-side impossible-rotation envelope while keeping real UE 5.8 runtime calibration, final-physics angular/acceleration envelopes, sanctions/ranked anti-cheat, build/package evidence and production gates open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
 - Added a separate retained package/cook evidence path; successful package evidence remains open until the self-hosted UE 5.8 workflow completes with non-empty Client/Server manifests and checksums
@@ -217,11 +222,11 @@ All notable changes to zNeonDrive are documented here.
 - PostgreSQL server metrics query only bounded current-database numeric counters and size; database names, SQL text, query fingerprints, relation names, URLs, credentials and raw errors are not exported
 - PostgreSQL server metrics are observational/read-only and cannot alter persistence, progression, race acceptance, rate limiting or gameplay authority
 - Unreal dedicated-server telemetry stores/exports only aggregate numeric session/tick/input/ticket/authority-activity/integrity counters and never retains player, vehicle, race, ticket, credential, endpoint or peer identifiers
-- Unreal authority-activity and displacement-envelope telemetry observes server-side execution only; it cannot authorize gameplay, mutate durable state, weaken the durable-identity gate, accept client transforms, automatically sanction a player, or bypass server-only gameplay-ticket redemption
+- Unreal authority-activity, displacement-envelope and rotation-envelope telemetry observes server-side execution only; it cannot authorize gameplay, mutate durable state, weaken the durable-identity gate, accept client transforms, automatically sanction a player, or bypass server-only gameplay-ticket redemption
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
-- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/external exporter coverage, deployed Redis HA/failover monitoring evidence, live Unreal replication-byte/rate and race-validation metrics, deployment-scale multi-replica load, long-duration soak, live calibration of physics-derived impossible-state envelopes, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
+- Deployed ingress sanitization/network isolation, deployed metrics isolation/SLO measurement, PostgreSQL query-level/external exporter coverage, deployed Redis HA/failover monitoring evidence, live Unreal replication-byte/rate and race-validation metrics, deployment-scale multi-replica load, long-duration soak, live calibration of physics-derived displacement/rotation/acceleration envelopes, production backup custody/PITR/RPO/RTO and ranked anti-cheat remain explicit production gates
 - Client presentation demo has no external CDN, analytics, API key, or network dependency
