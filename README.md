@@ -11,8 +11,8 @@
 [![Runtime Go](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml/badge.svg?branch=main)](https://github.com/cvsz/zneondrive/actions/workflows/runtime-go.yml)
 [![Dependency Review](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cvsz/zneondrive/actions/workflows/dependency-review.yml)
 
-![Phase](https://img.shields.io/badge/Phase-4.15%20Multi--Replica%20Stability-00D8FF?style=flat-square)
-![Runtime](https://img.shields.io/badge/Runtime-v1.9-8A2BE2?style=flat-square)
+![Phase](https://img.shields.io/badge/Phase-4.16%20Unreal%20Server%20Observability-00D8FF?style=flat-square)
+![Runtime](https://img.shields.io/badge/Runtime-v2.0-8A2BE2?style=flat-square)
 ![Production Readiness](https://img.shields.io/badge/Production%20Readiness-Evidence%20Gated-F59E0B?style=flat-square)
 ![UE Source Build](https://img.shields.io/badge/UE%20Source%20Build-Evidence%20Pending-EF4444?style=flat-square)
 
@@ -47,7 +47,7 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **Player identity:** 1 account → 1 primary character → 1 starter vehicle
 - **Vehicle philosophy:** a vehicle is a persistent identity object with ownership, builder, build, repair, race, and reputation history
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
-- **Current phase:** **Phase 4.15 Multi-Replica Stability v1.9**
+- **Current phase:** **Phase 4.16 Unreal Server Observability v2.0**
 - **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
 
 ## Runtime prototype v0.4
@@ -63,6 +63,7 @@ The repository now contains executable implementation scaffolding for both plane
 - prototype vehicle pawn,
 - client input → server RPC → authoritative movement,
 - replicated movement back to clients,
+- bounded aggregate dedicated-server telemetry source for sessions, tick timing, input clamps, and ticket redemption outcomes,
 - source-build workflow baseline for a self-hosted UE 5.8 Linux runner.
 
 See [game/README.md](./game/README.md).
@@ -325,6 +326,22 @@ This strengthens CI-scale stability evidence and can detect intermittent coordin
 
 See [Runtime Multi-Replica Stability Evidence v1.9](./docs/runtime-multireplica-stability-v1.9.md).
 
+### Unreal dedicated-server observability — v2.0
+
+The UE 5.8 dedicated-server source now has a bounded aggregate telemetry baseline:
+- active sessions plus join/leave counters,
+- latest and peak server tick duration,
+- authoritative driving-input clamp events,
+- gameplay-ticket redemption attempts, successes and failures,
+- one fixed-format numeric aggregate log record every 10 seconds,
+- no player, vehicle, race, ticket, credential, endpoint or peer identifiers retained in the telemetry accumulator.
+
+CI statically validates the required GameMode/PlayerController/VehiclePawn hooks and rejects dynamic/string fields or credential/endpoint reads in the telemetry accumulator. This is **source/static-validation evidence only** until the real UE 5.8 self-hosted runner successfully builds/packages the dedicated server and retained runtime logs prove emission.
+
+Replication rate/bytes, live race-validation metrics, authority corrections from final physics, deployed log shipping/scraping, SLO evidence, load/soak, HA/DR and production readiness remain open.
+
+See [Runtime Unreal Dedicated-Server Observability v2.0](./docs/runtime-unreal-server-observability-v2.0.md).
+
 ## Present to a client now
 
 Start with [client/README.md](./client/README.md).
@@ -365,6 +382,7 @@ Start with the complete [PROJECT: NEON DRIVE documentation index](./docs/README.
 - [Runtime PostgreSQL Server Observability v1.7](./docs/runtime-postgres-server-observability-v1.7.md)
 - [Runtime Integrated Trust-Boundary Evidence v1.8](./docs/runtime-integrated-trust-boundary-v1.8.md)
 - [Runtime Multi-Replica Stability Evidence v1.9](./docs/runtime-multireplica-stability-v1.9.md)
+- [Runtime Unreal Dedicated-Server Observability v2.0](./docs/runtime-unreal-server-observability-v2.0.md)
 - [NOVA CITY World Bible](./docs/nova-city-world-bible.md)
 - [Gameplay Systems](./docs/gameplay-systems.md)
 - [Architecture](./docs/architecture.md)
@@ -407,7 +425,7 @@ Schemas live under `design/schemas/`.
 `services/game-api/` implements the persistent service-plane slice, including durable rebuild, authoritative race lifecycle state, bounded local rate limiting, Redis-coordinated distributed rate-limit state, trusted-ingress identity resolution, concurrent and repeated two-replica HTTP limiter evidence, integrated PostgreSQL + Redis trust-boundary abuse-path evidence, credential-safe race-integrity/auth rejection telemetry, bounded HTTP observability metrics, bounded PostgreSQL pool metrics, bounded Redis server INFO metrics, bounded current-database PostgreSQL server metrics, and isolated PostgreSQL backup/restore verification.
 
 ### Unreal runtime
-`game/` contains the first gameplay-plane source baseline. A successful self-hosted UE source build is still required before claiming Unreal build evidence.
+`game/` contains the gameplay-plane source baseline, including aggregate dedicated-server observability for sessions, tick timing, authoritative input clamps and ticket redemption outcomes. A successful self-hosted UE 5.8 Client/Server build/package run is still required before claiming compiled/runtime Unreal evidence.
 
 Run repository checks:
 
@@ -442,9 +460,9 @@ Arrive in NOVA CITY
 
 ## Status
 
-**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, authoritative PostgreSQL race instances/checkpoints/results, bounded local HTTP rate limiting, Redis-coordinated shared limiter state with local fallback, trusted-proxy source identity resolution with explicit CIDR allowlisting, integrated PostgreSQL + Redis trust-boundary abuse-path evidence, concurrent and repeated two-replica Redis limiter CI evidence, credential-safe rate-limit security events, race-integrity/auth rejection telemetry with hashed correlation buckets, bounded HTTP request/status/latency/in-flight metrics on a separate internal listener, bounded PostgreSQL pgx pool connection/acquire metrics, bounded Redis server INFO metrics, bounded current-database PostgreSQL server metrics, isolated PostgreSQL 17 pg_dump/pg_restore CI recovery evidence, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, Redis limiter integration evidence, local Compose stack, and CI/security validation.
+**Implemented now:** pre-production design/content contracts, vertical-slice specification, client presentation package, Python authority oracle, Unreal C++ source integration layer, bounded Unreal dedicated-server aggregate telemetry source/static validation, Go durable service plane, PostgreSQL persistence, one-time gameplay tickets, inventory/blueprint persistence, catalog-validated transactional rebuilds, authoritative PostgreSQL race instances/checkpoints/results, bounded local HTTP rate limiting, Redis-coordinated shared limiter state with local fallback, trusted-proxy source identity resolution with explicit CIDR allowlisting, integrated PostgreSQL + Redis trust-boundary abuse-path evidence, concurrent and repeated two-replica Redis limiter CI evidence, credential-safe rate-limit security events, race-integrity/auth rejection telemetry with hashed correlation buckets, bounded HTTP request/status/latency/in-flight metrics on a separate internal listener, bounded PostgreSQL pgx pool connection/acquire metrics, bounded Redis server INFO metrics, bounded current-database PostgreSQL server metrics, isolated PostgreSQL 17 pg_dump/pg_restore CI recovery evidence, committed Go module lock, HTTP/PostgreSQL reconnect-ticket E2E, Redis limiter integration evidence, local Compose stack, and CI/security validation.
 
-**Still evidence-gated:** successful UE 5.8 source-build artifact, live packaged Unreal↔Go client/server and race E2E, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, deployed ingress header-sanitization/direct-bypass evidence, deployment-scale multi-replica distributed-limiter load, long-duration soak, physics-derived race anti-cheat/impossible-state detection, matchmaking, deployed metrics/dashboard/SLO evidence, PostgreSQL query-level latency/fingerprint instrumentation and external exporter coverage, Unreal runtime observability coverage, Redis production HA/failover evidence, production backup scheduling/custody/PITR/restore, accepted RPO/RTO, HA/regional DR, platform certification, and production deployment.
+**Still evidence-gated:** successful UE 5.8 source-build artifact, successful UE 5.8 Client/Server cook/package evidence, live packaged Unreal↔Go client/server and race E2E, live Unreal replication-rate/bytes/race-validation/authority-correction telemetry, Garage 17 playable content, final vehicle physics, playable Garage 17 rebuild interaction, relationships/factions, deployed ingress header-sanitization/direct-bypass evidence, deployment-scale multi-replica distributed-limiter load, long-duration soak, physics-derived race anti-cheat/impossible-state detection, matchmaking, deployed metrics/dashboard/SLO evidence, PostgreSQL query-level latency/fingerprint instrumentation and external exporter coverage, Redis production HA/failover evidence, production backup scheduling/custody/PITR/restore, accepted RPO/RTO, HA/regional DR, platform certification, and production deployment.
 
 ## License
 
