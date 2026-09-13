@@ -59,6 +59,7 @@
 - [x] race-integrity telemetry v1.2 evidence boundary
 - [x] observability metrics v1.3 source/unit evidence boundary
 - [x] PostgreSQL restore drill v1.4 CI evidence boundary
+- [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
 - [x] deployment + backup/restore/DR plans (production verification still open)
@@ -74,8 +75,12 @@
 - [x] Unreal .uproject baseline
 - [x] Unreal Game / Editor / dedicated Server targets
 - [x] server-authoritative replicated prototype pawn
-- [x] manual self-hosted UE source-build workflow
-- [ ] successful UE 5.8 source-build artifact
+- [x] manual self-hosted UE build workflow
+- [x] UE 5.8 source-tree and installed-build Linux helper
+- [x] retained UE Client/Server build-evidence workflow contract with engine metadata, logs and checksums
+- [ ] successful real UE 5.8 Client build evidence artifact
+- [ ] successful real UE 5.8 dedicated Server build evidence artifact
+- [ ] successful retained UE 5.8 Client/Server package/cook evidence
 - [x] Go 1.27 service binary
 - [x] PostgreSQL durable schema
 - [x] local Docker Compose PostgreSQL + Redis + API
@@ -210,6 +215,10 @@
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
+- [x] UE source/installed-build tooling tests
+- [x] UE retained build-evidence workflow contract
+- [ ] Successful real UE 5.8 Client/Server build evidence
+- [ ] Successful real UE 5.8 Client/Server package/cook evidence
 - [ ] Deployed ingress trust-boundary evidence
 - [ ] Deployed metrics/SLO evidence
 - [ ] Live Unreal/Go packaged integration/e2e
