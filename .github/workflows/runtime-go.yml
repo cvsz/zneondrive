@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'services/game-api/**'
+      - 'deploy/postgres/init-monitoring.sh'
       - 'tools/postgres-restore-drill.sh'
       - 'tools/validate_postgres_exporter.py'
       - 'compose.yaml'
@@ -12,6 +13,7 @@ on:
   pull_request:
     paths:
       - 'services/game-api/**'
+      - 'deploy/postgres/init-monitoring.sh'
       - 'tools/postgres-restore-drill.sh'
       - 'tools/validate_postgres_exporter.py'
       - 'compose.yaml'
@@ -80,14 +82,47 @@ jobs:
           TEST_REDIS_ADDR: 127.0.0.1:6379
         run: go test -tags=integration ./...
 
-      - name: External PostgreSQL exporter integration
+      - name: Least-privilege PostgreSQL exporter integration
         shell: bash
         run: |
           set -euo pipefail
+          monitor_password='zneondrive-monitor-test'
+          docker run --rm --network host \
+            -e PGPASSWORD='zneondrive-test' \
+            postgres:17-alpine \
+            psql -v ON_ERROR_STOP=1 \
+              -h 127.0.0.1 -U zneondrive -d zneondrive_test \
+              -v monitor_password="$monitor_password" <<'SQL'
+          DO $$
+          BEGIN
+            IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'zneondrive_monitor') THEN
+              CREATE ROLE zneondrive_monitor LOGIN;
+            END IF;
+          END
+          $$;
+          ALTER ROLE zneondrive_monitor NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+          ALTER ROLE zneondrive_monitor PASSWORD :'monitor_password';
+          GRANT pg_monitor TO zneondrive_monitor;
+          SQL
+
+          role_flags=$(docker run --rm --network host \
+            -e PGPASSWORD='zneondrive-test' \
+            postgres:17-alpine \
+            psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
+              -c "SELECT rolsuper::int || ':' || rolcreatedb::int || ':' || rolcreaterole::int || ':' || rolreplication::int || ':' || rolbypassrls::int FROM pg_roles WHERE rolname='zneondrive_monitor'")
+          test "$role_flags" = '0:0:0:0:0'
+
+          membership=$(docker run --rm --network host \
+            -e PGPASSWORD='zneondrive-test' \
+            postgres:17-alpine \
+            psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
+              -c "SELECT pg_has_role('zneondrive_monitor', 'pg_monitor', 'member')")
+          test "$membership" = 't'
+
           cid=$(docker run -d --network host \
             -e DATA_SOURCE_URI='127.0.0.1:5432/zneondrive_test?sslmode=disable' \
-            -e DATA_SOURCE_USER='zneondrive' \
-            -e DATA_SOURCE_PASS='zneondrive-test' \
+            -e DATA_SOURCE_USER='zneondrive_monitor' \
+            -e DATA_SOURCE_PASS="$monitor_password" \
             -e PG_EXPORTER_COLLECTION_TIMEOUT=5s \
             quay.io/prometheuscommunity/postgres-exporter:v0.19.1)
           trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
@@ -103,8 +138,8 @@ jobs:
           test "$ready" -eq 1
           grep -Eq '^pg_up(\{[^}]*\})? 1$' "$metrics_file"
           grep -q '^pg_stat_database_' "$metrics_file"
-          if grep -Fq 'zneondrive-test' "$metrics_file"; then
-            echo 'exporter metrics leaked the database password'
+          if grep -Fq 'zneondrive-test' "$metrics_file" || grep -Fq "$monitor_password" "$metrics_file"; then
+            echo 'exporter metrics leaked a database credential'
             exit 1
           fi
 
