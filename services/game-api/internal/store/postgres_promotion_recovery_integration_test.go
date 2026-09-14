@@ -69,10 +69,17 @@ func TestPostgresPhysicalStandbyPromotionPreservesQuestIdempotency(t *testing.T)
 		"-c", "SELECT pg_reload_conf()")
 
 	mustDocker(t,
-		"run", "--rm", "--network", network,
+		"run", "--rm",
 		"-v", replicaVolume+":/var/lib/postgresql/data",
 		"postgres:17-alpine", "sh", "-ceu",
-		"rm -rf /var/lib/postgresql/data/*; chown postgres:postgres /var/lib/postgresql/data; exec su-exec postgres pg_basebackup -h "+primaryName+" -U zneondrive_replica -D /var/lib/postgresql/data -Fp -Xs -R -P",
+		"rm -rf /var/lib/postgresql/data/*; chown postgres:postgres /var/lib/postgresql/data",
+	)
+	mustDocker(t,
+		"run", "--rm", "--user", "postgres", "--network", network,
+		"-v", replicaVolume+":/var/lib/postgresql/data",
+		"postgres:17-alpine",
+		"pg_basebackup", "-h", primaryName, "-U", "zneondrive_replica",
+		"-D", "/var/lib/postgresql/data", "-Fp", "-Xs", "-R", "-P",
 	)
 
 	mustDocker(t,
