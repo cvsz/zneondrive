@@ -320,3 +320,5 @@
 - [ ] Production deployment evidence
 - [ ] Production DR evidence
 - [ ] Go/no-go approval
+
+Unchecked production claims must not be represented as complete without evidence.
