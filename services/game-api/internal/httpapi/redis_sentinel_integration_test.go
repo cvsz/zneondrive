@@ -47,6 +47,10 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 		"redis:8-alpine", "redis-server", "--save", "", "--appendonly", "no",
 	)
 	waitRedisContainerReady(t, primary)
+	primaryIP := strings.TrimSpace(runDocker(t, "inspect", "-f", "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}", primary))
+	if primaryIP == "" {
+		t.Fatal("Redis primary did not expose a Docker network address")
+	}
 
 	runDocker(t,
 		"run", "-d", "--name", replica, "--network", network,
@@ -64,7 +68,10 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 	for i, sentinel := range sentinels {
 		// Sentinel intentionally listens on 6379 inside its isolated container so
 		// the shared PING readiness helper can validate it without special casing.
-		config := fmt.Sprintf("port 6379\nsentinel monitor %s %s 6379 2\nsentinel down-after-milliseconds %s 1000\nsentinel failover-timeout %s 10000\nsentinel parallel-syncs %s 1\n", masterName, masterName, masterName, masterName, masterName)
+		// Monitor the primary by its isolated-network address because Sentinel does
+		// not resolve hostnames unless explicitly enabled; replica discovery still
+		// comes from Redis replication metadata and survives primary removal.
+		config := fmt.Sprintf("port 6379\nsentinel monitor %s %s 6379 2\nsentinel down-after-milliseconds %s 1000\nsentinel failover-timeout %s 10000\nsentinel parallel-syncs %s 1\n", masterName, primaryIP, masterName, masterName, masterName)
 		runDocker(t,
 			"run", "-d", "--name", sentinel, "--network", network,
 			"-p", fmt.Sprintf("127.0.0.1:%d:6379", sentinelPorts[i]),
