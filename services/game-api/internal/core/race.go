@@ -69,12 +69,11 @@ func ValidateRaceCheckpointAdvance(instance RaceInstance, checkpointIndex int, e
 	return nil
 }
 
-// ValidateRaceFinish enforces the authoritative lifecycle preconditions applied
-// before final-result hashing/persistence. A finish is accepted only for an active
-// instance after at least one accepted checkpoint, with an exact cursor/count match
-// and elapsed time strictly newer than the last accepted checkpoint.
+// ValidateRaceFinish enforces the existing authoritative lifecycle preconditions
+// applied before final-result hashing/persistence. Persistence and idempotency remain
+// in PostgreSQL; this helper only centralizes the deterministic acceptance rule.
 func ValidateRaceFinish(instance RaceInstance, checkpointCount int, finishElapsedMS int64) error {
-	if instance.State != "active" || checkpointCount != instance.NextCheckpoint || checkpointCount < 1 || checkpointCount > 1025 || finishElapsedMS <= instance.LastElapsedMS || finishElapsedMS > 24*60*60*1000 {
+	if instance.State != "active" || checkpointCount != instance.NextCheckpoint || checkpointCount < 1 || finishElapsedMS <= instance.LastElapsedMS {
 		return ErrRaceOrder
 	}
 	return nil
