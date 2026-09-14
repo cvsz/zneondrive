@@ -6,6 +6,7 @@
     {"name":"zero_build_revision","race_id":"race_garage17_shakedown","roadworthy":true,"build_revision":0,"build_validation_hash":"abc123","valid":false},
     {"name":"empty_build_hash","race_id":"race_garage17_shakedown","roadworthy":true,"build_revision":7,"build_validation_hash":"   ","valid":false},
     {"name":"invalid_race_prefix","race_id":"event_garage17","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":false},
-    {"name":"uppercase_race_id","race_id":"race_Garage17","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":false}
+    {"name":"uppercase_race_id","race_id":"race_Garage17","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":false},
+    {"name":"unicode_lowercase_race_id","race_id":"race_élite","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":false}
   ]
 }
