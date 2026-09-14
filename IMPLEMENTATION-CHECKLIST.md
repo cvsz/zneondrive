@@ -82,6 +82,7 @@
 - [x] race-operation replay reference parity v4.2 shared Python/Go payload-binding evidence boundary
 - [x] quest side-effects reference parity v4.3 shared Python/Go inventory/blueprint/Roadworthy evidence boundary
 - [x] rebuild-operation replay hardening v4.4 shared Python/Go owner/vehicle/revision/hash evidence boundary
+- [x] quest-operation scope hardening v4.5 authoritative character-scoped durable idempotency evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -111,6 +112,7 @@
 - [x] durable one-character bootstrap
 - [x] durable starter vehicle + immutable revisions
 - [x] idempotent quest/build operations
+- [x] quest operation durable keys are scoped to authoritative character identity before PostgreSQL persistence
 - [x] MQ001–MQ100 prerequisite enforcement
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity vectors
 - [x] shared Python/Go MQ reward schedule parity vectors
@@ -302,6 +304,7 @@
 - [x] shared Python/Go race-start eligibility/build-binding parity evidence
 - [x] shared Python/Go race operation-id replay payload-binding parity evidence
 - [x] shared Python/Go rebuild operation-id replay owner/vehicle/revision/hash payload-binding parity evidence
+- [x] authoritative-character quest operation-key scoping source/unit/API evidence
 - [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
 - [x] shared Python/Go MQ reward schedule parity evidence
