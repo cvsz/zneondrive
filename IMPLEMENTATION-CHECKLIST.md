@@ -83,6 +83,7 @@
 - [x] quest side-effects reference parity v4.3 shared Python/Go inventory/blueprint/Roadworthy evidence boundary
 - [x] rebuild-operation replay hardening v4.4 shared Python/Go owner/vehicle/revision/hash evidence boundary
 - [x] quest-operation scope hardening v4.5 authoritative character-scoped durable idempotency evidence boundary
+- [x] service-process restart/reconnect recovery v4.6 PostgreSQL-backed CI evidence boundary (node/HA/DR remain open)
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -151,6 +152,7 @@
 - [x] one-time gameplay-ticket persistence and atomic redemption
 - [x] server-only shared-key internal redemption endpoint
 - [x] HTTP/PostgreSQL reconnect + ticket E2E
+- [x] PostgreSQL-backed Go service-process restart/reconnect preserves durable identity, progression and quest replay semantics
 - [x] Unreal session/resume subsystem source
 - [x] dedicated-server ticket redemption source
 - [x] authority-only durable VehicleID/build/parts/Roadworthy binding
@@ -273,6 +275,7 @@
 - [x] PostgreSQL 17 CI backup archive verification
 - [x] Isolated PostgreSQL CI restore drill
 - [x] Representative durable-state + idempotency validation after restore
+- [x] Go service-process restart/reconnect CI evidence against PostgreSQL durable state
 - [ ] Production backup verification / off-host retention evidence
 - [ ] Production restore drill against agreed deployment target
 - [ ] RPO/RTO accepted and demonstrated
@@ -299,6 +302,7 @@
 - [x] Unreal authority displacement-envelope source/static-validation evidence
 - [x] Unreal authority rotation-envelope source/static-validation evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
+- [x] PostgreSQL-backed Go service-process restart/reconnect recovery CI evidence
 - [x] shared Python/Go deterministic race-result hash parity evidence
 - [x] shared Python/Go race checkpoint/finish lifecycle-order parity evidence
 - [x] shared Python/Go race-start eligibility/build-binding parity evidence
