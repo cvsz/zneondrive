@@ -3,7 +3,11 @@ from pathlib import Path
 import unittest
 
 from zneondrive.domain import RaceValidationError, WorldState
-from zneondrive.race_contract import normalize_race_id, validate_race_checkpoint
+from zneondrive.race_contract import (
+    normalize_race_id,
+    race_result_hash,
+    validate_race_checkpoint,
+)
 
 
 VECTORS_PATH = Path(__file__).with_name("reference-parity-vectors.json")
@@ -21,10 +25,12 @@ class ReferenceParityTests(unittest.TestCase):
         quest_cases = self.vectors.get("quest_id_cases", [])
         race_id_cases = self.vectors.get("race_id_cases", [])
         checkpoint_cases = self.vectors.get("race_checkpoint_cases", [])
+        result_hash_cases = self.vectors.get("race_result_hash_cases", [])
         self.assertTrue(build_cases, "build_hash_cases must not be empty")
         self.assertTrue(quest_cases, "quest_id_cases must not be empty")
         self.assertTrue(race_id_cases, "race_id_cases must not be empty")
         self.assertTrue(checkpoint_cases, "race_checkpoint_cases must not be empty")
+        self.assertTrue(result_hash_cases, "race_result_hash_cases must not be empty")
 
         build_names: set[str] = set()
         for vector in build_cases:
@@ -65,6 +71,28 @@ class ReferenceParityTests(unittest.TestCase):
             self.assertTrue(name, "race checkpoint vector name must not be empty")
             self.assertNotIn(name, checkpoint_names, f"duplicate checkpoint vector name: {name}")
             checkpoint_names.add(name)
+
+        result_names: set[str] = set()
+        required_instance_fields = {
+            "race_instance_id",
+            "race_id",
+            "account_id",
+            "character_id",
+            "vehicle_id",
+            "build_revision",
+            "build_validation_hash",
+        }
+        for vector in result_hash_cases:
+            name = vector["name"]
+            self.assertTrue(name, "race result vector name must not be empty")
+            self.assertNotIn(name, result_names, f"duplicate race result vector name: {name}")
+            result_names.add(name)
+            self.assertEqual(set(vector["instance"]), required_instance_fields)
+            self.assertRegex(vector["instance"]["build_validation_hash"], r"^[0-9a-f]{64}$")
+            if vector["valid"]:
+                self.assertRegex(vector["expected_hash"], r"^[0-9a-f]{64}$")
+            else:
+                self.assertIsNone(vector["expected_hash"])
 
     def test_python_oracle_build_hashes_match_shared_vectors(self) -> None:
         for index, vector in enumerate(self.vectors["build_hash_cases"], start=1):
@@ -125,6 +153,26 @@ class ReferenceParityTests(unittest.TestCase):
                 else:
                     with self.assertRaises(RaceValidationError):
                         validate_race_checkpoint(vector["index"], vector["elapsed_ms"])
+
+    def test_python_race_result_hashes_match_shared_vectors(self) -> None:
+        for vector in self.vectors["race_result_hash_cases"]:
+            with self.subTest(vector=vector["name"]):
+                if vector["valid"]:
+                    self.assertEqual(
+                        race_result_hash(
+                            vector["instance"],
+                            vector["checkpoint_count"],
+                            vector["finish_elapsed_ms"],
+                        ),
+                        vector["expected_hash"],
+                    )
+                else:
+                    with self.assertRaises(RaceValidationError):
+                        race_result_hash(
+                            vector["instance"],
+                            vector["checkpoint_count"],
+                            vector["finish_elapsed_ms"],
+                        )
 
 
 if __name__ == "__main__":

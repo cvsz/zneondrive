@@ -15,6 +15,7 @@ type parityVectors struct {
 	QuestIDCases        []questIDVector        `json:"quest_id_cases"`
 	RaceIDCases         []raceIDVector         `json:"race_id_cases"`
 	RaceCheckpointCases []raceCheckpointVector `json:"race_checkpoint_cases"`
+	RaceResultHashCases []raceResultHashVector `json:"race_result_hash_cases"`
 }
 
 type buildHashVector struct {
@@ -41,6 +42,23 @@ type raceCheckpointVector struct {
 	Index     int    `json:"index"`
 	ElapsedMS int64  `json:"elapsed_ms"`
 	Valid     bool   `json:"valid"`
+}
+
+type raceResultHashVector struct {
+	Name string `json:"name"`
+	Instance struct {
+		RaceInstanceID      string `json:"race_instance_id"`
+		RaceID              string `json:"race_id"`
+		AccountID           string `json:"account_id"`
+		CharacterID         string `json:"character_id"`
+		VehicleID           string `json:"vehicle_id"`
+		BuildRevision       int    `json:"build_revision"`
+		BuildValidationHash string `json:"build_validation_hash"`
+	} `json:"instance"`
+	CheckpointCount int     `json:"checkpoint_count"`
+	FinishElapsedMS int64   `json:"finish_elapsed_ms"`
+	Valid           bool    `json:"valid"`
+	ExpectedHash    *string `json:"expected_hash"`
 }
 
 func loadReferenceParityVectors(t *testing.T) parityVectors {
@@ -77,6 +95,9 @@ func TestReferenceParityVectorIntegrity(t *testing.T) {
 	}
 	if len(vectors.RaceCheckpointCases) == 0 {
 		t.Fatal("race_checkpoint_cases must not be empty")
+	}
+	if len(vectors.RaceResultHashCases) == 0 {
+		t.Fatal("race_result_hash_cases must not be empty")
 	}
 
 	buildNames := make(map[string]struct{}, len(vectors.BuildHashCases))
@@ -134,6 +155,35 @@ func TestReferenceParityVectorIntegrity(t *testing.T) {
 			t.Fatalf("duplicate race checkpoint vector name: %s", vector.Name)
 		}
 		checkpointNames[vector.Name] = struct{}{}
+	}
+
+	resultNames := make(map[string]struct{}, len(vectors.RaceResultHashCases))
+	for _, vector := range vectors.RaceResultHashCases {
+		if vector.Name == "" {
+			t.Fatal("race result vector name must not be empty")
+		}
+		if _, exists := resultNames[vector.Name]; exists {
+			t.Fatalf("duplicate race result vector name: %s", vector.Name)
+		}
+		resultNames[vector.Name] = struct{}{}
+		if vector.Instance.RaceInstanceID == "" || vector.Instance.RaceID == "" || vector.Instance.AccountID == "" || vector.Instance.CharacterID == "" || vector.Instance.VehicleID == "" {
+			t.Fatalf("race result vector %s has incomplete identity", vector.Name)
+		}
+		hashBytes, err := hex.DecodeString(vector.Instance.BuildValidationHash)
+		if err != nil || len(hashBytes) != 32 {
+			t.Fatalf("race result vector %s has invalid build validation hash", vector.Name)
+		}
+		if vector.Valid {
+			if vector.ExpectedHash == nil {
+				t.Fatalf("valid race result vector %s must declare expected hash", vector.Name)
+			}
+			hashBytes, err := hex.DecodeString(*vector.ExpectedHash)
+			if err != nil || len(hashBytes) != 32 {
+				t.Fatalf("race result vector %s has invalid expected SHA-256", vector.Name)
+			}
+		} else if vector.ExpectedHash != nil {
+			t.Fatalf("invalid race result vector %s must not declare expected hash", vector.Name)
+		}
 	}
 }
 
@@ -218,6 +268,37 @@ func TestReferenceParityRaceCheckpoints(t *testing.T) {
 			}
 			if !vector.Valid && err == nil {
 				t.Fatalf("expected checkpoint index=%d elapsed_ms=%d to be rejected", vector.Index, vector.ElapsedMS)
+			}
+		})
+	}
+}
+
+func TestReferenceParityRaceResultHashes(t *testing.T) {
+	vectors := loadReferenceParityVectors(t)
+	for _, vector := range vectors.RaceResultHashCases {
+		vector := vector
+		t.Run(vector.Name, func(t *testing.T) {
+			instance := RaceInstance{
+				RaceInstanceID:      vector.Instance.RaceInstanceID,
+				RaceID:              vector.Instance.RaceID,
+				AccountID:           vector.Instance.AccountID,
+				CharacterID:         vector.Instance.CharacterID,
+				VehicleID:           vector.Instance.VehicleID,
+				BuildRevision:       vector.Instance.BuildRevision,
+				BuildValidationHash: vector.Instance.BuildValidationHash,
+			}
+			got, err := RaceResultHash(instance, vector.CheckpointCount, vector.FinishElapsedMS)
+			if !vector.Valid {
+				if err == nil {
+					t.Fatalf("expected race result hash input to be rejected, got %s", got)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("RaceResultHash: %v", err)
+			}
+			if vector.ExpectedHash == nil || got != *vector.ExpectedHash {
+				t.Fatalf("race result hash drift: got %s want %v", got, vector.ExpectedHash)
 			}
 		})
 	}

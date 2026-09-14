@@ -69,6 +69,7 @@
 - [x] Unreal displacement-envelope telemetry v2.2 source/static-validation evidence boundary
 - [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence boundary
 - [x] PostgreSQL statement metrics v3.4 source/integration evidence boundary
+- [x] race-result hash reference parity v3.5 shared Python/Go evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -149,6 +150,7 @@
 - [x] ordered checkpoint cursor + monotonic elapsed-time enforcement
 - [x] idempotent race start/checkpoint/finish operation semantics
 - [x] deterministic final result hash bound to authoritative build evidence
+- [x] shared Python/Go parity vectors verify deterministic race-result hash contract
 - [x] bounded per-process token-bucket limiter wrapped around service HTTP API
 - [x] limiter covers bootstrap/state/tickets/quests/builds/internal race mutations
 - [x] raw bearer/session credentials excluded from limiter keys
@@ -275,6 +277,7 @@
 - [x] Unreal authority displacement-envelope source/static-validation evidence
 - [x] Unreal authority rotation-envelope source/static-validation evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
+- [x] shared Python/Go deterministic race-result hash parity evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract
 - [ ] Successful real UE 5.8 Client/Server build evidence

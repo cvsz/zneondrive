@@ -109,16 +109,20 @@ jobs:
               -c pg_stat_statements.max=500 \
               -c pg_stat_statements.track=top >/dev/null
 
+          # pg_isready can report the temporary entrypoint bootstrap server as ready
+          # before POSTGRES_DB has been created. Require a successful query against
+          # the exact target database so the evidence step cannot race initialization.
           ready=0
           for _ in $(seq 1 30); do
-            if docker exec "$pg_name" pg_isready -U zneondrive -d zneondrive_stat_test >/dev/null 2>&1; then
+            if [ "$(docker exec -e PGPASSWORD='zneondrive-test' "$pg_name" \
+              psql -At -U zneondrive -d zneondrive_stat_test -c 'SELECT 1' 2>/dev/null || true)" = '1' ]; then
               ready=1
               break
             fi
             sleep 1
           done
           if [ "$ready" -ne 1 ]; then
-            echo 'isolated PostgreSQL for statement metrics never became ready'
+            echo 'isolated PostgreSQL target database for statement metrics never became query-ready'
             docker logs "$pg_name" || true
             exit 1
           fi
