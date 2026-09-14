@@ -17,11 +17,11 @@ import (
 // script per decision. Redis is coordination only: it never becomes a source
 // of gameplay authority or durable account/race state.
 type redisRateLimiter struct {
-	addr          string
-	sentinelAddrs []string
+	addr           string
+	sentinelAddrs  []string
 	sentinelMaster string
-	dialTimeout   time.Duration
-	ioTimeout     time.Duration
+	dialTimeout    time.Duration
+	ioTimeout      time.Duration
 }
 
 type redisRateLimitStats struct {
@@ -83,10 +83,10 @@ func newRedisSentinelRateLimiter(addrs []string, master string) *redisRateLimite
 		}
 	}
 	return &redisRateLimiter{
-		sentinelAddrs: clean,
+		sentinelAddrs:  clean,
 		sentinelMaster: strings.TrimSpace(master),
-		dialTimeout:   300 * time.Millisecond,
-		ioTimeout:     500 * time.Millisecond,
+		dialTimeout:    300 * time.Millisecond,
+		ioTimeout:      500 * time.Millisecond,
 	}
 }
 
@@ -176,16 +176,34 @@ func (r *redisRateLimiter) resolveAddr(ctx context.Context) (string, error) {
 	if r.addr != "" {
 		return r.addr, nil
 	}
+	if len(r.sentinelAddrs) == 0 {
+		return "", errors.New("resolve redis master via sentinel: no Redis Sentinel endpoints configured")
+	}
+
+	// Do not trust the first responsive Sentinel. During a network partition a
+	// stale/minority Sentinel can continue reporting the former primary. Require
+	// a strict majority of the configured Sentinel endpoints to agree on the
+	// same master address before the application sends limiter mutations there.
+	quorum := len(r.sentinelAddrs)/2 + 1
+	votes := make(map[string]int, len(r.sentinelAddrs))
 	var lastErr error
 	for _, sentinel := range r.sentinelAddrs {
 		addr, err := r.resolveSentinelMaster(ctx, sentinel)
-		if err == nil {
+		if err != nil {
+			lastErr = err
+			continue
+		}
+		votes[addr]++
+		if votes[addr] >= quorum {
 			return addr, nil
 		}
-		lastErr = err
+	}
+
+	if len(votes) > 0 {
+		return "", fmt.Errorf("resolve redis master via sentinel: no majority agreement (%d of %d required)", quorum, len(r.sentinelAddrs))
 	}
 	if lastErr == nil {
-		lastErr = errors.New("no Redis Sentinel endpoints configured")
+		lastErr = errors.New("no Redis Sentinel endpoint returned a master")
 	}
 	return "", fmt.Errorf("resolve redis master via sentinel: %w", lastErr)
 }
