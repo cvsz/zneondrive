@@ -10,6 +10,7 @@ import (
 
 var ErrInvalidRace = errors.New("invalid race input")
 var ErrRaceOrder = errors.New("invalid race lifecycle order")
+var ErrRaceNotReady = errors.New("race vehicle not ready")
 
 type RaceInstance struct {
 	RaceInstanceID      string `json:"race_instance_id"`
@@ -46,6 +47,24 @@ func NormalizeRaceID(raceID string) (string, error) {
 		return "", ErrInvalidRace
 	}
 	return raceID, nil
+}
+
+// ValidateRaceStartBinding centralizes deterministic race-start eligibility after
+// PostgreSQL has resolved ownership and the exact active build. PostgreSQL remains
+// authoritative for those reads and for the transaction; this helper only prevents
+// language/runtime drift in the acceptance rule.
+func ValidateRaceStartBinding(raceID string, roadworthy bool, buildRevision int, buildValidationHash string) (string, error) {
+	normalizedRaceID, err := NormalizeRaceID(raceID)
+	if err != nil {
+		return "", err
+	}
+	if !roadworthy {
+		return "", ErrRaceNotReady
+	}
+	if buildRevision < 1 || strings.TrimSpace(buildValidationHash) == "" {
+		return "", ErrInvalidRace
+	}
+	return normalizedRaceID, nil
 }
 
 func ValidateRaceCheckpoint(index int, elapsedMS int64) error {
