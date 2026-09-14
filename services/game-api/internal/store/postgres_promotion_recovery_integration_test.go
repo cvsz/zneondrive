@@ -246,13 +246,14 @@ func waitDockerPostgres(t *testing.T, container, database, user string) {
 	t.Helper()
 	deadline := time.Now().Add(45 * time.Second)
 	for time.Now().Before(deadline) {
-		cmd := exec.Command("docker", "exec", container, "pg_isready", "-U", user, "-d", database)
-		if cmd.Run() == nil {
+		output, err := exec.Command("docker", "exec", "-e", "PGPASSWORD="+promotionPassword, container,
+			"psql", "-At", "-U", user, "-d", database, "-c", "SELECT 1").CombinedOutput()
+		if err == nil && strings.TrimSpace(string(output)) == "1" {
 			return
 		}
 		time.Sleep(time.Second)
 	}
-	t.Fatalf("PostgreSQL container %s did not become ready", container)
+	t.Fatalf("PostgreSQL container %s target database %s did not become query-ready", container, database)
 }
 
 func dockerMappedPort(t *testing.T, container string) string {
