@@ -77,6 +77,8 @@
 - [x] Add concurrent two-replica HTTP integration evidence for shared Redis limiter budget
 - [x] Add repeated two-replica Redis limiter stability evidence across 12 CI cycles
 - [x] Add integrated PostgreSQL + Redis trust-boundary abuse-path evidence
+- [x] Add Redis 8 explicit replica-promotion limiter continuity CI evidence
+- [x] Add Redis 8 Sentinel quorum master-discovery/promotion CI evidence for limiter coordination
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
 - [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
@@ -88,6 +90,7 @@
 - [x] Add authority-side rotation envelope telemetry with wrap-safe yaw delta, durable-bind baseline reset and static placement validation
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
 - [x] Add PostgreSQL 17 physical-standby promotion CI evidence after WAL catch-up without promoting production HA/DR status
+- [x] Add PostgreSQL 17 transaction-boundary primary-loss/retry CI evidence without promoting automatic/fenced failover status
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -130,6 +133,9 @@
 - [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
 - [x] PostgreSQL physical-standby promotion recovery v4.7 CI evidence/non-claim contract
+- [x] PostgreSQL transaction-boundary failover recovery v4.9 CI evidence/non-claim contract
+- [x] Redis explicit replica-promotion recovery v5.0 CI evidence/non-claim contract
+- [x] Redis Sentinel master-discovery failover v5.1 CI evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -138,7 +144,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, automatic/fenced PostgreSQL failover, Redis failover, production RPO/RTO, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, automatic/fenced PostgreSQL failover, Redis split-brain fencing/old-primary rejoin/Cluster/deployment HA, production RPO/RTO, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -188,8 +194,11 @@
 - [ ] Unreal replication-rate/bytes, live race-validation, final-physics correction and deployed scrape evidence
 - [x] Integrated trust-boundary abuse-path baseline exercised against PostgreSQL + Redis
 - [x] Isolated PostgreSQL 17 physical-standby promotion evidence after WAL catch-up
-- [ ] Automatic/fenced PostgreSQL failover and interrupted-transaction safety evidence
-- [ ] Redis failover evidence
+- [x] PostgreSQL 17 transaction-boundary primary-loss/retry evidence for an uncommitted authoritative MQ001 mutation
+- [ ] Automatic/fenced PostgreSQL failover and split-brain prevention evidence
+- [x] Redis 8 explicit replica-promotion limiter continuity evidence
+- [x] Redis 8 Sentinel quorum automatic master-discovery/promotion limiter continuity evidence
+- [ ] Redis split-brain fencing/old-primary rejoin/Cluster/deployment-HA evidence
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
 - [ ] Incident/rollback exercise passed
