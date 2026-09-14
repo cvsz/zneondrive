@@ -1,3 +1,4 @@
+import inspect
 import unittest
 
 from zneondrive.domain import (
@@ -134,45 +135,48 @@ class WorldStateTests(unittest.TestCase):
         self.world.complete_quest("acct-1", "MQ002", operation_id="mq002")
         self.assertEqual(character.completed_quests, {"MQ001", "MQ002"})
 
-    def test_quest_reward_is_idempotent(self) -> None:
+    def test_quest_reward_is_server_derived_and_idempotent(self) -> None:
         self.complete_prerequisites("MQ011")
-        first = self.world.complete_quest(
-            "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
-        )
-        second = self.world.complete_quest(
-            "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
-        )
-        self.assertEqual(first, second)
         character = self.world.characters["char-1"]
-        self.assertEqual((character.money, character.xp, character.reputation), (500, 100, 5))
-
-    def test_quest_operation_replay_rejects_changed_reward_payload(self) -> None:
-        self.complete_prerequisites("MQ011")
-        self.world.complete_quest(
-            "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-conflict"
+        before = (character.money, character.xp, character.reputation)
+        first = self.world.complete_quest("acct-1", "MQ011", operation_id="q-1")
+        second = self.world.complete_quest("acct-1", "MQ011", operation_id="q-1")
+        self.assertEqual(first, second)
+        self.assertEqual(first, {"quest_id": "MQ011", "money": 210, "xp": 105, "reputation": 1})
+        after = (character.money, character.xp, character.reputation)
+        self.assertEqual(
+            tuple(after_value - before_value for after_value, before_value in zip(after, before)),
+            (210, 105, 1),
         )
-        with self.assertRaises(OperationConflictError):
+
+    def test_quest_reward_arguments_are_not_caller_controlled(self) -> None:
+        parameters = inspect.signature(WorldState.complete_quest).parameters
+        self.assertNotIn("money", parameters)
+        self.assertNotIn("xp", parameters)
+        self.assertNotIn("reputation", parameters)
+        self.complete_prerequisites("MQ011")
+        with self.assertRaises(TypeError):
             self.world.complete_quest(
                 "acct-1",
                 "MQ011",
                 money=5000,
-                xp=100,
-                reputation=5,
-                operation_id="q-conflict",
+                operation_id="caller-controlled-reward",
             )
-        character = self.world.characters["char-1"]
-        self.assertEqual((character.money, character.xp, character.reputation), (500, 100, 5))
 
     def test_same_quest_with_new_operation_does_not_double_reward(self) -> None:
         self.complete_prerequisites("MQ011")
-        self.world.complete_quest(
-            "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
-        )
-        receipt = self.world.complete_quest(
-            "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-2"
-        )
+        character = self.world.characters["char-1"]
+        before = (character.money, character.xp, character.reputation)
+        self.world.complete_quest("acct-1", "MQ011", operation_id="q-1")
+        after_first = (character.money, character.xp, character.reputation)
+        receipt = self.world.complete_quest("acct-1", "MQ011", operation_id="q-2")
+        after_second = (character.money, character.xp, character.reputation)
         self.assertEqual(receipt["money"], 0)
-        self.assertEqual(self.world.characters["char-1"].money, 500)
+        self.assertEqual(after_first, after_second)
+        self.assertEqual(
+            tuple(after_value - before_value for after_value, before_value in zip(after_first, before)),
+            (210, 105, 1),
+        )
 
     def test_garage_17_quest_side_effects_are_idempotent(self) -> None:
         character = self.world.characters["char-1"]
@@ -341,7 +345,7 @@ class WorldStateTests(unittest.TestCase):
     def test_operation_id_cannot_cross_mutation_types(self) -> None:
         self.complete_prerequisites("MQ011")
         self.world.complete_quest(
-            "acct-1", "MQ011", money=1, operation_id="cross-kind-op"
+            "acct-1", "MQ011", operation_id="cross-kind-op"
         )
         with self.assertRaises(OperationConflictError):
             self.world.revise_build(

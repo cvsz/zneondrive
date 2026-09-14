@@ -318,7 +318,6 @@ class WorldState:
                 f"insufficient inventory for rebuild: {','.join(missing_parts)}"
             )
 
-        # Validate every precondition before mutating inventory or build history.
         for part_id in added_parts:
             remaining = character.inventory.get(part_id, 0) - 1
             if remaining:
@@ -337,21 +336,24 @@ class WorldState:
         account_id: str,
         quest_id: str,
         *,
-        money: int = 0,
-        xp: int = 0,
-        reputation: int = 0,
         operation_id: str,
     ) -> dict[str, int | str]:
+        """Complete a quest using server-derived rewards only.
+
+        The reference oracle intentionally accepts no caller-supplied reward amounts.
+        Reward values mirror the Go/PostgreSQL authority so parity tests can detect
+        semantic drift without granting Python production authority.
+        """
         quest_number = parse_quest_id(quest_id)
+        money = 100 + quest_number * 10
+        xp = 50 + quest_number * 5
+        reputation = 1
         replayed, replay_or_fingerprint = self._replay_operation(
             operation_id,
             "complete_quest",
             {
                 "account_id": account_id,
                 "quest_id": quest_id,
-                "money": money,
-                "xp": xp,
-                "reputation": reputation,
             },
         )
         if replayed:
@@ -365,8 +367,6 @@ class WorldState:
         if quest_id in character.completed_quests:
             receipt = {"quest_id": quest_id, "money": 0, "xp": 0, "reputation": 0}
             return self._record_operation(operation_id, replay_or_fingerprint, receipt)
-        if min(money, xp, reputation) < 0:
-            raise DomainError("quest rewards cannot be negative")
 
         blueprint_id = QUEST_BLUEPRINT_GRANTS.get(quest_id)
         if blueprint_id and blueprint_id not in character.blueprints:
