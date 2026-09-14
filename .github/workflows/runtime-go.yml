@@ -82,17 +82,54 @@ jobs:
           TEST_REDIS_ADDR: 127.0.0.1:6379
         run: go test -tags=integration ./...
 
-      - name: Least-privilege PostgreSQL exporter integration
+      - name: Bounded pg_stat_statements exporter integration
         shell: bash
         run: |
           set -euo pipefail
           monitor_password='zneondrive-monitor-test'
-          docker run --rm -i --network host \
-            -e PGPASSWORD='zneondrive-test' \
+          query_marker='zneondrive-sensitive-query-marker-v3.4'
+          network="zneondrive-observability-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          pg_name="zneondrive-stat-pg-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          exporter_name="zneondrive-stat-exporter-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          docker network create "$network" >/dev/null
+          cleanup() {
+            docker rm -f "$exporter_name" "$pg_name" >/dev/null 2>&1 || true
+            docker network rm "$network" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          docker run -d --name "$pg_name" --network "$network" \
+            -e POSTGRES_DB='zneondrive_stat_test' \
+            -e POSTGRES_USER='zneondrive' \
+            -e POSTGRES_PASSWORD='zneondrive-test' \
             postgres:17-alpine \
-            psql -v ON_ERROR_STOP=1 \
-              -h 127.0.0.1 -U zneondrive -d zneondrive_test \
-              -v monitor_password="$monitor_password" <<'SQL'
+            postgres \
+              -c shared_preload_libraries=pg_stat_statements \
+              -c compute_query_id=on \
+              -c pg_stat_statements.max=500 \
+              -c pg_stat_statements.track=top >/dev/null
+
+          ready=0
+          for _ in $(seq 1 30); do
+            if docker exec "$pg_name" pg_isready -U zneondrive -d zneondrive_stat_test >/dev/null 2>&1; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo 'isolated PostgreSQL for statement metrics never became ready'
+            docker logs "$pg_name" || true
+            exit 1
+          fi
+
+          docker exec -i \
+            -e PGPASSWORD='zneondrive-test' \
+            "$pg_name" \
+            psql -v ON_ERROR_STOP=1 -U zneondrive -d zneondrive_stat_test \
+              -v monitor_password="$monitor_password" \
+              -v query_marker="$query_marker" <<'SQL'
+          CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
           DO $$
           BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'zneondrive_monitor') THEN
@@ -103,39 +140,62 @@ jobs:
           ALTER ROLE zneondrive_monitor NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
           ALTER ROLE zneondrive_monitor PASSWORD :'monitor_password';
           GRANT pg_monitor TO zneondrive_monitor;
+          CREATE TABLE IF NOT EXISTS statement_probe (id integer PRIMARY KEY, value text NOT NULL);
+          INSERT INTO statement_probe (id, value) VALUES (1, :'query_marker') ON CONFLICT (id) DO UPDATE SET value = EXCLUDED.value;
+          SELECT value FROM statement_probe WHERE id = 1;
+          SELECT count(*) FROM statement_probe;
           SQL
 
-          role_privileges_ok=$(docker run --rm --network host \
-            -e PGPASSWORD='zneondrive-test' \
-            postgres:17-alpine \
-            psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
+          preload=$(docker exec -e PGPASSWORD='zneondrive-test' "$pg_name" \
+            psql -At -U zneondrive -d zneondrive_stat_test \
+              -c "SHOW shared_preload_libraries")
+          if [ "$preload" != 'pg_stat_statements' ]; then
+            echo "unexpected shared_preload_libraries: $preload"
+            exit 1
+          fi
+          max_statements=$(docker exec -e PGPASSWORD='zneondrive-test' "$pg_name" \
+            psql -At -U zneondrive -d zneondrive_stat_test \
+              -c "SHOW pg_stat_statements.max")
+          if [ "$max_statements" != '500' ]; then
+            echo "unexpected pg_stat_statements.max: $max_statements"
+            exit 1
+          fi
+          role_privileges_ok=$(docker exec -e PGPASSWORD='zneondrive-test' "$pg_name" \
+            psql -At -U zneondrive -d zneondrive_stat_test \
               -c "SELECT (NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls)::text FROM pg_roles WHERE rolname='zneondrive_monitor'")
           if [ "$role_privileges_ok" != 'true' ]; then
             echo "unexpected monitoring privilege assertion: $role_privileges_ok"
             exit 1
           fi
-
-          membership=$(docker run --rm --network host \
-            -e PGPASSWORD='zneondrive-test' \
-            postgres:17-alpine \
-            psql -At -h 127.0.0.1 -U zneondrive -d zneondrive_test \
+          membership=$(docker exec -e PGPASSWORD='zneondrive-test' "$pg_name" \
+            psql -At -U zneondrive -d zneondrive_stat_test \
               -c "SELECT pg_has_role('zneondrive_monitor', 'pg_monitor', 'member')")
           if [ "$membership" != 't' ]; then
             echo "monitoring role is not a pg_monitor member: $membership"
             exit 1
           fi
+          statement_rows=$(docker exec -e PGPASSWORD="$monitor_password" "$pg_name" \
+            psql -At -U zneondrive_monitor -d zneondrive_stat_test \
+              -c "SELECT count(*) FROM pg_stat_statements")
+          if [ "$statement_rows" -lt 1 ]; then
+            echo 'pg_stat_statements did not retain any statements'
+            exit 1
+          fi
 
-          cid=$(docker run -d --network host \
-            -e DATA_SOURCE_URI='127.0.0.1:5432/zneondrive_test?sslmode=disable' \
+          docker run -d --name "$exporter_name" --network "$network" \
+            -p 127.0.0.1:19188:9187 \
+            -e DATA_SOURCE_URI="$pg_name:5432/zneondrive_stat_test?sslmode=disable" \
             -e DATA_SOURCE_USER='zneondrive_monitor' \
             -e DATA_SOURCE_PASS="$monitor_password" \
             -e PG_EXPORTER_COLLECTION_TIMEOUT=5s \
-            quay.io/prometheuscommunity/postgres-exporter:v0.19.1)
-          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+            quay.io/prometheuscommunity/postgres-exporter:v0.19.1 \
+              --collector.stat_statements \
+              --collector.stat_statements.limit=25 >/dev/null
+
           metrics_file=$(mktemp)
           ready=0
           for _ in $(seq 1 30); do
-            if curl --fail --silent --show-error http://127.0.0.1:9187/metrics >"$metrics_file"; then
+            if curl --fail --silent --show-error http://127.0.0.1:19188/metrics >"$metrics_file"; then
               ready=1
               break
             fi
@@ -143,17 +203,30 @@ jobs:
           done
           if [ "$ready" -ne 1 ]; then
             echo 'postgres exporter never became scrape-ready'
-            docker logs "$cid" 2>&1 | sed -E 's/(password|pass)=([^ ]+)/\1=[REDACTED]/gi' || true
+            docker logs "$exporter_name" 2>&1 | sed -E 's/(password|pass)=([^ ]+)/\1=[REDACTED]/gi' || true
             exit 1
           fi
           if ! grep -Eq '^pg_up(\{[^}]*\})? 1$' "$metrics_file"; then
             echo 'postgres exporter reported pg_up != 1'
             grep '^pg_up' "$metrics_file" || true
-            docker logs "$cid" 2>&1 | sed -E 's/(password|pass)=([^ ]+)/\1=[REDACTED]/gi' || true
+            docker logs "$exporter_name" 2>&1 | sed -E 's/(password|pass)=([^ ]+)/\1=[REDACTED]/gi' || true
             exit 1
           fi
           if ! grep -q '^pg_stat_database_' "$metrics_file"; then
             echo 'postgres exporter did not expose pg_stat_database metrics'
+            exit 1
+          fi
+          if ! grep -q '^pg_stat_statements_calls_total' "$metrics_file"; then
+            echo 'postgres exporter did not expose pg_stat_statements metrics'
+            exit 1
+          fi
+          statement_series=$(grep -c '^pg_stat_statements_calls_total' "$metrics_file" || true)
+          if [ "$statement_series" -gt 25 ]; then
+            echo "pg_stat_statements series exceeded configured per-scrape limit: $statement_series"
+            exit 1
+          fi
+          if grep -Fq "$query_marker" "$metrics_file"; then
+            echo 'exporter metrics leaked SQL/query text'
             exit 1
           fi
           if grep -Fq 'zneondrive-test' "$metrics_file" || grep -Fq "$monitor_password" "$metrics_file"; then
