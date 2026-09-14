@@ -81,6 +81,7 @@
 - [x] race-start reference parity v4.1 shared Python/Go Roadworthy/active-build binding evidence boundary
 - [x] race-operation replay reference parity v4.2 shared Python/Go payload-binding evidence boundary
 - [x] quest side-effects reference parity v4.3 shared Python/Go inventory/blueprint/Roadworthy evidence boundary
+- [x] rebuild-operation replay hardening v4.4 shared Python/Go owner/vehicle/revision/hash evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -156,7 +157,8 @@
 - [x] MQ004/MQ009 idempotent item grants
 - [x] MQ005 durable starter-rebuild blueprint unlock
 - [x] atomic inventory consume/return + immutable rebuild revision
-- [x] build operation replay bound to exact validation hash
+- [x] build operation replay bound to authoritative owner + vehicle + expected/result revision + exact validation hash
+- [x] shared Python/Go rebuild operation-id replay owner/vehicle/revision/hash parity vectors
 - [x] reconnect persistence for inventory/blueprints/rebuild state
 - [x] Unreal snapshot source parses inventory/blueprints
 - [x] PostgreSQL race instance/checkpoint/result persistence
@@ -299,6 +301,7 @@
 - [x] shared Python/Go race checkpoint/finish lifecycle-order parity evidence
 - [x] shared Python/Go race-start eligibility/build-binding parity evidence
 - [x] shared Python/Go race operation-id replay payload-binding parity evidence
+- [x] shared Python/Go rebuild operation-id replay owner/vehicle/revision/hash payload-binding parity evidence
 - [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
 - [x] shared Python/Go MQ reward schedule parity evidence

@@ -352,12 +352,21 @@ func (p *Postgres) ReviseBuild(ctx context.Context, tokenHash, vehicleID string,
 		return core.Snapshot{}, fmt.Errorf("authorize build mutation: %w", err)
 	}
 
-	var existingVehicle, existingHash string
+	var existingOwner, existingVehicle, existingHash string
 	var existingRevision int
-	err = tx.QueryRow(ctx, "SELECT vehicle_id,revision,validation_hash FROM vehicle_builds WHERE operation_id=$1", operationID).
-		Scan(&existingVehicle, &existingRevision, &existingHash)
+	err = tx.QueryRow(ctx, `
+		SELECT v.owner_character_id, vb.vehicle_id, vb.revision, vb.validation_hash
+		FROM vehicle_builds vb
+		JOIN vehicles v ON v.id=vb.vehicle_id
+		WHERE vb.operation_id=$1
+	`, operationID).Scan(&existingOwner, &existingVehicle, &existingRevision, &existingHash)
 	if err == nil {
-		if existingVehicle != vehicleID || existingHash != buildHash {
+		if !core.ValidateBuildOperationReplay(core.BuildOperationReplay{
+			OwnerCharacterID: existingOwner,
+			VehicleID: existingVehicle,
+			ResultRevision: existingRevision,
+			ValidationHash: existingHash,
+		}, characterID, vehicleID, expectedRevision, buildHash) {
 			return core.Snapshot{}, ErrOperationKey
 		}
 		if err := tx.Commit(ctx); err != nil {
