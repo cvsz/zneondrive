@@ -69,7 +69,7 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 			"run", "-d", "--name", sentinel, "--network", network,
 			"-p", fmt.Sprintf("127.0.0.1:%d:6379", sentinelPorts[i]),
 			"redis:8-alpine", "sh", "-c",
-			fmt.Sprintf("printf '%%s' %q > /tmp/sentinel.conf && exec redis-server /tmp/sentinel.conf --sentinel", config),
+			fmt.Sprintf("printf '%%b' %q > /tmp/sentinel.conf && exec redis-server /tmp/sentinel.conf --sentinel", config),
 		)
 		waitRedisContainerReady(t, sentinel)
 	}
