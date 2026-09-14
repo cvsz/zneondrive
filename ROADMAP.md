@@ -87,6 +87,7 @@
 - [x] Add authority-side displacement envelope telemetry with durable-bind baseline reset and static placement validation
 - [x] Add authority-side rotation envelope telemetry with wrap-safe yaw delta, durable-bind baseline reset and static placement validation
 - [x] Add isolated PostgreSQL 17 pg_dump/pg_restore CI restore drill with representative durable-state assertions
+- [x] Add PostgreSQL 17 physical-standby promotion CI evidence after WAL catch-up without promoting production HA/DR status
 - [ ] Implement relationship/faction-state runtime
 - [x] Add Go unit tests
 - [x] Add PostgreSQL integration test suite
@@ -128,6 +129,7 @@
 - [x] Unreal displacement-envelope telemetry v2.2 source/static-validation evidence/non-claim contract
 - [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence/non-claim contract
 - [x] UE 5.8 retained build-evidence workflow contract
+- [x] PostgreSQL physical-standby promotion recovery v4.7 CI evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -136,7 +138,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, automatic/fenced PostgreSQL failover, Redis failover, production RPO/RTO, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -185,6 +187,9 @@
 - [ ] PostgreSQL query-level/external exporter metrics completed
 - [ ] Unreal replication-rate/bytes, live race-validation, final-physics correction and deployed scrape evidence
 - [x] Integrated trust-boundary abuse-path baseline exercised against PostgreSQL + Redis
+- [x] Isolated PostgreSQL 17 physical-standby promotion evidence after WAL catch-up
+- [ ] Automatic/fenced PostgreSQL failover and interrupted-transaction safety evidence
+- [ ] Redis failover evidence
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
 - [ ] Incident/rollback exercise passed
