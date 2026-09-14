@@ -1,0 +1,20 @@
+{
+  "checkpoint_cases": [
+    {"name":"first checkpoint accepted","state":"active","next_checkpoint":0,"last_elapsed_ms":0,"checkpoint_index":0,"elapsed_ms":1000,"valid":true},
+    {"name":"next checkpoint accepted","state":"active","next_checkpoint":2,"last_elapsed_ms":2500,"checkpoint_index":2,"elapsed_ms":3000,"valid":true},
+    {"name":"wrong cursor rejected","state":"active","next_checkpoint":1,"last_elapsed_ms":1000,"checkpoint_index":2,"elapsed_ms":2000,"valid":false},
+    {"name":"elapsed regression rejected","state":"active","next_checkpoint":1,"last_elapsed_ms":1000,"checkpoint_index":1,"elapsed_ms":1000,"valid":false},
+    {"name":"finished instance rejected","state":"finished","next_checkpoint":1,"last_elapsed_ms":1000,"checkpoint_index":1,"elapsed_ms":2000,"valid":false},
+    {"name":"negative checkpoint rejected","state":"active","next_checkpoint":0,"last_elapsed_ms":0,"checkpoint_index":-1,"elapsed_ms":1000,"valid":false},
+    {"name":"checkpoint over bound rejected","state":"active","next_checkpoint":1025,"last_elapsed_ms":1000,"checkpoint_index":1025,"elapsed_ms":2000,"valid":false},
+    {"name":"nonpositive elapsed rejected","state":"active","next_checkpoint":0,"last_elapsed_ms":0,"checkpoint_index":0,"elapsed_ms":0,"valid":false},
+    {"name":"checkpoint elapsed over 24h rejected","state":"active","next_checkpoint":0,"last_elapsed_ms":0,"checkpoint_index":0,"elapsed_ms":86400001,"valid":false}
+  ],
+  "finish_cases": [
+    {"name":"finish accepted after checkpoints","state":"active","next_checkpoint":3,"last_elapsed_ms":9000,"checkpoint_count":3,"finish_elapsed_ms":10000,"valid":true},
+    {"name":"zero checkpoints rejected","state":"active","next_checkpoint":0,"last_elapsed_ms":0,"checkpoint_count":0,"finish_elapsed_ms":1000,"valid":false},
+    {"name":"count mismatch rejected","state":"active","next_checkpoint":3,"last_elapsed_ms":9000,"checkpoint_count":2,"finish_elapsed_ms":10000,"valid":false},
+    {"name":"finish elapsed regression rejected","state":"active","next_checkpoint":3,"last_elapsed_ms":9000,"checkpoint_count":3,"finish_elapsed_ms":9000,"valid":false},
+    {"name":"finished instance cannot finish twice","state":"finished","next_checkpoint":3,"last_elapsed_ms":9000,"checkpoint_count":3,"finish_elapsed_ms":10000,"valid":false}
+  ]
+}
