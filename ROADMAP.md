@@ -79,6 +79,7 @@
 - [x] Add integrated PostgreSQL + Redis trust-boundary abuse-path evidence
 - [x] Add Redis 8 explicit replica-promotion limiter continuity CI evidence
 - [x] Add Redis 8 Sentinel quorum master-discovery/promotion CI evidence for limiter coordination
+- [x] Add Redis 8 Sentinel old-primary rejoin evidence proving the returned node is reconfigured as a read-only replica of the promoted authority
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
 - [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
@@ -136,6 +137,7 @@
 - [x] PostgreSQL transaction-boundary failover recovery v4.9 CI evidence/non-claim contract
 - [x] Redis explicit replica-promotion recovery v5.0 CI evidence/non-claim contract
 - [x] Redis Sentinel master-discovery failover v5.1 CI evidence/non-claim contract
+- [x] Redis Sentinel old-primary rejoin/read-only fencing v5.2 CI evidence/non-claim contract
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
@@ -144,7 +146,7 @@
 - [x] README 1280×640 banner asset
 - [x] documentation completeness + relative-link CI validator
 
-> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, automatic/fenced PostgreSQL failover, Redis split-brain fencing/old-primary rejoin/Cluster/deployment HA, production RPO/RTO, production restore/DR, or production deployment.
+> Documentation readiness does not close runtime evidence gates such as successful real UE 5.8 Client/Server build/package, live Unreal↔Go E2E, deployed ingress correctness, live physics-derived anti-cheat validation, deployment-scale load/soak, deployed SLO measurement, query-level/external PostgreSQL exporter coverage, live Unreal replication-byte/rate and race-validation observability, automatic/fenced PostgreSQL failover, Redis asymmetric-partition split-brain prevention/Cluster/deployment HA, production RPO/RTO, production restore/DR, or production deployment.
 
 ## Phase 5 — Multiplayer alpha
 - [ ] Multi-player district instance/shard
@@ -198,7 +200,8 @@
 - [ ] Automatic/fenced PostgreSQL failover and split-brain prevention evidence
 - [x] Redis 8 explicit replica-promotion limiter continuity evidence
 - [x] Redis 8 Sentinel quorum automatic master-discovery/promotion limiter continuity evidence
-- [ ] Redis split-brain fencing/old-primary rejoin/Cluster/deployment-HA evidence
+- [x] Redis 8 Sentinel old-primary rejoin evidence: returned node becomes a connected read-only replica of the promoted authority and application discovery remains on the promoted master
+- [ ] Redis asymmetric-partition split-brain prevention/Cluster/deployment-HA evidence
 - [ ] SLOs/observability measured in deployed environment
 - [x] Incident/rollback runbook baseline documented
 - [ ] Incident/rollback exercise passed
