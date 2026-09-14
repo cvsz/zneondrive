@@ -13,9 +13,11 @@ import (
 )
 
 type fakeStore struct {
-	accountID  string
-	tokenHash  string
-	ticketHash string
+	accountID        string
+	tokenHash        string
+	ticketHash       string
+	characterID      string
+	questOperationID string
 }
 
 func (f *fakeStore) Ping(context.Context) error { return nil }
@@ -39,7 +41,11 @@ func (f *fakeStore) CreateSession(_ context.Context, accountID, tokenHash string
 }
 
 func (f *fakeStore) SnapshotBySession(_ context.Context, tokenHash string) (core.Snapshot, error) {
-	return core.Snapshot{AccountID: f.accountID, CharacterID: "char_test", VehicleID: "veh_test"}, nil
+	characterID := f.characterID
+	if characterID == "" {
+		characterID = "char_test"
+	}
+	return core.Snapshot{AccountID: f.accountID, CharacterID: characterID, VehicleID: "veh_test"}, nil
 }
 
 func (f *fakeStore) IssueGameTicket(_ context.Context, _ string, ticketHash string, _ time.Time) error {
@@ -51,7 +57,8 @@ func (f *fakeStore) RedeemGameTicket(_ context.Context, ticketHash string) (core
 	return core.Snapshot{AccountID: f.accountID, CharacterID: "char_test", VehicleID: "veh_test", ActiveBuildRevision: 1}, nil
 }
 
-func (f *fakeStore) CompleteQuest(context.Context, string, string, string) (core.Snapshot, core.RewardReceipt, error) {
+func (f *fakeStore) CompleteQuest(_ context.Context, _ string, _ string, operationID string) (core.Snapshot, core.RewardReceipt, error) {
+	f.questOperationID = operationID
 	return core.Snapshot{}, core.RewardReceipt{}, nil
 }
 
@@ -111,6 +118,30 @@ func TestStateRejectsMissingBearer(t *testing.T) {
 	handler.ServeHTTP(rec, req)
 	if rec.Code != http.StatusUnauthorized {
 		t.Fatalf("expected 401, got %d", rec.Code)
+	}
+}
+
+func TestQuestOperationIDIsScopedToAuthoritativeCharacter(t *testing.T) {
+	s := &fakeStore{accountID: "acct_test", characterID: "char_test"}
+	handler := New(s, "test-game-server-key-32-characters-minimum")
+	req := httptest.NewRequest(http.MethodPost, "/v1/quests/MQ001/complete", strings.NewReader(`{"operation_id":"client-op-1"}`))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer session-token")
+	rec := httptest.NewRecorder()
+
+	handler.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", rec.Code, rec.Body.String())
+	}
+	expected, ok := core.ScopeQuestOperationID("char_test", "client-op-1")
+	if !ok {
+		t.Fatal("expected valid scoped operation id")
+	}
+	if s.questOperationID != expected {
+		t.Fatalf("store received %q, expected %q", s.questOperationID, expected)
+	}
+	if s.questOperationID == "client-op-1" {
+		t.Fatal("raw caller operation id must not be used as durable quest operation key")
 	}
 }
 

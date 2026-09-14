@@ -185,7 +185,18 @@ func (a *API) completeQuest(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid_operation")
 		return
 	}
-	snapshot, receipt, err := a.store.CompleteQuest(r.Context(), core.HashSecret(token), questID, strings.TrimSpace(req.OperationID))
+	tokenHash := core.HashSecret(token)
+	authoritativeSnapshot, err := a.store.SnapshotBySession(r.Context(), tokenHash)
+	if err != nil {
+		writeStoreError(w, err)
+		return
+	}
+	scopedOperationID, ok := core.ScopeQuestOperationID(authoritativeSnapshot.CharacterID, req.OperationID)
+	if !ok {
+		writeError(w, http.StatusConflict, "operation_id_conflict")
+		return
+	}
+	snapshot, receipt, err := a.store.CompleteQuest(r.Context(), tokenHash, questID, scopedOperationID)
 	if err != nil {
 		writeStoreError(w, err)
 		return
