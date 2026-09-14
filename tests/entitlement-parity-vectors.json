@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "garage_capacity_cases": [
+    {"name": "free_first_vehicle", "current_vehicles": 0, "garage_slots": 1, "grant_allowed": true},
+    {"name": "free_second_vehicle_rejected", "current_vehicles": 1, "garage_slots": 1, "grant_allowed": false},
+    {"name": "vip_capacity_available", "current_vehicles": 2, "garage_slots": 3, "grant_allowed": true},
+    {"name": "vip_capacity_exhausted", "current_vehicles": 3, "garage_slots": 3, "grant_allowed": false}
+  ],
+  "routine_delete_cases": [
+    {"name": "starter_lineage_protected", "starter_lineage": true, "delete_allowed": false},
+    {"name": "non_starter_vehicle_deletable", "starter_lineage": false, "delete_allowed": true}
+  ]
+}
