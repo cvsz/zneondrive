@@ -1,6 +1,16 @@
 services:
   postgres:
     image: postgres:17-alpine
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - compute_query_id=on
+      - -c
+      - pg_stat_statements.max=500
+      - -c
+      - pg_stat_statements.track=top
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-zneondrive}
       POSTGRES_USER: ${POSTGRES_USER:-zneondrive}
@@ -19,6 +29,9 @@ services:
 
   postgres-exporter:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.19.1
+    command:
+      - --collector.stat_statements
+      - --collector.stat_statements.limit=25
     environment:
       DATA_SOURCE_URI: postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable
       DATA_SOURCE_USER: ${POSTGRES_EXPORTER_USER:-zneondrive_monitor}
