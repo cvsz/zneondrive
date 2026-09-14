@@ -243,7 +243,7 @@
 - [x] Unreal dedicated-server aggregate tick/session/input/ticket telemetry source baseline
 - [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [x] Unreal source-level authority displacement-envelope telemetry baseline
-- [x] Unreal source-level authority rotation-envelope telemetry source baseline
+- [x] Unreal source-level authority rotation-envelope telemetry baseline
 - [ ] Unreal replication-rate/bytes and deployed scrape/dashboard evidence
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
