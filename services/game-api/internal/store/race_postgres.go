@@ -151,8 +151,11 @@ func (p *Postgres) RecordRaceCheckpoint(ctx context.Context, raceInstanceID stri
 		}
 		return core.RaceInstance{}, fmt.Errorf("lock race instance: %w", err)
 	}
-	if instance.State != "active" || checkpointIndex != instance.NextCheckpoint || elapsedMS <= instance.LastElapsedMS {
-		return core.RaceInstance{}, ErrRaceOrder
+	if err = core.ValidateRaceCheckpointAdvance(instance, checkpointIndex, elapsedMS); err != nil {
+		if errors.Is(err, core.ErrRaceOrder) {
+			return core.RaceInstance{}, ErrRaceOrder
+		}
+		return core.RaceInstance{}, err
 	}
 	if _, err = tx.Exec(ctx, `
 		INSERT INTO race_checkpoints(race_instance_id,checkpoint_index,elapsed_ms,operation_id)
@@ -213,8 +216,11 @@ func (p *Postgres) FinishRace(ctx context.Context, raceInstanceID string, checkp
 		}
 		return core.RaceResult{}, fmt.Errorf("lock race finish: %w", err)
 	}
-	if instance.State != "active" || checkpointCount != instance.NextCheckpoint || checkpointCount < 1 || finishElapsedMS <= instance.LastElapsedMS {
-		return core.RaceResult{}, ErrRaceOrder
+	if err = core.ValidateRaceFinish(instance, checkpointCount, finishElapsedMS); err != nil {
+		if errors.Is(err, core.ErrRaceOrder) {
+			return core.RaceResult{}, ErrRaceOrder
+		}
+		return core.RaceResult{}, err
 	}
 	resultHash, err := core.RaceResultHash(instance, checkpointCount, finishElapsedMS)
 	if err != nil {
