@@ -4,7 +4,6 @@ package store
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -139,6 +138,4 @@ func TestPostgresServiceRestartReconnectRecovery(t *testing.T) {
 	if !mq002Receipt.Applied || afterMQ002.Money <= replayed.Money {
 		t.Fatalf("post-restart mutation did not advance authoritative state: replayed=%+v after=%+v receipt=%+v", replayed, afterMQ002, mq002Receipt)
 	}
-
-	_ = fmt.Sprintf("%s/%s", resumed.AccountID, resumed.CharacterID) // keep the evidence deliberately identity-local without logging secrets
 }
