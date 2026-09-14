@@ -21,10 +21,17 @@ func main() {
 	listenAddr := env("LISTEN_ADDR", ":8080")
 	metricsListenAddr := strings.TrimSpace(os.Getenv("METRICS_LISTEN_ADDR"))
 	redisAddr := strings.TrimSpace(os.Getenv("REDIS_ADDR"))
+	redisSentinelAddrsRaw := strings.TrimSpace(os.Getenv("REDIS_SENTINEL_ADDRS"))
+	redisSentinelMaster := strings.TrimSpace(os.Getenv("REDIS_SENTINEL_MASTER"))
 	trustedProxyCIDRs := strings.TrimSpace(os.Getenv("TRUSTED_PROXY_CIDRS"))
 	gameServerKey := strings.TrimSpace(os.Getenv("GAME_SERVER_SHARED_KEY"))
 	if len(gameServerKey) < 32 {
 		log.Fatal("GAME_SERVER_SHARED_KEY must be configured with at least 32 characters")
+	}
+
+	redisSentinelAddrs := splitCSV(redisSentinelAddrsRaw)
+	if (len(redisSentinelAddrs) == 0) != (redisSentinelMaster == "") {
+		log.Fatal("REDIS_SENTINEL_ADDRS and REDIS_SENTINEL_MASTER must be configured together")
 	}
 
 	proxyPolicy, err := httpapi.ParseTrustedProxyCIDRs(trustedProxyCIDRs)
@@ -53,16 +60,21 @@ func main() {
 	apiHandler := httpapi.New(db, gameServerKey)
 	telemetryHandler := httpapi.NewSecurityTelemetryHandler(apiHandler)
 	rateLimitedHandler := httpapi.NewRateLimitedHandlerWithTrustedProxies(telemetryHandler, proxyPolicy)
-	if redisAddr != "" {
+	if len(redisSentinelAddrs) > 0 {
+		rateLimitedHandler = httpapi.NewSentinelDistributedRateLimitedHandlerWithTrustedProxies(telemetryHandler, redisSentinelAddrs, redisSentinelMaster, proxyPolicy)
+		log.Printf("distributed rate limiting enabled via Redis Sentinel master discovery")
+	} else if redisAddr != "" {
 		rateLimitedHandler = httpapi.NewDistributedRateLimitedHandlerWithTrustedProxies(telemetryHandler, redisAddr, proxyPolicy)
-		log.Printf("distributed rate limiting enabled via Redis")
+		log.Printf("distributed rate limiting enabled via direct Redis endpoint")
 	} else {
-		log.Printf("WARN: REDIS_ADDR is not configured; rate limiting is process-local only")
+		log.Printf("WARN: Redis is not configured; rate limiting is process-local only")
 	}
 
 	metrics := httpapi.NewHTTPMetrics(db)
 	if redisAddr != "" {
 		metrics.SetRedisServerStatsProvider(httpapi.NewRedisServerStatsProvider(redisAddr))
+	} else if len(redisSentinelAddrs) > 0 {
+		log.Printf("Redis server INFO metrics require a direct REDIS_ADDR; Sentinel-backed limiter telemetry remains available")
 	}
 	observedHandler := metrics.Wrap(rateLimitedHandler)
 	server := &http.Server{
@@ -116,6 +128,16 @@ func main() {
 			log.Printf("metrics graceful shutdown failed: %v", err)
 		}
 	}
+}
+
+func splitCSV(raw string) []string {
+	var values []string
+	for _, value := range strings.Split(raw, ",") {
+		if value = strings.TrimSpace(value); value != "" {
+			values = append(values, value)
+		}
+	}
+	return values
 }
 
 func env(name, fallback string) string {

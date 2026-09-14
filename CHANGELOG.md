@@ -5,6 +5,7 @@ All notable changes to zNeonDrive are documented here.
 ## [Unreleased]
 
 ### Added
+- Runtime Redis Sentinel Failover Evidence v5.1 adds Redis 8 primary/replica plus three-Sentinel quorum CI evidence that the Go distributed limiter can resolve the active primary through Sentinel, preserve an exhausted replicated abuse budget across automatic replica promotion without application endpoint reconfiguration, and continue canonical refill semantics while keeping split-brain fencing/old-primary rejoin, Redis Cluster, deployment-scale load/soak, production RPO/RTO, live Unreal recovery, and production HA/DR open
 - Runtime Redis Promotion Recovery Evidence v5.0 adds isolated Redis 8 primary/replica CI evidence that an exhausted distributed limiter bucket is replicated, survives an explicit primary stop plus `REPLICAOF NO ONE` promotion, remains rejected on the promoted Redis, and resumes canonical refill semantics while keeping automatic failover/Sentinel-or-Cluster orchestration, fencing/split-brain prevention, deployment-scale load/soak, production RPO/RTO, live Unreal recovery, and production HA/DR open
 - Runtime PostgreSQL Transaction-Boundary Failover Evidence v4.9 adds deterministic PostgreSQL 17 physical-standby CI evidence that killing the primary while MQ001 is paused after its completion-row insert but before commit exposes no partial completion/reward after promotion; retrying the same authoritative character-scoped operation on the promoted primary applies exactly once and subsequent replay remains idempotent, while automatic failover/fencing, synchronous zero-RPO durability, Redis failover, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR remain open
 - Runtime Quest Store Replay Binding v4.8 makes PostgreSQL quest replay acceptance revalidate both the authenticated authoritative character and canonical quest ID for an existing durable operation ID, with integration evidence that cross-character reuse is rejected without mutating progression while exact same-character replay remains idempotent; live Unreal, HA/DR, load/soak, anti-cheat calibration, and production-readiness gates remain open
@@ -135,7 +136,7 @@ All notable changes to zNeonDrive are documented here.
 - Short Redis metrics dial/I/O deadlines plus unit and loopback RESP coverage for successful and failed probes
 - Runtime PostgreSQL Server Observability v1.7 source/integration evidence documentation
 - Bounded current-database `pg_stat_database` metrics for backends, transactions, block reads/cache hits, tuple activity, deadlocks, temporary files/bytes, and database size
-- Fixed-enum PostgreSQL metric labels with no database name, SQL text, query fingerprint, relation, connection URL, credential, player/race identifier, or raw query error exposure
+- Fixed-enum PostgreSQL metric labels with no database name, SQL text, query fingerprint, relation, connection URL, credential, player/race identifier, peer address, or raw query error exposure
 - PostgreSQL 17 integration evidence requiring a live backend count, positive database size, and non-negative cumulative counters
 - Runtime Integrated Trust-Boundary Evidence v1.8 documentation
 - PostgreSQL + Redis integration coverage proving direct clients cannot evade rate limits by rotating forwarding headers
@@ -183,6 +184,7 @@ All notable changes to zNeonDrive are documented here.
 - Documentation completeness and relative-link validator
 
 ### Changed
+- Redis recovery evidence governance now records v5.1 as Sentinel-backed automatic master discovery/promotion CI evidence for ephemeral limiter coordination while keeping split-brain fencing, old-primary rejoin safety, Redis Cluster/deployment HA, production RPO/RTO, load/soak, live Unreal recovery, and production readiness open
 - Redis recovery evidence governance now records v5.0 as explicit replica-promotion CI evidence for ephemeral limiter coordination while keeping automatic Redis failover orchestration, fencing/split-brain prevention, production HA, deployment-scale load/soak, RPO/RTO, and live Unreal recovery open
 - Recovery evidence governance now records v4.9 as isolated transaction-boundary PostgreSQL promotion CI evidence while explicitly keeping automatic failover/fencing, synchronous zero-RPO durability, Redis failover, node rescheduling, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR gates open
 - Recovery evidence governance now records v4.7 as isolated PostgreSQL physical-standby promotion CI evidence while explicitly keeping automatic failover/fencing, interrupted-transaction safety, Redis failover, node rescheduling, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR gates open
@@ -242,6 +244,7 @@ All notable changes to zNeonDrive are documented here.
 - Rate-limit state has bounded local cardinality with stale/oldest eviction to resist attacker-controlled memory growth
 - Redis coordinates shared token-bucket state across API instances using atomic Lua decisions and expiring keys
 - Redis failure retains the bounded process-local limiter and emits a fallback security event
+- Redis Sentinel discovery uses operator-configured endpoints/master names only; incomplete Sentinel configuration fails startup, discovery affects only ephemeral limiter coordination, and Sentinel/Redis outage retains the bounded local fallback
 - Forwarded client identity is ignored unless the immediate socket peer is explicitly trusted
 - Trusted `X-Forwarded-For` chains are evaluated from right to left so client-supplied left-most spoof values do not override the first untrusted hop
 - Malformed forwarding chains fail closed to the socket peer and log no supplied header value
@@ -266,7 +269,7 @@ All notable changes to zNeonDrive are documented here.
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Service-process restart/reconnect recovery reads authoritative state back from PostgreSQL using hashed credentials and does not promote Redis or client assertions to durable recovery authority; node/database/Redis failover safety remains unproven
 - PostgreSQL physical-standby promotion evidence uses an isolated CI-only replication trust rule and still reads authoritative state from PostgreSQL after promotion; v4.9 additionally kills the primary while MQ001 is uncommitted and proves the promoted authority exposes no partial reward/completion before exactly-once retry; automatic failover/fencing, synchronous zero-RPO durability, Redis failover, production RPO/RTO, regional DR, and live Unreal recovery remain unproven
-- Redis replica-promotion evidence covers only expiring limiter coordination state after the old primary is stopped; automatic failover/Sentinel-or-Cluster orchestration, old-primary fencing, replication-loss bounds, deployment-scale load/soak, and production Redis HA remain unproven
+- Redis replica-promotion + Sentinel evidence covers expiring limiter coordination state and automatic Sentinel master rediscovery after old-primary stop; old-primary fencing/rejoin safety, Redis Cluster, replication-loss bounds, deployment-scale load/soak, and production Redis HA remain unproven
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
