@@ -46,5 +46,87 @@
     {"name": "index_overflow", "index": 1025, "elapsed_ms": 1, "valid": false},
     {"name": "zero_elapsed", "index": 0, "elapsed_ms": 0, "valid": false},
     {"name": "elapsed_overflow", "index": 0, "elapsed_ms": 86400001, "valid": false}
+  ],
+  "race_result_hash_cases": [
+    {
+      "name": "canonical_result",
+      "instance": {
+        "race_instance_id": "raceinst_001",
+        "race_id": "race_garage17_001",
+        "account_id": "acct_001",
+        "character_id": "char_001",
+        "vehicle_id": "veh_001",
+        "build_revision": 7,
+        "build_validation_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+      },
+      "checkpoint_count": 3,
+      "finish_elapsed_ms": 45123,
+      "valid": true,
+      "expected_hash": "5d87d0e3dfae491e8cd27c12f594059362f80aa9ac505a7e4a513ec0ef575723"
+    },
+    {
+      "name": "maximum_checkpoint_count",
+      "instance": {
+        "race_instance_id": "raceinst_001",
+        "race_id": "race_garage17_001",
+        "account_id": "acct_001",
+        "character_id": "char_001",
+        "vehicle_id": "veh_001",
+        "build_revision": 7,
+        "build_validation_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+      },
+      "checkpoint_count": 1025,
+      "finish_elapsed_ms": 86400000,
+      "valid": true,
+      "expected_hash": "25199f41f49c8b056fe3697a8a7ec6be66e353565f09dad5fe27f390d1a04d3c"
+    },
+    {
+      "name": "zero_checkpoint_count",
+      "instance": {
+        "race_instance_id": "raceinst_001",
+        "race_id": "race_garage17_001",
+        "account_id": "acct_001",
+        "character_id": "char_001",
+        "vehicle_id": "veh_001",
+        "build_revision": 7,
+        "build_validation_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+      },
+      "checkpoint_count": 0,
+      "finish_elapsed_ms": 45123,
+      "valid": false,
+      "expected_hash": null
+    },
+    {
+      "name": "checkpoint_count_overflow",
+      "instance": {
+        "race_instance_id": "raceinst_001",
+        "race_id": "race_garage17_001",
+        "account_id": "acct_001",
+        "character_id": "char_001",
+        "vehicle_id": "veh_001",
+        "build_revision": 7,
+        "build_validation_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+      },
+      "checkpoint_count": 1026,
+      "finish_elapsed_ms": 45123,
+      "valid": false,
+      "expected_hash": null
+    },
+    {
+      "name": "zero_finish_elapsed",
+      "instance": {
+        "race_instance_id": "raceinst_001",
+        "race_id": "race_garage17_001",
+        "account_id": "acct_001",
+        "character_id": "char_001",
+        "vehicle_id": "veh_001",
+        "build_revision": 7,
+        "build_validation_hash": "1d43342b88e15f2168f6b745ebbd9efcd19cf42dd6857b7a0f39133c125c2920"
+      },
+      "checkpoint_count": 3,
+      "finish_elapsed_ms": 0,
+      "valid": false,
+      "expected_hash": null
+    }
   ]
 }
