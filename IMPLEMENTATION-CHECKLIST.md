@@ -85,6 +85,7 @@
 - [x] quest-operation scope hardening v4.5 authoritative character-scoped durable idempotency evidence boundary
 - [x] service-process restart/reconnect recovery v4.6 PostgreSQL-backed CI evidence boundary (node/HA/DR remain open)
 - [x] PostgreSQL physical-standby promotion recovery v4.7 CI evidence boundary (automatic failover/fencing/RPO/RTO/DR remain open)
+- [x] quest store replay binding v4.8 authoritative character + quest durable replay evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -115,6 +116,7 @@
 - [x] durable starter vehicle + immutable revisions
 - [x] idempotent quest/build operations
 - [x] quest operation durable keys are scoped to authoritative character identity before PostgreSQL persistence
+- [x] PostgreSQL quest replay lookup revalidates authoritative character + quest binding before accepting idempotent replay
 - [x] MQ001–MQ100 prerequisite enforcement
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity vectors
 - [x] shared Python/Go MQ reward schedule parity vectors
@@ -307,6 +309,7 @@
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] PostgreSQL-backed Go service-process restart/reconnect recovery CI evidence
 - [x] Isolated PostgreSQL 17 physical-standby promotion recovery CI evidence
+- [x] PostgreSQL quest replay authoritative-character binding integration evidence
 - [x] shared Python/Go deterministic race-result hash parity evidence
 - [x] shared Python/Go race checkpoint/finish lifecycle-order parity evidence
 - [x] shared Python/Go race-start eligibility/build-binding parity evidence
