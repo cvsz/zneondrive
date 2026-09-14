@@ -59,6 +59,9 @@ def main() -> None:
     require(docs_index, "runtime-reference-quest-reward-authority-v3.9.md", "docs index quest reward authority v3.9")
     require(changelog, "Runtime Reference Quest Reward Authority v3.9", "CHANGELOG quest reward authority v3.9")
     require(checklist, "quest-reward authority reference v3.9", "checklist quest reward authority v3.9")
+    require(docs_index, "runtime-reference-race-lifecycle-parity-v4.0.md", "docs index race lifecycle parity v4.0")
+    require(changelog, "Runtime Reference Race Lifecycle Parity v4.0", "CHANGELOG race lifecycle parity v4.0")
+    require(checklist, "race-lifecycle reference parity v4.0", "checklist race lifecycle parity v4.0")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
 
     require(docs_index, "runtime-postgres-statements-v3.4.md", "docs index PostgreSQL statement metrics v3.4")
