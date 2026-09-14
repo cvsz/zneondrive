@@ -1,0 +1,21 @@
+{
+  "start_cases": [
+    {"name":"same start payload","existing":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"race_neon_sprint"},"request":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":" race_neon_sprint "},"matches":true},
+    {"name":"different account","existing":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"race_neon_sprint"},"request":{"account_id":"acct_2","vehicle_id":"veh_1","race_id":"race_neon_sprint"},"matches":false},
+    {"name":"different vehicle","existing":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"race_neon_sprint"},"request":{"account_id":"acct_1","vehicle_id":"veh_2","race_id":"race_neon_sprint"},"matches":false},
+    {"name":"different race","existing":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"race_neon_sprint"},"request":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"race_night_run"},"matches":false},
+    {"name":"invalid replay race id","existing":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"race_neon_sprint"},"request":{"account_id":"acct_1","vehicle_id":"veh_1","race_id":"RACE_NEON_SPRINT"},"matches":false}
+  ],
+  "checkpoint_cases": [
+    {"name":"same checkpoint payload","existing":{"race_instance_id":"raceinst_1","checkpoint_index":3,"elapsed_ms":12000},"request":{"race_instance_id":"raceinst_1","checkpoint_index":3,"elapsed_ms":12000},"matches":true},
+    {"name":"different race instance","existing":{"race_instance_id":"raceinst_1","checkpoint_index":3,"elapsed_ms":12000},"request":{"race_instance_id":"raceinst_2","checkpoint_index":3,"elapsed_ms":12000},"matches":false},
+    {"name":"different checkpoint index","existing":{"race_instance_id":"raceinst_1","checkpoint_index":3,"elapsed_ms":12000},"request":{"race_instance_id":"raceinst_1","checkpoint_index":4,"elapsed_ms":12000},"matches":false},
+    {"name":"different checkpoint elapsed","existing":{"race_instance_id":"raceinst_1","checkpoint_index":3,"elapsed_ms":12000},"request":{"race_instance_id":"raceinst_1","checkpoint_index":3,"elapsed_ms":12001},"matches":false}
+  ],
+  "finish_cases": [
+    {"name":"same finish payload","existing":{"race_instance_id":"raceinst_1","checkpoint_count":5,"finish_elapsed_ms":45000},"request":{"race_instance_id":"raceinst_1","checkpoint_count":5,"finish_elapsed_ms":45000},"matches":true},
+    {"name":"different finish race instance","existing":{"race_instance_id":"raceinst_1","checkpoint_count":5,"finish_elapsed_ms":45000},"request":{"race_instance_id":"raceinst_2","checkpoint_count":5,"finish_elapsed_ms":45000},"matches":false},
+    {"name":"different finish checkpoint count","existing":{"race_instance_id":"raceinst_1","checkpoint_count":5,"finish_elapsed_ms":45000},"request":{"race_instance_id":"raceinst_1","checkpoint_count":4,"finish_elapsed_ms":45000},"matches":false},
+    {"name":"different finish elapsed","existing":{"race_instance_id":"raceinst_1","checkpoint_count":5,"finish_elapsed_ms":45000},"request":{"race_instance_id":"raceinst_1","checkpoint_count":5,"finish_elapsed_ms":45001},"matches":false}
+  ]
+}
