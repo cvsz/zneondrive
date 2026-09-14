@@ -5,6 +5,7 @@ All notable changes to zNeonDrive are documented here.
 ## [Unreleased]
 
 ### Added
+- Runtime Reference Race Lifecycle Parity v4.0 centralizes authoritative checkpoint/finish ordering predicates in the Go core, makes the PostgreSQL race store call those validators, and adds shared Python/Go vectors for active-state, exact checkpoint cursor, monotonic elapsed-time, checkpoint bounds, exact finish count, and post-finish rejection while keeping live packaged Unreal race and full reference-oracle parity gates open
 - Runtime Reference Quest Reward Authority v3.9 removes caller-controlled `money`/`xp`/`reputation` parameters from Python `WorldState.complete_quest()`, derives the canonical MQ reward schedule inside the reference authority, and adds executable regression coverage for reward injection rejection and idempotent grants while keeping Go/PostgreSQL as production reward authority
 - Runtime Reference Quest Reward Parity v3.8 shared Python/Go MQ reward vectors pin the existing server-derived reward schedule without promoting live Unreal or full reference-oracle parity gates
 - Runtime Reference Quest Sequence Parity v3.7 shared Python/Go vectors and executable Python reference enforcement for canonical MQ001–MQ100 identifiers plus immediate-prerequisite sequencing, while keeping full reference-oracle parity and live Unreal gates open
@@ -62,7 +63,7 @@ All notable changes to zNeonDrive are documented here.
 - Runtime Integration v0.5 trust-boundary specification
 - Unreal GameInstance service subsystem for bootstrap/resume/state/quest/build flows
 - One-time 60-second gameplay ticket issue/redeem protocol
-- Server-only shared-key internal ticket redemption endpoint
+- Server-only shared-key internal redemption endpoint
 - Atomic single-use gameplay-ticket persistence and migration
 - Dedicated-server PlayerController ticket redemption and authority-only durable pawn binding
 - Replicated durable VehicleID, build revision, active parts, Roadworthy, and binding state
@@ -198,7 +199,7 @@ All notable changes to zNeonDrive are documented here.
 - Advanced the Unreal observability source baseline to v2.1 with authority movement, durable-identity gate, collision-block and explicit net-update activity counters while keeping NetDriver packet/byte metrics, live race-validation/final-physics correction telemetry, successful real UE 5.8 build/package evidence and production gates open
 - Advanced the Unreal integrity source baseline to v2.2 with server-side impossible-displacement envelope telemetry while keeping live UE 5.8 calibration, acceleration/teleport envelopes for final physics, sanctions/ranked anti-cheat, build/package evidence and production gates open
 - Advanced the Unreal integrity source baseline to v2.3 with a wrap-safe server-side impossible-rotation envelope while keeping real UE 5.8 runtime calibration, final-physics angular/acceleration envelopes, sanctions/ranked anti-cheat, build/package evidence and production gates open
-- Extended post-baseline reference parity through v3.9 with shared build/quest/race-input/race-result vectors, fixture integrity, payload-bound idempotency, Garage 17 rebuild semantics, deterministic build-bound final-result hashing, entitlement capacity/starter-lineage deletion invariants, canonical MQ001–MQ100 identifier/immediate-prerequisite sequencing, server-derived quest reward parity, and removal of caller-controlled reward amounts from the Python quest-completion oracle while keeping full reference-oracle parity, live Unreal race transport, real UE build/package, and production gates open
+- Extended post-baseline reference parity through v4.0 with shared build/quest/race-input/race-result vectors, fixture integrity, payload-bound idempotency, Garage 17 rebuild semantics, deterministic build-bound final-result hashing, entitlement capacity/starter-lineage deletion invariants, canonical MQ001–MQ100 identifier/immediate-prerequisite sequencing, server-derived quest reward parity, removal of caller-controlled reward amounts from the Python quest-completion oracle, and shared checkpoint/finish lifecycle-order acceptance vectors while keeping full reference-oracle parity, live Unreal race transport, real UE build/package, and production gates open
 - Advanced PostgreSQL observability through v3.1-v3.4 with bounded query-activity metrics, a least-privilege external exporter, and bounded query-text-free `pg_stat_statements` CI evidence while keeping production secret-manager delivery/rotation, deployed scrape/dashboard/SLO evidence, long-retention cardinality behavior, load/soak, HA/DR, and production gates open
 - Linux Unreal build/package Make targets now accept both UE 5.8 source trees and installed builds; successful Client/Server compilation and packaged Unreal↔Go evidence remain open gates
 - Reworked the manual Unreal workflow into a retained build-evidence path for real Client/Server compilation while keeping successful build and package/cook gates explicitly open until an actual self-hosted run passes
