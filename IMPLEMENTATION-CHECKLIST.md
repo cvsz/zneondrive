@@ -86,6 +86,7 @@
 - [x] service-process restart/reconnect recovery v4.6 PostgreSQL-backed CI evidence boundary (node/HA/DR remain open)
 - [x] PostgreSQL physical-standby promotion recovery v4.7 CI evidence boundary (automatic failover/fencing/RPO/RTO/DR remain open)
 - [x] quest store replay binding v4.8 authoritative character + quest durable replay evidence boundary
+- [x] PostgreSQL transaction-boundary failover recovery v4.9 CI evidence boundary (automatic failover/fencing/zero-RPO/RPO-RTO/DR remain open)
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -157,6 +158,7 @@
 - [x] HTTP/PostgreSQL reconnect + ticket E2E
 - [x] PostgreSQL-backed Go service-process restart/reconnect preserves durable identity, progression and quest replay semantics
 - [x] PostgreSQL 17 physical standby promotion CI evidence preserves durable identity/progression + quest replay semantics after WAL catch-up
+- [x] PostgreSQL 17 transaction-boundary failover CI evidence proves uncommitted MQ001 completion/reward rollback and exactly-once retry after promotion
 - [x] Unreal session/resume subsystem source
 - [x] dedicated-server ticket redemption source
 - [x] authority-only durable VehicleID/build/parts/Roadworthy binding
@@ -281,6 +283,7 @@
 - [x] Representative durable-state + idempotency validation after restore
 - [x] Go service-process restart/reconnect CI evidence against PostgreSQL durable state
 - [x] Isolated PostgreSQL 17 physical-standby promotion + post-promotion quest replay CI evidence
+- [x] Isolated PostgreSQL 17 primary-loss-during-uncommitted-MQ001 + promoted retry CI evidence
 - [ ] Production backup verification / off-host retention evidence
 - [ ] Production restore drill against agreed deployment target
 - [ ] RPO/RTO accepted and demonstrated
@@ -309,6 +312,7 @@
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] PostgreSQL-backed Go service-process restart/reconnect recovery CI evidence
 - [x] Isolated PostgreSQL 17 physical-standby promotion recovery CI evidence
+- [x] Isolated PostgreSQL 17 transaction-boundary failover retry CI evidence
 - [x] PostgreSQL quest replay authoritative-character binding integration evidence
 - [x] shared Python/Go deterministic race-result hash parity evidence
 - [x] shared Python/Go race checkpoint/finish lifecycle-order parity evidence
