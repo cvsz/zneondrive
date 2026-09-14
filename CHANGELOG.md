@@ -5,6 +5,7 @@ All notable changes to zNeonDrive are documented here.
 ## [Unreleased]
 
 ### Added
+- Runtime Service Restart Recovery Evidence v4.6 adds PostgreSQL-backed CI evidence that a Go service-process restart can resume the same authoritative account/character/vehicle state, renew a session, reject duplicate quest reward replay, and continue sequential quest progression while keeping node failover, PostgreSQL/Redis HA, production RPO/RTO, regional DR, and live Unreal recovery open
 - Runtime Reference Quest Operation Scope v4.5 scopes player-facing quest durable operation keys to authoritative character identity plus the caller's opaque idempotency key, preserving replay across renewed sessions while preventing cross-character key collisions and keeping PostgreSQL as the durable quest/progression authority
 - Runtime Reference Build Operation Replay v4.4 binds Go/PostgreSQL rebuild operation replays to the authoritative character owner, original vehicle, expected/result revision pair, and canonical build validation hash, with shared Python/Go negative vectors for owner/vehicle/revision/hash drift while keeping full reference-oracle parity and live Unreal gates open
 - Runtime Reference Quest Side Effects Parity v4.3 adds shared Python/Go vectors for deterministic MQ004/MQ005/MQ009/MQ012 inventory, blueprint, and Roadworthy effects while keeping PostgreSQL/Go production authority, full reference-oracle parity, and live Unreal gates open
@@ -178,6 +179,7 @@ All notable changes to zNeonDrive are documented here.
 - Documentation completeness and relative-link validator
 
 ### Changed
+- Recovery evidence governance now records v4.6 as service-process restart/reconnect CI evidence only and explicitly keeps node rescheduling, database/Redis failover, production RPO/RTO, regional DR, and live Unreal recovery gates open
 - Threat-model status now distinguishes CI-exercised partial abuse evidence from deployed/live security verification; production security remains explicitly gated on live Unreal↔Go, deployed ingress, final-physics anti-cheat, privileged audit, load/soak, HA/DR and recovery evidence
 - Replaced generic template README, roadmap, architecture, and implementation checklist with zNeonDrive-specific material
 - Advanced Phase 3 vertical-slice specification to complete while keeping playable/runtime claims evidence-gated
@@ -254,6 +256,7 @@ All notable changes to zNeonDrive are documented here.
 - Unreal authority-activity, displacement-envelope and rotation-envelope telemetry observes server-side execution only; it cannot authorize gameplay, mutate durable state, weaken the durable-identity gate, accept client transforms, automatically sanction a player, or bypass server-only gameplay-ticket redemption
 - Metrics are served on a separate configurable listener; Compose publishes that listener to host loopback only by default
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
+- Service-process restart/reconnect recovery reads authoritative state back from PostgreSQL using hashed credentials and does not promote Redis or client assertions to durable recovery authority; node/database/Redis failover safety remains unproven
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key

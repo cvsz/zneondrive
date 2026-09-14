@@ -77,6 +77,11 @@ def main() -> None:
     require(docs_index, "runtime-reference-quest-operation-scope-v4.5.md", "docs index quest operation scope v4.5")
     require(changelog, "Runtime Reference Quest Operation Scope v4.5", "CHANGELOG quest operation scope v4.5")
     require(checklist, "quest-operation scope hardening v4.5", "checklist quest operation scope v4.5")
+    require(docs_index, "runtime-service-restart-recovery-v4.6.md", "docs index service restart recovery v4.6")
+    require(changelog, "Runtime Service Restart Recovery Evidence v4.6", "CHANGELOG service restart recovery v4.6")
+    require(checklist, "service-process restart/reconnect recovery v4.6", "checklist service restart recovery v4.6")
+    require(checklist, "[ ] process/node reconnect recovery", "node reconnect recovery remains open")
+    require(checklist, "[ ] duplicate-reward prevention under failover", "failover reward safety remains open")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
 
     require(docs_index, "runtime-postgres-statements-v3.4.md", "docs index PostgreSQL statement metrics v3.4")
