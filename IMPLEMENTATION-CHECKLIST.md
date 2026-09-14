@@ -260,3 +260,62 @@
 - [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [x] Unreal source-level authority displacement-envelope telemetry baseline
 - [x] Unreal source-level authority rotation-envelope telemetry source baseline
+- [ ] Unreal replication-rate/bytes and deployed scrape/dashboard evidence
+- [ ] Deployed metrics scrape/dashboard evidence
+- [ ] Load test executed against agreed deployment target
+- [ ] Long-duration soak test
+- [x] PostgreSQL 17 CI backup archive verification
+- [x] Isolated PostgreSQL CI restore drill
+- [x] Representative durable-state + idempotency validation after restore
+- [ ] Production backup verification / off-host retention evidence
+- [ ] Production restore drill against agreed deployment target
+- [ ] RPO/RTO accepted and demonstrated
+- [ ] process/node reconnect recovery
+- [ ] duplicate-reward prevention under failover
+- [ ] content rollback
+
+## Release evidence
+- [ ] Stack-specific Unreal + Go CI all green
+- [x] Go HTTP/PostgreSQL runtime integration/e2e
+- [x] Redis shared limiter integration evidence
+- [x] Trusted-ingress identity source unit evidence
+- [x] Concurrent two-replica HTTP/Redis limiter CI evidence
+- [x] Repeated two-replica Redis limiter stability CI evidence
+- [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
+- [x] Race-integrity/auth telemetry source + unit evidence
+- [x] Go HTTP metrics source + unit evidence
+- [x] PostgreSQL pool metrics source + unit evidence
+- [x] Redis server metrics source + unit evidence
+- [x] PostgreSQL server metrics source + PostgreSQL 17 integration evidence
+- [x] PostgreSQL statement metrics + external exporter PostgreSQL 17 CI evidence
+- [x] Unreal dedicated-server observability source/static-validation evidence
+- [x] Unreal authority activity observability source/static-validation evidence
+- [x] Unreal authority displacement-envelope source/static-validation evidence
+- [x] Unreal authority rotation-envelope source/static-validation evidence
+- [x] Isolated PostgreSQL 17 backup/restore CI evidence
+- [x] shared Python/Go deterministic race-result hash parity evidence
+- [x] shared Python/Go race checkpoint/finish lifecycle-order parity evidence
+- [x] shared Python/Go race-start eligibility/build-binding parity evidence
+- [x] shared Python/Go race operation-id replay payload-binding parity evidence
+- [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
+- [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
+- [x] shared Python/Go MQ reward schedule parity evidence
+- [x] Python reference quest completion rejects caller-controlled reward amounts
+- [x] UE source/installed-build tooling tests
+- [x] UE retained build-evidence workflow contract
+- [ ] Successful real UE 5.8 Client/Server build evidence
+- [ ] Successful real UE 5.8 Client/Server package/cook evidence
+- [ ] Deployed ingress trust-boundary evidence
+- [ ] Deployed metrics/SLO evidence
+- [ ] Live Unreal/Go packaged integration/e2e
+- [ ] Live Unreal/Go race lifecycle e2e
+- [ ] Security scans pass for complete runtime surface
+- [ ] Distributed abuse controls verified under deployment-scale multi-replica HTTP load
+- [ ] Performance budgets measured/passed
+- [ ] Accessibility review
+- [ ] Privacy/data-retention review
+- [ ] Production deployment evidence
+- [ ] Production DR evidence
+- [ ] Go/no-go approval
+
+Unchecked production claims must not be represented as complete without evidence.
