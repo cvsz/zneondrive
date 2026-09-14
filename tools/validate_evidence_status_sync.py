@@ -68,6 +68,9 @@ def main() -> None:
     require(docs_index, "runtime-reference-race-operation-parity-v4.2.md", "docs index race operation parity v4.2")
     require(changelog, "Runtime Reference Race Operation Parity v4.2", "CHANGELOG race operation parity v4.2")
     require(checklist, "race-operation replay reference parity v4.2", "checklist race operation parity v4.2")
+    require(docs_index, "runtime-reference-quest-side-effects-parity-v4.3.md", "docs index quest side effects parity v4.3")
+    require(changelog, "Runtime Reference Quest Side Effects Parity v4.3", "CHANGELOG quest side effects parity v4.3")
+    require(checklist, "quest side-effects reference parity v4.3", "checklist quest side effects parity v4.3")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
 
     require(docs_index, "runtime-postgres-statements-v3.4.md", "docs index PostgreSQL statement metrics v3.4")

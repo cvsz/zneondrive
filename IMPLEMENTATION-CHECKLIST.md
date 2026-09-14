@@ -80,6 +80,7 @@
 - [x] race-lifecycle reference parity v4.0 shared Python/Go checkpoint/finish-order evidence boundary
 - [x] race-start reference parity v4.1 shared Python/Go Roadworthy/active-build binding evidence boundary
 - [x] race-operation replay reference parity v4.2 shared Python/Go payload-binding evidence boundary
+- [x] quest side-effects reference parity v4.3 shared Python/Go inventory/blueprint/Roadworthy evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -112,6 +113,7 @@
 - [x] MQ001–MQ100 prerequisite enforcement
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity vectors
 - [x] shared Python/Go MQ reward schedule parity vectors
+- [x] shared Python/Go MQ004/MQ005/MQ009/MQ012 quest side-effect parity vectors
 - [x] Python reference quest completion derives rewards instead of accepting caller-controlled amounts
 - [x] MQ012 Roadworthy transition
 - [x] Go unit tests
@@ -300,6 +302,7 @@
 - [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
 - [x] shared Python/Go MQ reward schedule parity evidence
+- [x] shared Python/Go MQ004/MQ005/MQ009/MQ012 quest side-effect parity evidence
 - [x] Python reference quest completion rejects caller-controlled reward amounts
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract
