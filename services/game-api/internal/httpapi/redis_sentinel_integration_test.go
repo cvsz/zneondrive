@@ -80,6 +80,14 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 		waitRedisContainerReady(t, sentinel)
 	}
 
+	// Do not inject the primary fault until Sentinel has actually formed a
+	// failover-capable quorum and learned the replica. PING readiness alone only
+	// proves each Sentinel process is alive; it does not prove peer discovery.
+	for _, sentinel := range sentinels {
+		waitRedisSentinelQuorum(t, sentinel, masterName)
+		waitRedisSentinelReplica(t, sentinel, masterName, replicaIP)
+	}
+
 	sentinelAddrs := make([]string, 0, len(sentinelPorts))
 	for _, port := range sentinelPorts {
 		sentinelAddrs = append(sentinelAddrs, fmt.Sprintf("127.0.0.1:%d", port))
@@ -124,4 +132,20 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 	if ok, _, err := limiter.allow(ctx, key, policy, now.Add(policy.RefillEvery)); err != nil || !ok {
 		t.Fatalf("Sentinel-discovered promoted Redis must continue canonical refill semantics: ok=%v err=%v", ok, err)
 	}
+}
+
+func waitRedisSentinelQuorum(t *testing.T, sentinel, masterName string) {
+	t.Helper()
+	waitForRedisCondition(t, 30*time.Second, func() bool {
+		out, err := exec.Command("docker", "exec", sentinel, "redis-cli", "-p", "6379", "SENTINEL", "ckquorum", masterName).CombinedOutput()
+		return err == nil && strings.HasPrefix(strings.TrimSpace(string(out)), "OK")
+	}, fmt.Sprintf("%s never formed Sentinel quorum for %s", sentinel, masterName))
+}
+
+func waitRedisSentinelReplica(t *testing.T, sentinel, masterName, replicaIP string) {
+	t.Helper()
+	waitForRedisCondition(t, 30*time.Second, func() bool {
+		out, err := exec.Command("docker", "exec", sentinel, "redis-cli", "-p", "6379", "SENTINEL", "replicas", masterName).CombinedOutput()
+		return err == nil && strings.Contains(string(out), replicaIP)
+	}, fmt.Sprintf("%s never discovered Redis replica %s", sentinel, replicaIP))
 }
