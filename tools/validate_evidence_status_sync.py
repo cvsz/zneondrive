@@ -74,6 +74,9 @@ def main() -> None:
     require(docs_index, "runtime-reference-build-operation-replay-v4.4.md", "docs index build operation replay v4.4")
     require(changelog, "Runtime Reference Build Operation Replay v4.4", "CHANGELOG build operation replay v4.4")
     require(checklist, "rebuild-operation replay hardening v4.4", "checklist build operation replay v4.4")
+    require(docs_index, "runtime-reference-quest-operation-scope-v4.5.md", "docs index quest operation scope v4.5")
+    require(changelog, "Runtime Reference Quest Operation Scope v4.5", "CHANGELOG quest operation scope v4.5")
+    require(checklist, "quest-operation scope hardening v4.5", "checklist quest operation scope v4.5")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
 
     require(docs_index, "runtime-postgres-statements-v3.4.md", "docs index PostgreSQL statement metrics v3.4")
