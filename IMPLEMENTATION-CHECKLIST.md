@@ -78,6 +78,7 @@
 - [x] quest-reward reference parity v3.8 shared Python/Go evidence boundary
 - [x] quest-reward authority reference v3.9 caller-controlled reward removal evidence boundary
 - [x] race-lifecycle reference parity v4.0 shared Python/Go checkpoint/finish-order evidence boundary
+- [x] race-start reference parity v4.1 shared Python/Go Roadworthy/active-build binding evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -163,6 +164,7 @@
 - [x] deterministic final result hash bound to authoritative build evidence
 - [x] shared Python/Go parity vectors verify deterministic race-result hash contract
 - [x] shared Python/Go parity vectors verify checkpoint cursor, monotonic elapsed and finish-order contract
+- [x] shared Python/Go parity vectors verify race-start Roadworthy + active build revision/hash binding contract
 - [x] bounded per-process token-bucket limiter wrapped around service HTTP API
 - [x] limiter covers bootstrap/state/tickets/quests/builds/internal race mutations
 - [x] raw bearer/session credentials excluded from limiter keys
@@ -291,6 +293,7 @@
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] shared Python/Go deterministic race-result hash parity evidence
 - [x] shared Python/Go race checkpoint/finish lifecycle-order parity evidence
+- [x] shared Python/Go race-start eligibility/build-binding parity evidence
 - [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
 - [x] shared Python/Go MQ reward schedule parity evidence

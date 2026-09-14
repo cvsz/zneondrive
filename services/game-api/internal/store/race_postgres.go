@@ -75,8 +75,12 @@ func (p *Postgres) StartRace(ctx context.Context, accountID, vehicleID, raceID, 
 	if err != nil {
 		return core.RaceInstance{}, fmt.Errorf("bind race vehicle: %w", err)
 	}
-	if !roadworthy {
+	normalizedRaceID, err = core.ValidateRaceStartBinding(normalizedRaceID, roadworthy, buildRevision, buildHash)
+	if errors.Is(err, core.ErrRaceNotReady) {
 		return core.RaceInstance{}, ErrRaceNotReady
+	}
+	if err != nil {
+		return core.RaceInstance{}, err
 	}
 
 	raceInstanceID, err := core.NewID("raceinst")
