@@ -28,6 +28,7 @@
 - [x] vehicle ownership
 - [x] append-only build revisions
 - [x] quest reward idempotency
+- [x] MQ001–MQ100 ID + immediate-prerequisite sequence reference rule
 - [x] race/build binding reference rule
 - [x] ordered checkpoint reference rule
 - [x] VIP separation reference rule
@@ -70,6 +71,8 @@
 - [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence boundary
 - [x] PostgreSQL statement metrics v3.4 source/integration evidence boundary
 - [x] race-result hash reference parity v3.5 shared Python/Go evidence boundary
+- [x] entitlement fairness reference parity v3.6 shared Python/Go evidence boundary
+- [x] quest-sequence reference parity v3.7 shared Python/Go evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -100,6 +103,7 @@
 - [x] durable starter vehicle + immutable revisions
 - [x] idempotent quest/build operations
 - [x] MQ001–MQ100 prerequisite enforcement
+- [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity vectors
 - [x] MQ012 Roadworthy transition
 - [x] Go unit tests
 - [x] PostgreSQL integration tests
@@ -243,7 +247,7 @@
 - [x] Unreal dedicated-server aggregate tick/session/input/ticket telemetry source baseline
 - [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [x] Unreal source-level authority displacement-envelope telemetry baseline
-- [x] Unreal source-level authority rotation-envelope telemetry baseline
+- [x] Unreal source-level authority rotation-envelope telemetry source baseline
 - [ ] Unreal replication-rate/bytes and deployed scrape/dashboard evidence
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
@@ -278,6 +282,8 @@
 - [x] Unreal authority rotation-envelope source/static-validation evidence
 - [x] Isolated PostgreSQL 17 backup/restore CI evidence
 - [x] shared Python/Go deterministic race-result hash parity evidence
+- [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
+- [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract
 - [ ] Successful real UE 5.8 Client/Server build evidence
