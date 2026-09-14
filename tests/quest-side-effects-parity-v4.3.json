@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "quest_id": "MQ001",
+      "inventory_item_id": "",
+      "inventory_quantity": 0,
+      "blueprint_id": "",
+      "mark_starter_roadworthy": false
+    },
+    {
+      "quest_id": "MQ004",
+      "inventory_item_id": "part_brakes_track_i",
+      "inventory_quantity": 1,
+      "blueprint_id": "",
+      "mark_starter_roadworthy": false
+    },
+    {
+      "quest_id": "MQ005",
+      "inventory_item_id": "",
+      "inventory_quantity": 0,
+      "blueprint_id": "bp_starter_rebuild",
+      "mark_starter_roadworthy": false
+    },
+    {
+      "quest_id": "MQ009",
+      "inventory_item_id": "part_tires_street_i",
+      "inventory_quantity": 1,
+      "blueprint_id": "",
+      "mark_starter_roadworthy": false
+    },
+    {
+      "quest_id": "MQ012",
+      "inventory_item_id": "",
+      "inventory_quantity": 0,
+      "blueprint_id": "",
+      "mark_starter_roadworthy": true
+    },
+    {
+      "quest_id": "MQ100",
+      "inventory_item_id": "",
+      "inventory_quantity": 0,
+      "blueprint_id": "",
+      "mark_starter_roadworthy": false
+    }
+  ],
+  "invalid_quest_ids": ["", "MQ000", "MQ101", "mq004", "MQ4", "SIDE004"]
+}
