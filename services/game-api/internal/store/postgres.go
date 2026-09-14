@@ -208,10 +208,10 @@ func (p *Postgres) CompleteQuest(ctx context.Context, tokenHash, questID, operat
 		return core.Snapshot{}, core.RewardReceipt{}, fmt.Errorf("authorize quest mutation: %w", err)
 	}
 
-	var existingQuest string
-	err = tx.QueryRow(ctx, "SELECT quest_id FROM quest_completions WHERE operation_id=$1", operationID).Scan(&existingQuest)
+	var existingCharacter, existingQuest string
+	err = tx.QueryRow(ctx, "SELECT character_id, quest_id FROM quest_completions WHERE operation_id=$1", operationID).Scan(&existingCharacter, &existingQuest)
 	if err == nil {
-		if existingQuest != questID {
+		if existingCharacter != characterID || existingQuest != questID {
 			return core.Snapshot{}, core.RewardReceipt{}, ErrOperationKey
 		}
 		if err := tx.Commit(ctx); err != nil {

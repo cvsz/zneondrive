@@ -5,6 +5,7 @@ All notable changes to zNeonDrive are documented here.
 ## [Unreleased]
 
 ### Added
+- Runtime Quest Store Replay Binding v4.8 makes PostgreSQL quest replay acceptance revalidate both the authenticated authoritative character and canonical quest ID for an existing durable operation ID, with integration evidence that cross-character reuse is rejected without mutating progression while exact same-character replay remains idempotent; live Unreal, HA/DR, load/soak, anti-cheat calibration, and production-readiness gates remain open
 - Runtime PostgreSQL Promotion Recovery Evidence v4.7 adds isolated PostgreSQL 17 physical-streaming-standby CI evidence that WAL-caught-up durable identity/progression and character-scoped quest idempotency survive an explicit primary stop and standby promotion, while automatic failover/fencing, interrupted-transaction safety, Redis failover, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR remain open
 - Runtime Service Restart Recovery Evidence v4.6 adds PostgreSQL-backed CI evidence that a Go service-process restart can resume the same authoritative account/character/vehicle state, renew a session, reject duplicate quest reward replay, and continue sequential quest progression while keeping node failover, PostgreSQL/Redis HA, production RPO/RTO, regional DR, and live Unreal recovery open
 - Runtime Reference Quest Operation Scope v4.5 scopes player-facing quest durable operation keys to authoritative character identity plus the caller's opaque idempotency key, preserving replay across renewed sessions while preventing cross-character key collisions and keeping PostgreSQL as the durable quest/progression authority
@@ -228,6 +229,7 @@ All notable changes to zNeonDrive are documented here.
 - Inventory consumption/returns and build revision activation commit atomically
 - Replayed build operation IDs must match the authoritative character owner, original vehicle, expected/result revision pair, and build validation hash
 - Player-facing quest operation IDs are transformed into durable keys scoped to the authenticated authoritative character before PostgreSQL persistence, preventing cross-character operation-key collision while preserving same-character replay across renewed sessions
+- PostgreSQL quest operation replay additionally revalidates the persisted character and quest binding before accepting a durable operation ID as an idempotent replay
 - Race lifecycle writes are internal-only, dedicated-server authenticated, and derive build identity from PostgreSQL rather than client input
 - Race checkpoints reject skipped/out-of-order indices and elapsed-time regression before durable acceptance
 - Final race result hashes bind the exact accepted build revision/hash and authoritative checkpoint cursor
