@@ -5,6 +5,7 @@ All notable changes to zNeonDrive are documented here.
 ## [Unreleased]
 
 ### Added
+- Runtime Redis Promotion Recovery Evidence v5.0 adds isolated Redis 8 primary/replica CI evidence that an exhausted distributed limiter bucket is replicated, survives an explicit primary stop plus `REPLICAOF NO ONE` promotion, remains rejected on the promoted Redis, and resumes canonical refill semantics while keeping automatic failover/Sentinel-or-Cluster orchestration, fencing/split-brain prevention, deployment-scale load/soak, production RPO/RTO, live Unreal recovery, and production HA/DR open
 - Runtime PostgreSQL Transaction-Boundary Failover Evidence v4.9 adds deterministic PostgreSQL 17 physical-standby CI evidence that killing the primary while MQ001 is paused after its completion-row insert but before commit exposes no partial completion/reward after promotion; retrying the same authoritative character-scoped operation on the promoted primary applies exactly once and subsequent replay remains idempotent, while automatic failover/fencing, synchronous zero-RPO durability, Redis failover, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR remain open
 - Runtime Quest Store Replay Binding v4.8 makes PostgreSQL quest replay acceptance revalidate both the authenticated authoritative character and canonical quest ID for an existing durable operation ID, with integration evidence that cross-character reuse is rejected without mutating progression while exact same-character replay remains idempotent; live Unreal, HA/DR, load/soak, anti-cheat calibration, and production-readiness gates remain open
 - Runtime PostgreSQL Promotion Recovery Evidence v4.7 adds isolated PostgreSQL 17 physical-streaming-standby CI evidence that WAL-caught-up durable identity/progression and character-scoped quest idempotency survive an explicit primary stop and standby promotion, while automatic failover/fencing, interrupted-transaction safety, Redis failover, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR remain open
@@ -145,7 +146,7 @@ All notable changes to zNeonDrive are documented here.
 - Per-round assertions requiring exactly one shared 16-request Redis budget plus 48 HTTP 429 responses with `Retry-After`, preventing intermittent per-process burst multiplication from passing unnoticed
 - Runtime Unreal Dedicated-Server Observability v2.0 source/static-validation documentation
 - Bounded Unreal server aggregate telemetry for active sessions, joins/leaves, tick timing, authoritative input clamps, and gameplay-ticket redemption outcomes
-- Static CI validator requiring the Unreal telemetry hooks and rejecting string/dynamic identifiers or credential/endpoint reads in the aggregate telemetry contract
+- Static CI validator requiring the new counters to remain paired with actual authority-side gate, `Hit.bBlockingHit`, and `ForceNetUpdate()` source hooks while retaining numeric-only secret-safe telemetry
 - Runtime Unreal Authority Activity Observability v2.1 source/static-validation documentation
 - Bounded Unreal authority activity counters for post-identity movement ticks, durable-identity gate blocks, authoritative swept-movement collision blocks, and explicit durable-binding `ForceNetUpdate()` requests
 - Static validation requiring the new counters to remain paired with actual authority-side gate, `Hit.bBlockingHit`, and `ForceNetUpdate()` source hooks while retaining numeric-only secret-safe telemetry
@@ -182,6 +183,7 @@ All notable changes to zNeonDrive are documented here.
 - Documentation completeness and relative-link validator
 
 ### Changed
+- Redis recovery evidence governance now records v5.0 as explicit replica-promotion CI evidence for ephemeral limiter coordination while keeping automatic Redis failover orchestration, fencing/split-brain prevention, production HA, deployment-scale load/soak, RPO/RTO, and live Unreal recovery open
 - Recovery evidence governance now records v4.9 as isolated transaction-boundary PostgreSQL promotion CI evidence while explicitly keeping automatic failover/fencing, synchronous zero-RPO durability, Redis failover, node rescheduling, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR gates open
 - Recovery evidence governance now records v4.7 as isolated PostgreSQL physical-standby promotion CI evidence while explicitly keeping automatic failover/fencing, interrupted-transaction safety, Redis failover, node rescheduling, production RPO/RTO, regional DR, live Unreal recovery, and production HA/DR gates open
 - Recovery evidence governance records v4.6 as service-process restart/reconnect CI evidence only and explicitly keeps node rescheduling, database/Redis failover, production RPO/RTO, regional DR, and live Unreal recovery gates open
@@ -264,6 +266,7 @@ All notable changes to zNeonDrive are documented here.
 - Restore verification runs only against isolated throwaway PostgreSQL databases and does not promote Redis to durable authority
 - Service-process restart/reconnect recovery reads authoritative state back from PostgreSQL using hashed credentials and does not promote Redis or client assertions to durable recovery authority; node/database/Redis failover safety remains unproven
 - PostgreSQL physical-standby promotion evidence uses an isolated CI-only replication trust rule and still reads authoritative state from PostgreSQL after promotion; v4.9 additionally kills the primary while MQ001 is uncommitted and proves the promoted authority exposes no partial reward/completion before exactly-once retry; automatic failover/fencing, synchronous zero-RPO durability, Redis failover, production RPO/RTO, regional DR, and live Unreal recovery remain unproven
+- Redis replica-promotion evidence covers only expiring limiter coordination state after the old primary is stopped; automatic failover/Sentinel-or-Cluster orchestration, old-primary fencing, replication-loss bounds, deployment-scale load/soak, and production Redis HA remain unproven
 - Unreal build-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/build metadata and target checksums
 - Unreal package-evidence collection excludes runtime credentials and data-plane connection URLs; it captures only repository/runner/engine/package metadata, file manifests, sizes, logs, and checksums
 - Health probes bypass player mutation limits; internal routes still require the dedicated-server shared key
