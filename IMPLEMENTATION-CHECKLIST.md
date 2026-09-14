@@ -68,6 +68,7 @@
 - [x] Unreal authority activity observability v2.1 source/static-validation evidence boundary
 - [x] Unreal displacement-envelope telemetry v2.2 source/static-validation evidence boundary
 - [x] Unreal rotation-envelope telemetry v2.3 source/static-validation evidence boundary
+- [x] PostgreSQL statement metrics v3.4 source/integration evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -169,7 +170,7 @@
 - [ ] long-duration soak evidence
 - [x] PostgreSQL pool connection/acquire metrics source + unit evidence
 - [x] PostgreSQL current-database server metrics source + integration evidence
-- [ ] PostgreSQL query-level/external exporter metrics
+- [x] PostgreSQL query-level/external exporter metrics source + PostgreSQL 17 CI evidence (deployment verification still open)
 - [x] Redis server metrics source + unit evidence
 - [x] Unreal server tick/session/input-clamp/ticket-redemption aggregate telemetry source + static validation
 - [x] Unreal authority movement/identity-gate/collision/net-update aggregate telemetry source + static validation
@@ -235,12 +236,12 @@
 - [x] PostgreSQL pool connection/acquire metrics source/unit baseline
 - [x] Redis server metrics source/unit baseline
 - [x] PostgreSQL current-database server metrics source/integration baseline
+- [x] PostgreSQL query-level/external exporter metrics source + PostgreSQL 17 CI evidence
 - [x] Repeated two-replica Redis limiter CI stability evidence
 - [x] Unreal dedicated-server aggregate tick/session/input/ticket telemetry source baseline
 - [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [x] Unreal source-level authority displacement-envelope telemetry baseline
 - [x] Unreal source-level authority rotation-envelope telemetry baseline
-- [ ] PostgreSQL query-level/external exporter metrics
 - [ ] Unreal replication-rate/bytes and deployed scrape/dashboard evidence
 - [ ] Deployed metrics scrape/dashboard evidence
 - [ ] Load test executed against agreed deployment target
@@ -268,6 +269,7 @@
 - [x] PostgreSQL pool metrics source + unit evidence
 - [x] Redis server metrics source + unit evidence
 - [x] PostgreSQL server metrics source + PostgreSQL 17 integration evidence
+- [x] PostgreSQL statement metrics + external exporter PostgreSQL 17 CI evidence
 - [x] Unreal dedicated-server observability source/static-validation evidence
 - [x] Unreal authority activity observability source/static-validation evidence
 - [x] Unreal authority displacement-envelope source/static-validation evidence
