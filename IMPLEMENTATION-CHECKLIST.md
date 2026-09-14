@@ -88,6 +88,7 @@
 - [x] quest store replay binding v4.8 authoritative character + quest durable replay evidence boundary
 - [x] PostgreSQL transaction-boundary failover recovery v4.9 CI evidence boundary (automatic failover/fencing/zero-RPO/RPO-RTO/DR remain open)
 - [x] Redis replica-promotion limiter recovery v5.0 CI evidence boundary (automatic failover/Sentinel/Cluster/fencing/production HA remain open)
+- [x] Redis Sentinel master-discovery failover v5.1 CI evidence boundary (fencing/Cluster/deployment HA remain open)
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -132,6 +133,7 @@
 - [x] repeated two-replica HTTP stability test across 12 fresh client budgets / 768 requests
 - [x] integrated PostgreSQL + Redis trust-boundary abuse-path test
 - [x] Redis 8 replica-promotion integration evidence preserves exhausted limiter budget and refill semantics after explicit promotion
+- [x] Redis 8 Sentinel integration evidence automatically rediscovers promoted limiter authority without application endpoint reconfiguration
 - [x] credential-safe race-integrity/auth rejection telemetry middleware
 - [x] bounded HTTP request/status-class/latency/in-flight metrics
 - [x] separate metrics listener with loopback-only Compose publication
@@ -252,6 +254,7 @@
 - [x] Repeated multi-replica Redis limiter stability CI evidence
 - [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
 - [x] Redis explicit replica-promotion limiter continuity CI evidence
+- [x] Redis Sentinel automatic master-discovery failover continuity CI evidence
 - [x] Dedicated-server auth rejection telemetry/correlation baseline
 - [x] Authoritative race rejection telemetry baseline
 - [x] Unreal authoritative input-clamp aggregate telemetry source baseline
@@ -274,6 +277,7 @@
 - [x] PostgreSQL query-level/external exporter metrics source + PostgreSQL 17 CI evidence
 - [x] Repeated two-replica Redis limiter CI stability evidence
 - [x] Redis 8 explicit replica-promotion limiter continuity CI evidence
+- [x] Redis 8 Sentinel automatic master-discovery failover continuity CI evidence
 - [x] Unreal dedicated-server aggregate tick/session/input/ticket telemetry source baseline
 - [x] Unreal authority movement/gating/collision/net-update telemetry source baseline
 - [x] Unreal source-level authority displacement-envelope telemetry baseline
@@ -288,7 +292,8 @@
 - [x] Go service-process restart/reconnect CI evidence against PostgreSQL durable state
 - [x] Isolated PostgreSQL 17 physical-standby promotion + post-promotion quest replay CI evidence
 - [x] Isolated PostgreSQL 17 primary-loss-during-uncommitted-MQ001 + promoted retry CI evidence
-- [ ] Automatic Redis failover/Sentinel-or-Cluster orchestration and fencing evidence
+- [x] Redis Sentinel automatic primary discovery/promotion CI evidence for limiter coordination
+- [ ] Redis split-brain fencing/old-primary rejoin/Cluster/deployment-HA evidence
 - [ ] Production backup verification / off-host retention evidence
 - [ ] Production restore drill against agreed deployment target
 - [ ] RPO/RTO accepted and demonstrated
@@ -305,6 +310,7 @@
 - [x] Repeated two-replica Redis limiter stability CI evidence
 - [x] Integrated PostgreSQL + Redis trust-boundary abuse-path CI evidence
 - [x] Redis 8 explicit replica-promotion limiter continuity CI evidence
+- [x] Redis 8 Sentinel automatic master-discovery failover continuity CI evidence
 - [x] Race-integrity/auth telemetry source + unit evidence
 - [x] Go HTTP metrics source + unit evidence
 - [x] PostgreSQL pool metrics source + unit evidence
