@@ -45,7 +45,7 @@ func (p *Postgres) StartRace(ctx context.Context, accountID, vehicleID, raceID, 
 		&existing.NextCheckpoint, &existing.LastElapsedMS,
 	)
 	if err == nil {
-		if existing.AccountID != accountID || existing.VehicleID != vehicleID || existing.RaceID != normalizedRaceID {
+		if !core.RaceStartReplayMatches(existing, accountID, vehicleID, normalizedRaceID) {
 			return core.RaceInstance{}, ErrOperationKey
 		}
 		if err = tx.Commit(ctx); err != nil {
@@ -133,7 +133,7 @@ func (p *Postgres) RecordRaceCheckpoint(ctx context.Context, raceInstanceID stri
 	err = tx.QueryRow(ctx, `SELECT race_instance_id,checkpoint_index,elapsed_ms FROM race_checkpoints WHERE operation_id=$1`, operationID).
 		Scan(&existingInstanceID, &existingIndex, &existingElapsed)
 	if err == nil {
-		if existingInstanceID != raceInstanceID || existingIndex != checkpointIndex || existingElapsed != elapsedMS {
+		if !core.RaceCheckpointReplayMatches(existingInstanceID, existingIndex, existingElapsed, raceInstanceID, checkpointIndex, elapsedMS) {
 			return core.RaceInstance{}, ErrOperationKey
 		}
 		if err = tx.Commit(ctx); err != nil {
@@ -198,7 +198,7 @@ func (p *Postgres) FinishRace(ctx context.Context, raceInstanceID string, checkp
 	`, operationID).Scan(&existing.RaceInstanceID, &existing.RaceID, &existing.VehicleID, &existing.BuildRevision,
 		&existing.CheckpointCount, &existing.FinishElapsedMS, &existing.ResultHash)
 	if err == nil {
-		if existing.RaceInstanceID != raceInstanceID || existing.CheckpointCount != checkpointCount || existing.FinishElapsedMS != finishElapsedMS {
+		if !core.RaceFinishReplayMatches(existing, raceInstanceID, checkpointCount, finishElapsedMS) {
 			return core.RaceResult{}, ErrOperationKey
 		}
 		if err = tx.Commit(ctx); err != nil {
