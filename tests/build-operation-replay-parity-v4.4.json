@@ -1,0 +1,9 @@
+{
+  "cases": [
+    {"name":"exact replay","existing_owner":"char_a","existing_vehicle":"veh_a","existing_result_revision":2,"existing_hash":"hash_a","owner":"char_a","vehicle":"veh_a","expected_revision":1,"hash":"hash_a","allow":true},
+    {"name":"changed owner","existing_owner":"char_a","existing_vehicle":"veh_a","existing_result_revision":2,"existing_hash":"hash_a","owner":"char_b","vehicle":"veh_a","expected_revision":1,"hash":"hash_a","allow":false},
+    {"name":"changed vehicle","existing_owner":"char_a","existing_vehicle":"veh_a","existing_result_revision":2,"existing_hash":"hash_a","owner":"char_a","vehicle":"veh_b","expected_revision":1,"hash":"hash_a","allow":false},
+    {"name":"changed expected revision","existing_owner":"char_a","existing_vehicle":"veh_a","existing_result_revision":2,"existing_hash":"hash_a","owner":"char_a","vehicle":"veh_a","expected_revision":2,"hash":"hash_a","allow":false},
+    {"name":"changed hash","existing_owner":"char_a","existing_vehicle":"veh_a","existing_result_revision":2,"existing_hash":"hash_a","owner":"char_a","vehicle":"veh_a","expected_revision":1,"hash":"hash_b","allow":false}
+  ]
+}
