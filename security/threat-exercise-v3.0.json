@@ -78,7 +78,7 @@
           "markers": [
             "PostgreSQL inventory + blueprint persistence",
             "atomic inventory consume/return + immutable rebuild revision",
-            "build operation replay bound to exact validation hash"
+            "build operation replay bound to authoritative owner + vehicle + expected/result revision + exact validation hash"
           ]
         }
       ]
