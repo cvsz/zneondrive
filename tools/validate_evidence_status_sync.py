@@ -71,6 +71,9 @@ def main() -> None:
     require(docs_index, "runtime-reference-quest-side-effects-parity-v4.3.md", "docs index quest side effects parity v4.3")
     require(changelog, "Runtime Reference Quest Side Effects Parity v4.3", "CHANGELOG quest side effects parity v4.3")
     require(checklist, "quest side-effects reference parity v4.3", "checklist quest side effects parity v4.3")
+    require(docs_index, "runtime-reference-build-operation-replay-v4.4.md", "docs index build operation replay v4.4")
+    require(changelog, "Runtime Reference Build Operation Replay v4.4", "CHANGELOG build operation replay v4.4")
+    require(checklist, "rebuild-operation replay hardening v4.4", "checklist build operation replay v4.4")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
 
     require(docs_index, "runtime-postgres-statements-v3.4.md", "docs index PostgreSQL statement metrics v3.4")
