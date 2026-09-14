@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {"quest_id": "MQ001", "money": 110, "xp": 55, "reputation": 1},
+    {"quest_id": "MQ004", "money": 140, "xp": 70, "reputation": 1},
+    {"quest_id": "MQ005", "money": 150, "xp": 75, "reputation": 1},
+    {"quest_id": "MQ009", "money": 190, "xp": 95, "reputation": 1},
+    {"quest_id": "MQ012", "money": 220, "xp": 110, "reputation": 1},
+    {"quest_id": "MQ100", "money": 1100, "xp": 550, "reputation": 1}
+  ],
+  "invalid_quest_ids": ["MQ000", "MQ101", "mq001", "MQ01", "MQ0010"]
+}
