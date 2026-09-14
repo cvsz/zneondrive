@@ -8,6 +8,7 @@ from zneondrive.domain import (
     Entitlements,
     InsufficientInventoryError,
     OperationConflictError,
+    QuestOutOfOrderError,
     RaceValidationError,
     STARTER_REBUILD_BLUEPRINT,
     WorldState,
@@ -32,6 +33,18 @@ class WorldStateTests(unittest.TestCase):
             starter_lineage=True,
             operation_id="grant-starter-1",
         )
+
+    def complete_prerequisites(self, quest_id: str) -> None:
+        target = int(quest_id[2:])
+        character = self.world.characters["char-1"]
+        for number in range(1, target):
+            prerequisite = f"MQ{number:03d}"
+            if prerequisite not in character.completed_quests:
+                self.world.complete_quest(
+                    "acct-1",
+                    prerequisite,
+                    operation_id=f"prereq-{prerequisite}",
+                )
 
     def test_free_account_has_one_vehicle_capacity(self) -> None:
         with self.assertRaises(CapacityError):
@@ -105,7 +118,24 @@ class WorldStateTests(unittest.TestCase):
             )
         self.assertEqual(self.vehicle.active_build.revision, 2)
 
+    def test_quest_ids_and_prerequisites_are_enforced(self) -> None:
+        character = self.world.characters["char-1"]
+        with self.assertRaises(DomainError):
+            self.world.complete_quest(
+                "acct-1", "MQ101", operation_id="invalid-quest"
+            )
+        with self.assertRaises(QuestOutOfOrderError):
+            self.world.complete_quest(
+                "acct-1", "MQ002", operation_id="skip-mq001"
+            )
+        self.assertEqual(character.completed_quests, set())
+
+        self.world.complete_quest("acct-1", "MQ001", operation_id="mq001")
+        self.world.complete_quest("acct-1", "MQ002", operation_id="mq002")
+        self.assertEqual(character.completed_quests, {"MQ001", "MQ002"})
+
     def test_quest_reward_is_idempotent(self) -> None:
+        self.complete_prerequisites("MQ011")
         first = self.world.complete_quest(
             "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
         )
@@ -117,6 +147,7 @@ class WorldStateTests(unittest.TestCase):
         self.assertEqual((character.money, character.xp, character.reputation), (500, 100, 5))
 
     def test_quest_operation_replay_rejects_changed_reward_payload(self) -> None:
+        self.complete_prerequisites("MQ011")
         self.world.complete_quest(
             "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-conflict"
         )
@@ -133,6 +164,7 @@ class WorldStateTests(unittest.TestCase):
         self.assertEqual((character.money, character.xp, character.reputation), (500, 100, 5))
 
     def test_same_quest_with_new_operation_does_not_double_reward(self) -> None:
+        self.complete_prerequisites("MQ011")
         self.world.complete_quest(
             "acct-1", "MQ011", money=500, xp=100, reputation=5, operation_id="q-1"
         )
@@ -144,6 +176,7 @@ class WorldStateTests(unittest.TestCase):
 
     def test_garage_17_quest_side_effects_are_idempotent(self) -> None:
         character = self.world.characters["char-1"]
+        self.complete_prerequisites("MQ004")
         self.world.complete_quest("acct-1", "MQ004", operation_id="mq004-a")
         self.assertEqual(character.inventory.get("part_brakes_track_i"), 1)
         self.world.complete_quest("acct-1", "MQ004", operation_id="mq004-b")
@@ -154,13 +187,14 @@ class WorldStateTests(unittest.TestCase):
         self.world.complete_quest("acct-1", "MQ005", operation_id="mq005-b")
         self.assertEqual(character.blueprints, {STARTER_REBUILD_BLUEPRINT})
 
+        self.complete_prerequisites("MQ009")
         self.world.complete_quest("acct-1", "MQ009", operation_id="mq009-a")
         self.world.complete_quest("acct-1", "MQ009", operation_id="mq009-b")
         self.assertEqual(character.inventory.get("part_tires_street_i"), 1)
 
     def test_rebuild_requires_blueprint_and_inventory_before_mutation(self) -> None:
         character = self.world.characters["char-1"]
-        target = STARTER_PARTS + ["part_brakes_track_i"]
+        target = STARTER_PARTS + ["part_tires_street_i"]
         with self.assertRaises(BlueprintRequiredError):
             self.world.rebuild_vehicle(
                 "acct-1",
@@ -172,7 +206,10 @@ class WorldStateTests(unittest.TestCase):
         self.assertEqual(self.vehicle.active_build.revision, 1)
         self.assertEqual(character.inventory, {})
 
+        self.complete_prerequisites("MQ005")
         self.world.complete_quest("acct-1", "MQ005", operation_id="mq005-unlock")
+        inventory_before = dict(character.inventory)
+        self.assertNotIn("part_tires_street_i", inventory_before)
         with self.assertRaises(InsufficientInventoryError):
             self.world.rebuild_vehicle(
                 "acct-1",
@@ -182,10 +219,11 @@ class WorldStateTests(unittest.TestCase):
                 operation_id="rebuild-without-part",
             )
         self.assertEqual(self.vehicle.active_build.revision, 1)
-        self.assertEqual(character.inventory, {})
+        self.assertEqual(character.inventory, inventory_before)
 
     def test_rebuild_consumes_returns_and_replays_semantic_payload(self) -> None:
         character = self.world.characters["char-1"]
+        self.complete_prerequisites("MQ004")
         self.world.complete_quest("acct-1", "MQ004", operation_id="mq004")
         self.world.complete_quest("acct-1", "MQ005", operation_id="mq005")
         first_parts = STARTER_PARTS + ["part_brakes_track_i"]
@@ -219,6 +257,7 @@ class WorldStateTests(unittest.TestCase):
             )
         self.assertEqual(self.vehicle.active_build.revision, 2)
 
+        self.complete_prerequisites("MQ009")
         self.world.complete_quest("acct-1", "MQ009", operation_id="mq009")
         swapped = self.world.rebuild_vehicle(
             "acct-1",
@@ -300,6 +339,7 @@ class WorldStateTests(unittest.TestCase):
         self.assertEqual(self.world.race_results["race-replay"], first)
 
     def test_operation_id_cannot_cross_mutation_types(self) -> None:
+        self.complete_prerequisites("MQ011")
         self.world.complete_quest(
             "acct-1", "MQ011", money=1, operation_id="cross-kind-op"
         )

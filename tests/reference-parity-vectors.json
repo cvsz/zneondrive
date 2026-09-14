@@ -28,7 +28,16 @@
     {"quest_id": "MQ000", "valid": false, "previous": null},
     {"quest_id": "MQ101", "valid": false, "previous": null},
     {"quest_id": "MQ01", "valid": false, "previous": null},
-    {"quest_id": "Q001", "valid": false, "previous": null}
+    {"quest_id": "Q001", "valid": false, "previous": null},
+    {"quest_id": "MQ00A", "valid": false, "previous": null},
+    {"quest_id": " MQ001", "valid": false, "previous": null}
+  ],
+  "quest_prerequisite_cases": [
+    {"name": "mq001_root_allowed", "quest_id": "MQ001", "completed": [], "allowed": true},
+    {"name": "mq002_missing_immediate_previous", "quest_id": "MQ002", "completed": [], "allowed": false},
+    {"name": "mq002_after_mq001", "quest_id": "MQ002", "completed": ["MQ001"], "allowed": true},
+    {"name": "mq012_missing_mq011", "quest_id": "MQ012", "completed": ["MQ001", "MQ010"], "allowed": false},
+    {"name": "mq012_after_mq011", "quest_id": "MQ012", "completed": ["MQ011"], "allowed": true}
   ],
   "race_id_cases": [
     {"name": "canonical", "race_id": "race_garage17_001", "valid": true, "normalized": "race_garage17_001"},

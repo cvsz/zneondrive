@@ -49,6 +49,10 @@ class OperationConflictError(DomainError):
     """Raised when an idempotency key is reused for a different mutation."""
 
 
+class QuestOutOfOrderError(DomainError):
+    """Raised when a quest is completed before its immediate prerequisite."""
+
+
 class RaceValidationError(DomainError):
     """Raised when a race result cannot be proven against accepted state."""
 
@@ -135,6 +139,24 @@ def _operation_fingerprint(kind: str, payload: dict[str, Any]) -> str:
         ensure_ascii=True,
     )
     return sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def parse_quest_id(quest_id: str) -> int:
+    """Parse the canonical MQ001..MQ100 identifier used by the Go runtime."""
+    if len(quest_id) != 5 or not quest_id.startswith("MQ") or not quest_id[2:].isdigit():
+        raise DomainError("invalid quest id")
+    number = int(quest_id[2:])
+    if number < 1 or number > 100:
+        raise DomainError("invalid quest id")
+    return number
+
+
+def previous_quest_id(quest_id: str) -> str | None:
+    """Return the immediate main-quest prerequisite, or None for MQ001."""
+    number = parse_quest_id(quest_id)
+    if number == 1:
+        return None
+    return f"MQ{number - 1:03d}"
 
 
 class WorldState:
@@ -320,6 +342,7 @@ class WorldState:
         reputation: int = 0,
         operation_id: str,
     ) -> dict[str, int | str]:
+        quest_number = parse_quest_id(quest_id)
         replayed, replay_or_fingerprint = self._replay_operation(
             operation_id,
             "complete_quest",
@@ -334,6 +357,11 @@ class WorldState:
         if replayed:
             return replay_or_fingerprint
         account, character = self._owned_character(account_id)
+        previous = None if quest_number == 1 else f"MQ{quest_number - 1:03d}"
+        if previous is not None and previous not in character.completed_quests:
+            raise QuestOutOfOrderError(
+                f"quest prerequisite not completed: {previous}"
+            )
         if quest_id in character.completed_quests:
             receipt = {"quest_id": quest_id, "money": 0, "xp": 0, "reputation": 0}
             return self._record_operation(operation_id, replay_or_fingerprint, receipt)
