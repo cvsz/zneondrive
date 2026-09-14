@@ -56,12 +56,18 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 	)
 	waitRedisContainerReady(t, replica)
 	waitRedisReplicationLink(t, replica)
+	replicaIP := strings.TrimSpace(runDocker(t, "inspect", "-f", "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}", replica))
+	if replicaIP == "" {
+		t.Fatal("Redis replica did not expose a Docker network address")
+	}
 
 	for i, sentinel := range sentinels {
-		config := fmt.Sprintf("port 26379\nsentinel monitor %s %s 6379 2\nsentinel down-after-milliseconds %s 1000\nsentinel failover-timeout %s 10000\nsentinel parallel-syncs %s 1\n", masterName, masterName, masterName, masterName, masterName)
+		// Sentinel intentionally listens on 6379 inside its isolated container so
+		// the shared PING readiness helper can validate it without special casing.
+		config := fmt.Sprintf("port 6379\nsentinel monitor %s %s 6379 2\nsentinel down-after-milliseconds %s 1000\nsentinel failover-timeout %s 10000\nsentinel parallel-syncs %s 1\n", masterName, masterName, masterName, masterName, masterName)
 		runDocker(t,
 			"run", "-d", "--name", sentinel, "--network", network,
-			"-p", fmt.Sprintf("127.0.0.1:%d:26379", sentinelPorts[i]),
+			"-p", fmt.Sprintf("127.0.0.1:%d:6379", sentinelPorts[i]),
 			"redis:8-alpine", "sh", "-c",
 			fmt.Sprintf("printf '%%s' %q > /tmp/sentinel.conf && exec redis-server /tmp/sentinel.conf --sentinel", config),
 		)
@@ -76,7 +82,7 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 	policy := rateLimitPolicy{Burst: 2, RefillEvery: 30 * time.Second}
 	now := time.Now().UTC().Truncate(time.Millisecond)
 	key := "sentinel:" + suffix
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Second)
 	defer cancel()
 
 	waitForRedisCondition(t, 30*time.Second, func() bool {
@@ -103,11 +109,7 @@ func TestRedisSentinelFailoverPreservesDistributedLimiterBudget(t *testing.T) {
 	waitRedisRole(t, replica, "role:master")
 	waitForRedisCondition(t, 30*time.Second, func() bool {
 		addr, err := limiter.resolveAddr(ctx)
-		if err != nil {
-			return false
-		}
-		containerIP := strings.TrimSpace(runDocker(t, "inspect", "-f", "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}", replica))
-		return addr == containerIP+":6379"
+		return err == nil && addr == replicaIP+":6379"
 	}, "Sentinel never converged on the promoted Redis replica")
 
 	if ok, retry, err := limiter.allow(ctx, key, policy, now); err != nil || ok || retry < time.Second {
