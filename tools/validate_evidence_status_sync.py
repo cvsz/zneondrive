@@ -4,7 +4,7 @@
 This validator checks promoted evidence status rather than treating every test-harness
 increment as a runtime milestone. It prevents documentation from silently closing
 real UE build/package/live-integration gates before retained evidence exists, while
-also requiring post-baseline reference-parity evidence to remain discoverable.
+also requiring post-baseline evidence increments to remain discoverable.
 """
 from pathlib import Path
 
@@ -35,8 +35,8 @@ def main() -> None:
     require(checklist, "Unreal rotation-envelope telemetry v2.3", "checklist promoted evidence")
     require(changelog, "Runtime Unreal Authority Rotation Envelope v2.3", "CHANGELOG promoted evidence")
 
-    # Post-baseline reference-parity evidence is test-harness evidence, not a promoted
-    # runtime milestone, but it must remain discoverable and historically recorded.
+    # Post-baseline evidence is not a promoted gameplay-runtime milestone, but it must
+    # remain discoverable and historically recorded.
     require(docs_index, "runtime-reference-parity-v2.4.md", "docs index parity v2.4")
     require(docs_index, "runtime-reference-parity-integrity-v2.5.md", "docs index parity v2.5")
     require(docs_index, "runtime-reference-operation-parity-v2.6.md", "docs index parity v2.6")
@@ -45,6 +45,15 @@ def main() -> None:
     require(docs_index, "runtime-reference-race-parity-v2.9.md", "docs index race parity v2.9")
     require(changelog, "Runtime Reference Race Input Parity v2.9", "CHANGELOG race parity v2.9")
     require(checklist, "[ ] full reference-oracle parity in Go", "full parity remains open")
+
+    require(docs_index, "runtime-postgres-statements-v3.4.md", "docs index PostgreSQL statement metrics v3.4")
+    require(changelog, "Runtime PostgreSQL Statement Metrics Evidence v3.4", "CHANGELOG PostgreSQL statement metrics v3.4")
+    require(
+        checklist,
+        "[x] PostgreSQL query-level/external exporter metrics source + PostgreSQL 17 CI evidence (deployment verification still open)",
+        "checklist PostgreSQL statement/exporter CI evidence",
+    )
+    require(checklist, "[ ] Deployed metrics scrape/dashboard evidence", "deployed metrics gate remains open")
 
     # Public status must remain evidence-gated until retained real-engine evidence exists.
     require(readme, "Production%20Readiness-Evidence%20Gated", "README production badge")
