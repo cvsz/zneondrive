@@ -29,6 +29,8 @@
 - [x] append-only build revisions
 - [x] quest reward idempotency
 - [x] MQ001–MQ100 ID + immediate-prerequisite sequence reference rule
+- [x] server-derived quest reward schedule reference rule
+- [x] quest completion reference API rejects caller-controlled money/xp/reputation
 - [x] race/build binding reference rule
 - [x] ordered checkpoint reference rule
 - [x] VIP separation reference rule
@@ -73,6 +75,8 @@
 - [x] race-result hash reference parity v3.5 shared Python/Go evidence boundary
 - [x] entitlement fairness reference parity v3.6 shared Python/Go evidence boundary
 - [x] quest-sequence reference parity v3.7 shared Python/Go evidence boundary
+- [x] quest-reward reference parity v3.8 shared Python/Go evidence boundary
+- [x] quest-reward authority reference v3.9 caller-controlled reward removal evidence boundary
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -104,6 +108,8 @@
 - [x] idempotent quest/build operations
 - [x] MQ001–MQ100 prerequisite enforcement
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity vectors
+- [x] shared Python/Go MQ reward schedule parity vectors
+- [x] Python reference quest completion derives rewards instead of accepting caller-controlled amounts
 - [x] MQ012 Roadworthy transition
 - [x] Go unit tests
 - [x] PostgreSQL integration tests
@@ -284,6 +290,8 @@
 - [x] shared Python/Go deterministic race-result hash parity evidence
 - [x] shared Python/Go entitlement capacity + starter-deletion parity evidence
 - [x] shared Python/Go MQ001–MQ100 quest ID + prerequisite sequence parity evidence
+- [x] shared Python/Go MQ reward schedule parity evidence
+- [x] Python reference quest completion rejects caller-controlled reward amounts
 - [x] UE source/installed-build tooling tests
 - [x] UE retained build-evidence workflow contract
 - [ ] Successful real UE 5.8 Client/Server build evidence
