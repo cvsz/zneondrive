@@ -1,0 +1,11 @@
+{
+  "cases": [
+    {"name":"roadworthy_active_build","race_id":"race_garage17_shakedown","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":true},
+    {"name":"race_id_trimmed","race_id":"  race_garage17_shakedown  ","roadworthy":true,"build_revision":1,"build_validation_hash":"hash","valid":true},
+    {"name":"not_roadworthy","race_id":"race_garage17_shakedown","roadworthy":false,"build_revision":7,"build_validation_hash":"abc123","valid":false},
+    {"name":"zero_build_revision","race_id":"race_garage17_shakedown","roadworthy":true,"build_revision":0,"build_validation_hash":"abc123","valid":false},
+    {"name":"empty_build_hash","race_id":"race_garage17_shakedown","roadworthy":true,"build_revision":7,"build_validation_hash":"   ","valid":false},
+    {"name":"invalid_race_prefix","race_id":"event_garage17","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":false},
+    {"name":"uppercase_race_id","race_id":"race_Garage17","roadworthy":true,"build_revision":7,"build_validation_hash":"abc123","valid":false}
+  ]
+}
