@@ -49,6 +49,13 @@ zNeonDrive is the design and implementation repository for **PROJECT: NEON DRIVE
 - **VIP constraint:** garage/storage/convenience capacity only; no direct competitive performance advantage
 - **Current phase:** **Phase 4.19 Unreal Rotation Envelope v2.3**
 - **Selected implementation direction:** Unreal Engine 5.8 client/dedicated gameplay server + Go 1.27 service plane + PostgreSQL + Redis
+- **3D character prototypes:** Nova (female) and Rex (male) are generated low-poly OBJ/MTL meshes for the UE pipeline; production skeletal rigs, animation, facial systems, and final 8K materials remain release gates.
+
+### Current Unreal character assets
+
+The first playable 3D character blockouts are in [`game/Content/Characters/Prototype`](./game/Content/Characters/Prototype). They are deterministic importable meshes for pipeline/gameplay validation, not final art. The Unreal release plan covers rigging, animation, platform packaging, and final runtime verification.
+
+External character examples are tracked with attribution in [`THIRD_PARTY_ASSETS.md`](./THIRD_PARTY_ASSETS.md). Credit is reserved for Quaternius and Kenney when their CC0 assets are imported; the current repository prototypes are generated locally and are not copied from them.
 
 ## Runtime prototype v0.4
 

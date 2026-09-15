@@ -105,6 +105,8 @@ Every engineering document should distinguish:
 - [Live Operations](./live-ops.md)
 - [Release](./release.md)
 - [Release Readiness Checklist](./release-readiness-checklist.md)
+- [Unreal 5.8.2 Latest Status](./unreal-5.8.2-latest-status.md)
+- [Unreal 5.8.2 Client Release Plan](./superpowers/plans/2026-09-15-unreal-5.8.2-client-release.md)
 
 ## Project management and contribution
 

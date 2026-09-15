@@ -1,0 +1,10 @@
+newmtl skin
+Kd 0.55 0.28 0.18
+newmtl jacket_magenta
+Kd 0.04 0.12 0.18
+newmtl pants
+Kd 0.03 0.04 0.08
+newmtl boots
+Kd 0.01 0.01 0.015
+newmtl accent_cyan
+Kd 0.0 0.9 1.0

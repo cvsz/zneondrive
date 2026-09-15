@@ -11,6 +11,9 @@ Use this checklist for release/go-no-go reviews. Check only items backed by evid
 - [ ] Go unit/integration tests pass
 - [ ] Unreal target build passes on retained toolchain evidence
 - [ ] packaged client/server artifacts retained
+- [ ] UE 5.8.2 archive integrity and install evidence retained
+- [ ] Windows 11 client package launch/API test passed
+- [ ] Android APK/AAB install/launch/API test passed
 
 ## Gameplay/content
 
