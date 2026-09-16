@@ -12,6 +12,7 @@ public class NeonDrive : ModuleRules
             "CoreUObject",
             "Engine",
             "InputCore",
+            "EnhancedInput",
             "HTTP",
             "Json",
             "JsonUtilities"

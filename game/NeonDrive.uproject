@@ -3,6 +3,12 @@
   "EngineAssociation": "5.8",
   "Category": "Games",
   "Description": "PROJECT: NEON DRIVE playable vertical-slice runtime",
+  "Plugins": [
+    {
+      "Name": "EnhancedInput",
+      "Enabled": true
+    }
+  ],
   "Modules": [
     {
       "Name": "NeonDrive",
