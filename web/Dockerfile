@@ -1,6 +1,10 @@
 FROM nginx:1.29-alpine
 COPY web/nginx.conf /etc/nginx/conf.d/default.conf
 COPY web/index.html /usr/share/nginx/html/index.html
+COPY web/privacy.html /usr/share/nginx/html/privacy.html
+COPY web/terms.html /usr/share/nginx/html/terms.html
+COPY web/robots.txt /usr/share/nginx/html/robots.txt
+COPY web/sitemap.xml /usr/share/nginx/html/sitemap.xml
 COPY web/styles.css /usr/share/nginx/html/styles.css
 COPY web/app.js /usr/share/nginx/html/app.js
 COPY web/client-v-0-0-1 /usr/share/nginx/html/client-v-0-0-1
