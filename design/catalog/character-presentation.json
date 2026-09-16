@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0",
+  "skeleton_profile": "neondrive_humanoid_v1",
+  "defaults": {
+    "presentation_tier": "npc",
+    "lod_profile": "standard",
+    "motion_profile": "humanoid_default",
+    "facial_profile": "none",
+    "network_cosmetics": true
+  },
+  "tiers": {
+    "hero": {"max_visible": 8, "facial": true, "groom": true, "motion_matching": true},
+    "player": {"max_visible": 1, "facial": true, "groom": true, "motion_matching": true},
+    "npc": {"max_visible": 64, "facial": false, "groom": false, "motion_matching": true},
+    "crowd": {"max_visible": 256, "facial": false, "groom": false, "motion_matching": false}
+  },
+  "characters": {
+    "char_maya_voss": {"tier": "hero", "motion": "engineer", "facial": "hero_face"},
+    "char_adrian_cross": {"tier": "hero", "motion": "champion", "facial": "hero_face"},
+    "char_victor_kane": {"tier": "hero", "motion": "executive", "facial": "hero_face"},
+    "char_mara_chen": {"tier": "hero", "motion": "commander", "facial": "hero_face"},
+    "char_rook_maddox": {"tier": "npc", "motion": "street", "facial": "none"},
+    "char_nia_serrano": {"tier": "npc", "motion": "engineer", "facial": "none"},
+    "char_sol_reyes": {"tier": "npc", "motion": "street", "facial": "none"},
+    "char_selene_ward": {"tier": "npc", "motion": "executive", "facial": "none"},
+    "char_ilya_orlov": {"tier": "npc", "motion": "engineer", "facial": "none"},
+    "char_kade_mercer": {"tier": "npc", "motion": "street", "facial": "none"},
+    "char_jun_park": {"tier": "npc", "motion": "courier", "facial": "none"},
+    "char_tessa_quinn": {"tier": "npc", "motion": "social", "facial": "none"},
+    "char_omar_veyr": {"tier": "npc", "motion": "outdoor", "facial": "none"},
+    "char_yara_kestrel": {"tier": "npc", "motion": "engineer", "facial": "none"},
+    "char_bishop_crane": {"tier": "npc", "motion": "street", "facial": "none"},
+    "char_naomi_vale": {"tier": "npc", "motion": "investigator", "facial": "none"},
+    "char_dax_hollow": {"tier": "npc", "motion": "champion", "facial": "none"},
+    "char_ivy_chen": {"tier": "npc", "motion": "engineer", "facial": "none"},
+    "char_mateo_cruz": {"tier": "npc", "motion": "labor", "facial": "none"},
+    "char_soren_pike": {"tier": "npc", "motion": "street", "facial": "none"},
+    "char_aria_knox": {"tier": "npc", "motion": "investigator", "facial": "none"},
+    "char_juno_rae": {"tier": "npc", "motion": "social", "facial": "none"},
+    "char_elias_voss": {"tier": "npc", "motion": "engineer", "facial": "none"},
+    "char_cassian_dreke": {"tier": "hero", "motion": "security", "facial": "hero_face"},
+    "char_rowan_gray": {"tier": "hero", "motion": "mystery", "facial": "hero_face"}
+  }
+}
