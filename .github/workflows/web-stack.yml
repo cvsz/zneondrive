@@ -57,7 +57,7 @@ jobs:
         run: |
           set -euo pipefail
           for url in http://127.0.0.1:18085/ http://127.0.0.1:18085/client-v-0-0-1/ http://127.0.0.1:18085/client-v-0-0-1/manifest.json http://127.0.0.1:18085/privacy.html http://127.0.0.1:18085/terms.html; do
-            headers="$(curl -fsSI "$url")"
+            headers="$(curl -fsS -D - -o /dev/null "$url")"
             grep -qi '^Content-Security-Policy:' <<<"$headers"
             grep -qi '^X-Frame-Options: DENY' <<<"$headers"
             grep -qi '^X-Content-Type-Options: nosniff' <<<"$headers"
