@@ -47,20 +47,24 @@ jobs:
           curl -fsS http://127.0.0.1:18085/healthz
           curl -fsS http://127.0.0.1:18085/api/healthz
           curl -fsS http://127.0.0.1:18085/client-v-0-0-1/ >/dev/null
-          curl -fsS http://127.0.0.1:18085/client-v-0-0-1/manifest.json | grep -q '"version": "0.0.1"'
+          curl -fsS http://127.0.0.1:18085/client-v-0-0-1/manifest.json | grep -q '\"version\": \"0.0.1\"'
           curl -fsS http://127.0.0.1:18085/client-v-0-0-1/SHA256SUMS.txt >/dev/null
+          curl -fsS http://127.0.0.1:18085/privacy.html >/dev/null
+          curl -fsS http://127.0.0.1:18085/terms.html >/dev/null
+          curl -fsS http://127.0.0.1:18085/robots.txt | grep -q 'Sitemap:'
+          curl -fsS http://127.0.0.1:18085/sitemap.xml | grep -q 'https://zneon.zeaz.dev/'
       - name: Verify security headers and public API boundary
         run: |
           set -euo pipefail
-          for url in http://127.0.0.1:18085/ http://127.0.0.1:18085/client-v-0-0-1/ http://127.0.0.1:18085/client-v-0-0-1/manifest.json; do
+          for url in http://127.0.0.1:18085/ http://127.0.0.1:18085/client-v-0-0-1/ http://127.0.0.1:18085/client-v-0-0-1/manifest.json http://127.0.0.1:18085/privacy.html http://127.0.0.1:18085/terms.html; do
             headers="$(curl -fsSI "$url")"
             grep -qi '^Content-Security-Policy:' <<<"$headers"
             grep -qi '^X-Frame-Options: DENY' <<<"$headers"
             grep -qi '^X-Content-Type-Options: nosniff' <<<"$headers"
             grep -qi '^Referrer-Policy:' <<<"$headers"
           done
-          body="$(curl -fsS http://127.0.0.1:18085/api/not-public)"
-          grep -q 'zNeonDrive' <<<"$body"
+          code="$(curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:18085/api/not-public)"
+          test "$code" = "404"
       - name: Verify unpublished artifacts stay absent
         run: |
           set -euo pipefail
