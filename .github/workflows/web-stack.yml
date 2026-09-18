@@ -28,7 +28,7 @@ jobs:
       WEB_PORT: 18085
       GAME_SERVER_SHARED_KEY: ci-web-stack-test-key-not-for-production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Validate Compose model
         run: docker compose config --quiet
       - name: Build web and Go API images
