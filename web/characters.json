@@ -1,0 +1,247 @@
+{
+  "game": "PROJECT: NEON DRIVE",
+  "set": "launch-roster-v1",
+  "count": 12,
+  "characters": [
+    {
+      "id": "kai",
+      "name_th": "ไค",
+      "name_en": "KAI",
+      "species": "human",
+      "kind_th": "ชาย · นักแข่งรุ่นเก๋า",
+      "role": "Veteran Racer / Garage Chief",
+      "faction": "Free Roads",
+      "accent": "#22d3ee",
+      "bio_th": "อดีตแชมป์สนามใต้ดิน ผันตัวมาเปิดอู่และปั้นนักแข่งรุ่นใหม่",
+      "bio_en": "Ex-underground champion turned garage chief mentoring rookie runners.",
+      "stats": {
+        "spd": 8,
+        "hdl": 7,
+        "arm": 5,
+        "tec": 6,
+        "chr": 8
+      },
+      "portrait": "/assets/characters/kai.svg"
+    },
+    {
+      "id": "mira",
+      "name_th": "มิร่า",
+      "name_en": "MIRA",
+      "species": "human",
+      "kind_th": "หญิง · วิศวกร",
+      "role": "Race Engineer / Navigator",
+      "faction": "Mechanist Guild",
+      "accent": "#f0f",
+      "bio_th": "วิศวกรจูนรถอัจฉริยะ อ่านสนามได้ก่อนใครผ่านข้อมูลเทเลเมทรี",
+      "bio_en": "Genius tune engineer who reads the track through live telemetry.",
+      "stats": {
+        "spd": 6,
+        "hdl": 8,
+        "arm": 4,
+        "tec": 10,
+        "chr": 7
+      },
+      "portrait": "/assets/characters/mira.svg"
+    },
+    {
+      "id": "po",
+      "name_th": "โป้",
+      "name_en": "PO",
+      "species": "human",
+      "kind_th": "เด็กโต · รุกกี้",
+      "role": "Rookie Runner",
+      "faction": "Free Roads",
+      "accent": "#a3e635",
+      "bio_th": "เด็กส่งของที่ขับแซงทุกคนในซอย ฝันอยากเป็นแชมป์ NOVA CITY",
+      "bio_en": "Courier kid who outruns everyone in the alleys; future champion.",
+      "stats": {
+        "spd": 7,
+        "hdl": 9,
+        "arm": 3,
+        "tec": 5,
+        "chr": 9
+      },
+      "portrait": "/assets/characters/po.svg"
+    },
+    {
+      "id": "lungvolt",
+      "name_th": "ลุงโวลต์",
+      "name_en": "UNCLE VOLT",
+      "species": "human",
+      "kind_th": "คนแก่ · ตำนานช่าง",
+      "role": "Retired Legend / Master Mechanic",
+      "faction": "Mechanist Guild",
+      "accent": "#fbbf24",
+      "bio_th": "ตำนานสนามยุคบุกเบิก ซ่อมได้ทุกอย่างด้วยมือและประสบการณ์",
+      "bio_en": "Pioneer-era legend who can fix anything with hands and memory.",
+      "stats": {
+        "spd": 4,
+        "hdl": 6,
+        "arm": 6,
+        "tec": 9,
+        "chr": 10
+      },
+      "portrait": "/assets/characters/lungvolt.svg"
+    },
+    {
+      "id": "jump",
+      "name_th": "จั๊มพ์",
+      "name_en": "JUMP",
+      "species": "rabbit",
+      "kind_th": "กระต่าย · หน่วยสอดแนม",
+      "role": "Sprinter / Scout",
+      "faction": "Iron Wolves",
+      "accent": "#fb7185",
+      "bio_th": "กระต่ายสายฟ้า เร็วที่สุดในตรอกแคบ ไม่มีใครไล่ทัน",
+      "bio_en": "Lightning rabbit; unbeatable in tight alley sprints.",
+      "stats": {
+        "spd": 10,
+        "hdl": 9,
+        "arm": 3,
+        "tec": 5,
+        "chr": 7
+      },
+      "portrait": "/assets/characters/jump.svg"
+    },
+    {
+      "id": "shell",
+      "name_th": "เชลล์",
+      "name_en": "SHELL",
+      "species": "turtle",
+      "kind_th": "เต่า · รถถัง",
+      "role": "Heavy Defender / Tanker",
+      "faction": "NOVA Authority",
+      "accent": "#34d399",
+      "bio_th": "กำแพงเคลื่อนที่ของหน่วยงาน เกราะหนา ใจเย็น ไม่เคยถอย",
+      "bio_en": "The Authority's moving wall; patient, armored, immovable.",
+      "stats": {
+        "spd": 3,
+        "hdl": 5,
+        "arm": 10,
+        "tec": 6,
+        "chr": 5
+      },
+      "portrait": "/assets/characters/shell.svg"
+    },
+    {
+      "id": "sky",
+      "name_th": "สกาย",
+      "name_en": "SKY",
+      "species": "bird",
+      "kind_th": "นก · ลาดตระเวน",
+      "role": "Aerial Recon",
+      "faction": "VANTEX",
+      "accent": "#38bdf8",
+      "bio_th": "นกนางแอ่นนักสืบอากาศ เห็นทุกความเคลื่อนไหวจากด้านบน",
+      "bio_en": "Swallow recon operative watching every move from above.",
+      "stats": {
+        "spd": 9,
+        "hdl": 8,
+        "arm": 3,
+        "tec": 8,
+        "chr": 6
+      },
+      "portrait": "/assets/characters/sky.svg"
+    },
+    {
+      "id": "rooster",
+      "name_th": "รูสเตอร์",
+      "name_en": "ROOSTER",
+      "species": "chicken",
+      "kind_th": "ไก่ · โชว์แมน",
+      "role": "Showman / Trick Driver",
+      "faction": "VANTEX",
+      "accent": "#f97316",
+      "bio_th": "ขวัญใจสนาม ชอบโชว์ลีลาเสี่ยงตายเรียกเสียงเชียร์",
+      "bio_en": "Crowd-favorite daredevil showman of the circuit.",
+      "stats": {
+        "spd": 7,
+        "hdl": 10,
+        "arm": 4,
+        "tec": 5,
+        "chr": 10
+      },
+      "portrait": "/assets/characters/rooster.svg"
+    },
+    {
+      "id": "neoncat",
+      "name_th": "นีออน",
+      "name_en": "NEON",
+      "species": "cat",
+      "kind_th": "แมว · สายลับ",
+      "role": "Agile Infiltrator",
+      "faction": "Iron Wolves",
+      "accent": "#a78bfa",
+      "bio_th": "แมวลอบเร้น เงียบ ไว และหายตัวได้ก่อนใครจะรู้ตัว",
+      "bio_en": "Silent feline infiltrator; gone before anyone notices.",
+      "stats": {
+        "spd": 9,
+        "hdl": 10,
+        "arm": 3,
+        "tec": 7,
+        "chr": 8
+      },
+      "portrait": "/assets/characters/neoncat.svg"
+    },
+    {
+      "id": "tusk",
+      "name_th": "ทัสก์",
+      "name_en": "TUSK",
+      "species": "elephant",
+      "kind_th": "ช้าง · ขนส่งหนัก",
+      "role": "Heavy Hauler",
+      "faction": "NOVA Authority",
+      "accent": "#94a3b8",
+      "bio_th": "ยักษ์ใหญ่ใจดี แบกของหนักและปกป้องขบวนได้ทั้งทีม",
+      "bio_en": "Gentle giant hauling heavy loads and shielding convoys.",
+      "stats": {
+        "spd": 4,
+        "hdl": 5,
+        "arm": 10,
+        "tec": 6,
+        "chr": 7
+      },
+      "portrait": "/assets/characters/tusk.svg"
+    },
+    {
+      "id": "dash",
+      "name_th": "แดช",
+      "name_en": "DASH",
+      "species": "horse",
+      "kind_th": "ม้า · นักแข่งมาราธอน",
+      "role": "Endurance Racer",
+      "faction": "Free Roads",
+      "accent": "#ef4444",
+      "bio_th": "ม้าศึกทางไกล ยิ่งวิ่งยิ่งแรง ไม่มีคำว่าหมดในพจนานุกรม",
+      "bio_en": "Long-distance warhorse; stronger with every lap.",
+      "stats": {
+        "spd": 9,
+        "hdl": 7,
+        "arm": 5,
+        "tec": 5,
+        "chr": 8
+      },
+      "portrait": "/assets/characters/dash.svg"
+    },
+    {
+      "id": "venom",
+      "name_th": "เวน่อม",
+      "name_en": "VENOM",
+      "species": "snake",
+      "kind_th": "งู · ก่อวินาศกรรม",
+      "role": "Saboteur",
+      "faction": "Iron Wolves",
+      "accent": "#4ade80",
+      "bio_th": "งูพิษแห่งเงามืด วางกับดักและทำลายแผนคู่แข่งอย่างเงียบเชียบ",
+      "bio_en": "Shadow serpent sabotaging rival plans without a trace.",
+      "stats": {
+        "spd": 6,
+        "hdl": 8,
+        "arm": 4,
+        "tec": 9,
+        "chr": 4
+      },
+      "portrait": "/assets/characters/venom.svg"
+    }
+  ]
+}

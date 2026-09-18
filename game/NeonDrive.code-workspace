@@ -1,0 +1,2099 @@
+{
+	"folders": [
+		{
+			"name": "NeonDrive",
+			"path": "."
+		},
+		{
+			"name": "UE5",
+			"path": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+		}
+	],
+	"settings": {
+		"js/ts.tsc.autoDetect": "off",
+		"npm.autoDetect": "off",
+		"terminal.integrated.env.linux": {
+			"PATH": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/ThirdParty/DotNet/10.0/linux-x64:${env:PATH}",
+			"DOTNET_ROOT": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/ThirdParty/DotNet/10.0/linux-x64",
+			"DOTNET_HOST_PATH": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/ThirdParty/DotNet/10.0/linux-x64/dotnet",
+			"DOTNET_MULTILEVEL_LOOKUP": "0",
+			"DOTNET_ROLL_FORWARD": "LatestMajor"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",
+			"ms-dotnettools.csharp"
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "NeonDrive Linux Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive Linux Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive Linux DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive Linux Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive Linux Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive Linux Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive Linux Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive LinuxArm64 Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive LinuxArm64 DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive LinuxArm64 Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive LinuxArm64 Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDrive LinuxArm64 Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDrive LinuxArm64 Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDrive",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient Linux Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient Linux DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient Linux Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient Linux Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient Linux Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient Linux Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient LinuxArm64 Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient LinuxArm64 DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient LinuxArm64 Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient LinuxArm64 Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveClient LinuxArm64 Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveClient LinuxArm64 Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveClient",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveEditor Linux Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveEditor Linux DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveEditor Linux Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveEditor Linux Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveEditor",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer Linux Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer Linux DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer Linux Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer Linux Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer Linux Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer Linux Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"Linux",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer LinuxArm64 Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Debug",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer LinuxArm64 DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer LinuxArm64 Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Development",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer LinuxArm64 Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Test",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"NeonDriveServer LinuxArm64 Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			},
+			{
+				"label": "NeonDriveServer LinuxArm64 Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"NeonDriveServer",
+					"LinuxArm64",
+					"Shipping",
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+				}
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch NeonDrive (Debug)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealGame-Linux-Debug",
+				"preLaunchTask": "NeonDrive Linux Debug Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDrive (DebugGame)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealGame-Linux-DebugGame",
+				"preLaunchTask": "NeonDrive Linux DebugGame Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDrive (Development)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealGame",
+				"preLaunchTask": "NeonDrive Linux Development Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDrive (Test)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealGame-Linux-Test",
+				"preLaunchTask": "NeonDrive Linux Test Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDrive (Shipping)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealGame-Linux-Shipping",
+				"preLaunchTask": "NeonDrive Linux Shipping Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveClient (Debug)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealClient-Linux-Debug",
+				"preLaunchTask": "NeonDriveClient Linux Debug Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveClient (DebugGame)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealClient-Linux-DebugGame",
+				"preLaunchTask": "NeonDriveClient Linux DebugGame Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveClient (Development)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealClient",
+				"preLaunchTask": "NeonDriveClient Linux Development Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveClient (Test)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealClient-Linux-Test",
+				"preLaunchTask": "NeonDriveClient Linux Test Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveClient (Shipping)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealClient-Linux-Shipping",
+				"preLaunchTask": "NeonDriveClient Linux Shipping Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveEditor (Debug)",
+				"request": "launch",
+				"program": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/Linux/UnrealEditor-Linux-Debug",
+				"preLaunchTask": "NeonDriveEditor Linux Debug Build",
+				"args": [
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject"
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveEditor (DebugGame)",
+				"request": "launch",
+				"program": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/Linux/UnrealEditor-Linux-DebugGame",
+				"preLaunchTask": "NeonDriveEditor Linux DebugGame Build",
+				"args": [
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject"
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveEditor (Development)",
+				"request": "launch",
+				"program": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/Linux/UnrealEditor",
+				"preLaunchTask": "NeonDriveEditor Linux Development Build",
+				"args": [
+					"/home/cvsz/zneondrive/game/NeonDrive.uproject"
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveServer (Debug)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealServer-Linux-Debug",
+				"preLaunchTask": "NeonDriveServer Linux Debug Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveServer (DebugGame)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealServer-Linux-DebugGame",
+				"preLaunchTask": "NeonDriveServer Linux DebugGame Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveServer (Development)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealServer",
+				"preLaunchTask": "NeonDriveServer Linux Development Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveServer (Test)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealServer-Linux-Test",
+				"preLaunchTask": "NeonDriveServer Linux Test Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Launch NeonDriveServer (Shipping)",
+				"request": "launch",
+				"program": "/home/cvsz/zneondrive/game/Binaries/Linux/UnrealServer-Linux-Shipping",
+				"preLaunchTask": "NeonDriveServer Linux Shipping Build",
+				"args": [
+				],
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8",
+				"type": "cppdbg",
+				"visualizerFile": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true
+			},
+			{
+				"name": "Generate Project Files",
+				"type": "coreclr",
+				"request": "launch",
+				"preLaunchTask": "UnrealBuildTool Linux Development Build",
+				"program": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Build/BatchFiles/RunUBT.sh",
+				"args": [
+					"-projectfiles",
+					"-vscode",
+					"-project=/home/cvsz/zneondrive/game/NeonDrive.uproject",
+					"-game",
+					"-engine",
+					"-dotnet"
+				],
+				"env": {
+					"PATH": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/ThirdParty/DotNet/10.0/linux-x64:${env:PATH}",
+					"DOTNET_ROOT": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/ThirdParty/DotNet/10.0/linux-x64",
+					"DOTNET_HOST_PATH": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Binaries/ThirdParty/DotNet/10.0/linux-x64/dotnet",
+					"DOTNET_MULTILEVEL_LOOKUP": "0",
+					"DOTNET_ROLL_FORWARD": "LatestMajor"
+				},
+				"console": "internalConsole",
+				"internalConsoleOptions": "openOnSessionStart",
+				"stopAtEntry": false,
+				"cwd": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8"
+			}
+		]
+	}
+}
