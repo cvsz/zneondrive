@@ -4,6 +4,8 @@ COPY web/index.html /usr/share/nginx/html/index.html
 COPY web/styles.css /usr/share/nginx/html/styles.css
 COPY web/app.js /usr/share/nginx/html/app.js
 COPY web/client-v-0-0-1 /usr/share/nginx/html/client-v-0-0-1
+COPY web/characters.json /usr/share/nginx/html/characters.json
+COPY web/assets/characters /usr/share/nginx/html/assets/characters
 COPY assets/zneondrive-banner.png /usr/share/nginx/html/assets/zneondrive-banner.png
 RUN chmod -R a+rX /usr/share/nginx/html
 EXPOSE 8080
