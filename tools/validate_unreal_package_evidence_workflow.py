@@ -25,7 +25,7 @@ REQUIRED = [
     "Assert package evidence exists",
     "if: success()",
     "if: always()",
-    "actions/upload-artifact@v4",
+    "actions/upload-artifact@v7",
     "retention-days: 30",
 ]
 FORBIDDEN = [
