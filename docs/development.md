@@ -53,6 +53,8 @@ See [game/README.md](../game/README.md).
 
 The repository contains Game, Editor, and Server targets plus a minimal authoritative replicated vehicle pawn. Full Unreal compile evidence requires a UE 5.8 source toolchain and is deliberately kept on a manual self-hosted workflow.
 
+When packaging from a source tree without `Engine/Binaries/Linux/UnrealEditor-Cmd`, set `UE_COOK_EDITOR` to an absolute path for a locally installed, compatible `UnrealEditor-Cmd`. `UE_ROOT` continues to select the source tree used by UAT and target builds. Confirm engine and asset compatibility before combining separate installations.
+
 ## Content authoring rules
 
 - Never rename a published stable content ID merely to change display text.

@@ -195,9 +195,15 @@ prepare_package_output() {
 package_client() {
   version_json >/dev/null
   check_installed_target_support UnrealClient
+  local -a editor_args=()
+  if [[ -n "${UE_COOK_EDITOR:-}" ]]; then
+    [[ "$UE_COOK_EDITOR" == /* && -x "$UE_COOK_EDITOR" ]] || fail "UE_COOK_EDITOR must be an absolute path to an executable UnrealEditor-Cmd."
+    editor_args+=("-unrealexe=$UE_COOK_EDITOR")
+  fi
   local out="$DIST_DIR/packages/client-linux"
   prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
+    "${editor_args[@]}" \
     -project="$PROJECT" -noP4 -build -cook -stage -pak -archive \
     -archivedirectory="$out" -targetplatform=Linux -clientconfig=Development -client -utf8output
   note "Linux player package archived under $out"
@@ -206,9 +212,15 @@ package_client() {
 package_server() {
   version_json >/dev/null
   check_installed_target_support UnrealServer
+  local -a editor_args=()
+  if [[ -n "${UE_COOK_EDITOR:-}" ]]; then
+    [[ "$UE_COOK_EDITOR" == /* && -x "$UE_COOK_EDITOR" ]] || fail "UE_COOK_EDITOR must be an absolute path to an executable UnrealEditor-Cmd."
+    editor_args+=("-unrealexe=$UE_COOK_EDITOR")
+  fi
   local out="$DIST_DIR/packages/server-linux"
   prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
+    "${editor_args[@]}" \
     -project="$PROJECT" -noP4 -build -cook -stage -pak -archive \
     -archivedirectory="$out" -server -noclient -serverplatform=Linux -serverconfig=Development -utf8output
   note "Linux dedicated-server package archived under $out"
