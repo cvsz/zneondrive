@@ -10,7 +10,7 @@ LOG_TAIL ?= 200
 
 .PHONY: help doctor ue-detect env-init deps-server deps-client control-panel \
 	validate-design validate-docs validate-runtime validate-control check-json lint \
-	test-reference go-test go-integration go-vet go-build test build security ci \
+	test-reference go-test go-integration go-integration-local go-vet go-build test build security ci \
 	server-install server-up server-down server-restart server-status server-health server-logs server-reset \
 	runtime-up runtime-down db-shell redis-cli \
 	client-generate client-build client-package-linux editor-build client-install client-play client-doctor \
@@ -57,7 +57,8 @@ help:
 	  '' \
 	  'Quality' \
 	  '  make validate-design validate-docs validate-runtime validate-control' \
-	  '  make go-test go-integration go-vet go-build test build security ci'
+	  '  make go-test go-integration go-vet go-build test build security ci' \
+	  '  make go-integration-local    Run isolated PostgreSQL + Redis integration tests'
 
 doctor:
 	@$(CONTROL) doctor
@@ -95,6 +96,7 @@ validate-control:
 	python3 tools/validate_unreal_package_evidence_workflow.py
 	bash -n tools/zneondrive-control.sh
 	bash -n tools/ue-linux.sh
+	bash -n tools/run-isolated-go-integration.sh
 
 check-json:
 	python3 -c 'import json,pathlib; [json.loads(p.read_text(encoding="utf-8")) for p in pathlib.Path("design").rglob("*.json")]; json.loads(pathlib.Path("game/NeonDrive.uproject").read_text(encoding="utf-8")); print("JSON OK")'
@@ -106,6 +108,9 @@ test-reference:
 
 go-test:
 	cd services/game-api && go test ./...
+
+go-integration-local:
+	bash tools/run-isolated-go-integration.sh
 
 go-integration:
 	@test -n "$${TEST_DATABASE_URL:-}" || { echo 'TEST_DATABASE_URL is required'; exit 2; }
