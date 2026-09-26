@@ -30,15 +30,15 @@ go vet ./...
 go build ./cmd/server
 ```
 
-PostgreSQL integration tests are run in GitHub Actions. For local integration testing:
+การรัน PostgreSQL + Redis integration suite แบบ isolated ในเครื่อง:
 
 ```bash
-cp .env.example .env
-docker compose up -d postgres redis
-cd services/game-api
-TEST_DATABASE_URL='postgres://zneondrive:zneondrive-local@127.0.0.1:55432/zneondrive?sslmode=disable' \
-  go test -tags=integration ./...
+make go-integration-local
 ```
+
+คำสั่งนี้เริ่ม PostgreSQL 17 และ Redis 8 ชั่วคราว โดย bind port ไว้ที่ loopback และเลือก host port อัตโนมัติ ตรวจ `SELECT 1`, Redis `PING` และ host port ด้วย readiness checks ที่มี timeout ก่อนรัน suite; Go packages ทำงานทีละ package เพื่อลดการแย่ง Docker/CPU ขณะที่ concurrency ภายในแต่ละ test ยังทำงานตามเดิม Container, network และ volume ที่ integration tests สร้างจะติด run label เดียวกันเพื่อให้ cleanup ลบได้เฉพาะ resource ของรอบนี้ Logs ดิบอยู่ใน temporary directory ที่จำกัดสิทธิ์; runner ทำ redaction รูปแบบ credential ที่พบบ่อยก่อนเก็บ sanitized output ใน `artifacts/go-integration/<run-id>/`; คำสั่งนี้ไม่ใช้ `.env` หรือ Compose volumes ของ runtime ที่มีอยู่
+
+หากต้องการใช้ service ที่เตรียมไว้แล้ว ให้ตั้ง `TEST_DATABASE_URL` และ `TEST_REDIS_ADDR` แล้วใช้ `make go-integration` ตามเดิม
 
 Run the whole local service stack:
 

@@ -233,15 +233,41 @@ func docker(args ...string) error {
 
 func mustDocker(t *testing.T, args ...string) {
 	t.Helper()
-	cmd := exec.Command("docker", args...)
+	cmd := exec.Command("docker", integrationDockerArgs(args)...)
 	if output, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("docker command failed: %v: %s", err, strings.TrimSpace(string(output)))
 	}
 }
 
+func integrationDockerArgs(args []string) []string {
+	label := os.Getenv("ZNEONDRIVE_INTEGRATION_RESOURCE_LABEL")
+	if label == "" || len(args) == 0 {
+		return args
+	}
+
+	insertAt := -1
+	switch {
+	case args[0] == "run":
+		insertAt = 1
+	case len(args) > 1 && args[0] == "network" && args[1] == "create":
+		insertAt = 2
+	case len(args) > 1 && args[0] == "volume" && args[1] == "create":
+		insertAt = 2
+	}
+	if insertAt < 0 {
+		return args
+	}
+
+	labeled := make([]string, 0, len(args)+2)
+	labeled = append(labeled, args[:insertAt]...)
+	labeled = append(labeled, "--label", label)
+	labeled = append(labeled, args[insertAt:]...)
+	return labeled
+}
+
 func mustDockerOutput(t *testing.T, args ...string) string {
 	t.Helper()
-	cmd := exec.Command("docker", args...)
+	cmd := exec.Command("docker", integrationDockerArgs(args)...)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("docker command failed: %v: %s", err, strings.TrimSpace(string(output)))
