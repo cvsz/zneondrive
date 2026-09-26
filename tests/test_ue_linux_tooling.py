@@ -228,6 +228,49 @@ class UELinuxToolingTests(unittest.TestCase):
                 self.assertTrue(marker.is_file())
                 self.assertFalse(self.calls.exists())
 
+    def test_package_client_uses_configured_cook_editor(self) -> None:
+        editor = Path(self.tmp.name) / "installed engine" / "UnrealEditor-Cmd"
+        editor.parent.mkdir(parents=True)
+        self._write_exe(editor, '#!/usr/bin/env bash\nexit 0\n')
+        self._run(
+            "package-client",
+            extra_env={
+                "DIST_DIR": str(Path(self.tmp.name) / "client-dist"),
+                "UE_COOK_EDITOR": str(editor),
+            },
+        )
+
+        self.assertIn(f"-unrealexe={editor}", self.calls.read_text(encoding="utf-8"))
+
+    def test_control_panel_package_uses_configured_cook_editor(self) -> None:
+        editor = Path(self.tmp.name) / "installed engine" / "UnrealEditor-Cmd"
+        editor.parent.mkdir(parents=True)
+        self._write_exe(editor, '#!/usr/bin/env bash\nexit 0\n')
+        self._write_exe(
+            self.engine / "GenerateProjectFiles.sh",
+            '#!/usr/bin/env bash\nexit 0\n',
+        )
+        env = os.environ.copy()
+        env.update(
+            UE_ROOT=str(self.engine),
+            UE_COOK_EDITOR=str(editor),
+            DIST_DIR=str(Path(self.tmp.name) / "control-editor-dist"),
+            RUNTIME_DIR=str(Path(self.tmp.name) / "runtime"),
+            ENV_FILE=str(Path(self.tmp.name) / "missing.env"),
+            CALLS_LOG=str(self.calls),
+        )
+
+        result = subprocess.run(
+            ["bash", str(CONTROL_SCRIPT), "client-package-linux"],
+            env=env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(f"-unrealexe={editor}", self.calls.read_text(encoding="utf-8"))
+
     def test_control_panel_package_command_refuses_existing_output(self) -> None:
         dist = Path(self.tmp.name) / "control-dist"
         output = dist / "packages/server-linux"
