@@ -27,15 +27,47 @@ printf 'run_id=%s\nstarted_utc=%s\npostgres_image=postgres:17-alpine\nredis_imag
 
 sanitize_file() {
   local input="$1" output="$2"
-  sed -E -e 's#(://[^:/[:space:]]+):[^@/[:space:]]+@#\1:[REDACTED]@#gI' -e 's/(password|passwd|token|secret|authorization|api[_-]?key)(=|:)[[:space:]]*[^[:space:],;]+/\1\2[REDACTED]/Ig' -e 's/(Bearer[[:space:]]+)[A-Za-z0-9._~+\/-]+=*/\1[REDACTED]/Ig' "$input" > "$output"
+  sed -E \
+    -e 's#(://)[^:/[:space:]@]+:[^@/[:space:]]+@#\1[REDACTED]@#gI' \
+    -e 's/("[[:alnum:]_.-]*(password|passwd|token|secret|authorization|api[_-]?key|access[_-]?key|private[_-]?key|server[_-]?key|resume[_-]?key|credential|jwt|cookie)[[:alnum:]_.-]*"[[:space:]]*:[[:space:]]*).*/\1[REDACTED]/Ig' \
+    -e 's/((password|passwd|token|secret|authorization|api[_-]?key|access[_-]?key|private[_-]?key|server[_-]?key|resume[_-]?key|credential|jwt|cookie)[[:alnum:]_.-]*[[:space:]]*[:=][[:space:]]*).*/\1[REDACTED]/Ig' \
+    -e 's/(Bearer[[:space:]]+)[A-Za-z0-9._~+\/-]+=*/\1[REDACTED]/Ig' \
+    -e 's/gh[pousr]_[A-Za-z0-9_]{20,}/[REDACTED]/g' \
+    -e 's/github_pat_[A-Za-z0-9_]{20,}/[REDACTED]/g' \
+    "$input" > "$output"
+}
+
+verify_sanitizer() {
+  local probe="$RAW_DIR/sanitize-probe.raw.log" sanitized="$RAW_DIR/sanitize-probe.log"
+  cat > "$probe" <<'PROBE'
+Authorization: Bearer bearer-example
+resume_key=resume-example
+server_key: server-example
+{"private_key":"private-example","ok":true}
+postgres://runner:password-example@127.0.0.1/database
+Bearer standalone-example
+ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
+github_pat_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
+PROBE
+  sanitize_file "$probe" "$sanitized" || fail "Could not run the log sanitizer self-check."
+  for secret in bearer-example resume-example server-example private-example password-example standalone-example ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890; do
+    if grep -Fq "$secret" "$sanitized"; then fail "The log sanitizer self-check found an unredacted credential pattern."; fi
+  done
+  rm -f -- "$probe" "$sanitized"
+}
+
+docker_call() {
+  local duration="$1"
+  shift
+  timeout --signal=TERM --kill-after=5s "$duration" docker "$@"
 }
 
 labeled_resource_ids() {
   local resource_type="$1"
   case "$resource_type" in
-    containers) timeout 10s docker ps -aq --filter "label=$RESOURCE_LABEL" ;;
-    networks) timeout 10s docker network ls -q --filter "label=$RESOURCE_LABEL" ;;
-    volumes) timeout 10s docker volume ls -q --filter "label=$RESOURCE_LABEL" ;;
+    containers) docker_call 10s ps -aq --filter "label=$RESOURCE_LABEL" ;;
+    networks) docker_call 10s network ls -q --filter "label=$RESOURCE_LABEL" ;;
+    volumes) docker_call 10s volume ls -q --filter "label=$RESOURCE_LABEL" ;;
     *) return 2 ;;
   esac
 }
@@ -49,7 +81,7 @@ capture_labeled_container_logs() {
   [[ -n "$ids" ]] || return 0
   while IFS= read -r container_id; do
     [[ -n "$container_id" ]] || continue
-    if timeout 10s docker logs "$container_id" > "$raw" 2>&1 || [[ -s "$raw" ]]; then
+    if docker_call 10s logs "$container_id" > "$raw" 2>&1 || [[ -s "$raw" ]]; then
       if ! sanitize_file "$raw" "$EVIDENCE_DIR/container-${container_id:0:12}.log"; then
         printf 'Could not sanitize logs for container %s.\n' "$container_id" >&2
         rm -f -- "$raw"
@@ -70,13 +102,13 @@ remove_labeled_resources() {
   mapfile -t resource_ids <<< "$ids"
   case "$resource_type" in
     containers)
-      if timeout 30s docker rm -f -v "${resource_ids[@]}" >/dev/null 2>&1; then return 0; fi
+      if docker_call 30s rm -f -v "${resource_ids[@]}" >/dev/null 2>&1; then return 0; fi
       ;;
     networks)
-      if timeout 30s docker network rm "${resource_ids[@]}" >/dev/null 2>&1; then return 0; fi
+      if docker_call 30s network rm "${resource_ids[@]}" >/dev/null 2>&1; then return 0; fi
       ;;
     volumes)
-      if timeout 30s docker volume rm -f "${resource_ids[@]}" >/dev/null 2>&1; then return 0; fi
+      if docker_call 30s volume rm -f "${resource_ids[@]}" >/dev/null 2>&1; then return 0; fi
       ;;
   esac
   if output="$(labeled_resource_ids "$resource_type")" && [[ -z "$output" ]]; then
@@ -121,11 +153,13 @@ command -v docker >/dev/null 2>&1 || fail "docker is required for isolated Go in
 command -v go >/dev/null 2>&1 || fail "go is required for isolated Go integration tests."
 command -v timeout >/dev/null 2>&1 || fail "timeout is required for bounded Docker startup and cleanup."
 command -v mktemp >/dev/null 2>&1 || fail "mktemp is required to keep raw logs outside the evidence directory."
-timeout 10s docker info >/dev/null 2>&1 || fail "Docker daemon is unavailable."
+command -v grep >/dev/null 2>&1 || fail "grep is required for the log sanitizer self-check."
+verify_sanitizer
+docker_call 10s info >/dev/null 2>&1 || fail "Docker daemon is unavailable."
 
 ensure_name_available() {
   local name="$1" status
-  if timeout 10s docker inspect "$name" >/dev/null 2>&1; then
+  if docker_call 10s inspect "$name" >/dev/null 2>&1; then
     fail "Generated integration container name is already in use; no existing container was changed."
   else
     status="$?"
@@ -135,17 +169,17 @@ ensure_name_available() {
 ensure_name_available "$PG_NAME"
 ensure_name_available "$REDIS_NAME"
 
-timeout 180s docker run -d --name "$PG_NAME" --label "$RESOURCE_LABEL" -p 127.0.0.1::5432 -e "POSTGRES_DB=$PG_DATABASE" -e "POSTGRES_USER=$PG_USER" -e "POSTGRES_PASSWORD=$PG_PASSWORD" postgres:17-alpine >/dev/null
-timeout 180s docker run -d --name "$REDIS_NAME" --label "$RESOURCE_LABEL" -p 127.0.0.1::6379 redis:8-alpine redis-server --save '' --appendonly no >/dev/null
+docker_call 180s run -d --name "$PG_NAME" --label "$RESOURCE_LABEL" -p 127.0.0.1::5432 -e "POSTGRES_DB=$PG_DATABASE" -e "POSTGRES_USER=$PG_USER" -e "POSTGRES_PASSWORD=$PG_PASSWORD" postgres:17-alpine >/dev/null
+docker_call 180s run -d --name "$REDIS_NAME" --label "$RESOURCE_LABEL" -p 127.0.0.1::6379 redis:8-alpine redis-server --save '' --appendonly no >/dev/null
 
-pg_port="$(timeout 10s docker port "$PG_NAME" 5432/tcp | sed -nE 's/.*:([0-9]+)$/\1/p' | head -n1)"
-redis_port="$(timeout 10s docker port "$REDIS_NAME" 6379/tcp | sed -nE 's/.*:([0-9]+)$/\1/p' | head -n1)"
+pg_port="$(docker_call 10s port "$PG_NAME" 5432/tcp | sed -nE 's/.*:([0-9]+)$/\1/p' | head -n1)"
+redis_port="$(docker_call 10s port "$REDIS_NAME" 6379/tcp | sed -nE 's/.*:([0-9]+)$/\1/p' | head -n1)"
 [[ "$pg_port" =~ ^[0-9]+$ ]] || fail "Could not resolve the isolated PostgreSQL loopback port."
 [[ "$redis_port" =~ ^[0-9]+$ ]] || fail "Could not resolve the isolated Redis loopback port."
 
 pg_ready=0
 for ((attempt = 0; attempt < 30; attempt++)); do
-  if timeout 3s docker exec -e "PGPASSWORD=$PG_PASSWORD" "$PG_NAME" psql -At -U "$PG_USER" -d "$PG_DATABASE" -c 'SELECT 1' 2>/dev/null | grep -qx '1'; then
+  if docker_call 3s exec -e "PGPASSWORD=$PG_PASSWORD" "$PG_NAME" psql -At -U "$PG_USER" -d "$PG_DATABASE" -c 'SELECT 1' 2>/dev/null | grep -qx '1'; then
     pg_ready=1
     break
   fi
@@ -155,7 +189,7 @@ done
 
 redis_ready=0
 for ((attempt = 0; attempt < 30; attempt++)); do
-  if [[ "$(timeout 3s docker exec "$REDIS_NAME" redis-cli PING 2>/dev/null || true)" == "PONG" ]]; then
+  if [[ "$(docker_call 3s exec "$REDIS_NAME" redis-cli PING 2>/dev/null || true)" == "PONG" ]]; then
     redis_ready=1
     break
   fi
@@ -166,7 +200,7 @@ done
 wait_host_port() {
   local port="$1" service="$2"
   for ((attempt = 0; attempt < 30; attempt++)); do
-    if timeout 2s bash -c 'exec 3<>"/dev/tcp/127.0.0.1/$1"' _ "$port" 2>/dev/null; then return 0; fi
+    if timeout --signal=TERM --kill-after=2s 2s bash -c 'exec 3<>"/dev/tcp/127.0.0.1/$1"' _ "$port" 2>/dev/null; then return 0; fi
     sleep 1
   done
   fail "The mapped $service host port did not accept connections within 30 bounded attempts."
