@@ -90,6 +90,7 @@
 - [x] Redis replica-promotion limiter recovery v5.0 CI evidence boundary (automatic failover/Sentinel/Cluster/fencing/production HA remain open)
 - [x] Redis Sentinel master-discovery failover v5.1 CI evidence boundary (fencing/Cluster/deployment HA remain open)
 - [x] Redis Sentinel old-primary rejoin/read-only fencing v5.2 CI evidence boundary (asymmetric-partition split-brain/Cluster/deployment HA remain open)
+- [x] ขอบเขตหลักฐาน Redis Sentinel majority-resolution v5.3 ใน CI (asymmetric-partition fencing/Cluster/deployment HA ยังเปิดอยู่)
 - [x] UE 5.8 retained build-evidence workflow boundary
 - [x] testing strategy + performance-budget targets
 - [x] observability/SLO target contract (deployment measurement still open)
@@ -258,6 +259,7 @@
 - [x] Redis explicit replica-promotion limiter continuity CI evidence
 - [x] Redis Sentinel automatic master-discovery failover continuity CI evidence
 - [x] Redis Sentinel old-primary rejoin/read-only demotion CI evidence
+- [x] Redis Sentinel ต้องใช้เสียงข้างมากเพื่อเลือก master ก่อนทำ limiter mutation
 - [x] Dedicated-server auth rejection telemetry/correlation baseline
 - [x] Authoritative race rejection telemetry baseline
 - [x] Unreal authoritative input-clamp aggregate telemetry source baseline
@@ -298,6 +300,7 @@
 - [x] Isolated PostgreSQL 17 primary-loss-during-uncommitted-MQ001 + promoted retry CI evidence
 - [x] Redis Sentinel automatic primary discovery/promotion CI evidence for limiter coordination
 - [x] Redis Sentinel old-primary rejoin is demoted to a connected read-only replica after promotion in isolated CI
+- [x] ต้องมีเสียงข้างมากจาก Redis Sentinel ก่อน limiter coordination จะตาม primary ที่รายงาน
 - [ ] Redis asymmetric-partition split-brain prevention/Cluster/deployment-HA evidence
 - [ ] Production backup verification / off-host retention evidence
 - [ ] Production restore drill against agreed deployment target
