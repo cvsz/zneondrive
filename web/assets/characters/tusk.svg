@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1026"/><stop offset="1" stop-color="#05070f"/></linearGradient>
+<filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="4" y="4" width="248" height="248" rx="28" fill="url(#bg)" stroke="#94a3b8" stroke-width="5"/>
+<ellipse cx="128" cy="222" rx="70" ry="14" fill="#94a3b8" opacity="0.22" filter="url(#glow)"/>
+<circle cx="128" cy="130" r="46" fill="#a9b7c9"/>
+<ellipse cx="80" cy="120" rx="16" ry="26" fill="#8fa1b8"/>
+<ellipse cx="176" cy="120" rx="16" ry="26" fill="#8fa1b8"/>
+<path d="M118 140 Q116 176 128 184 Q140 176 138 140 L132 140 Q132 168 128 172 Q124 168 124 140 Z" fill="#8fa1b8"/>
+<path d="M96 108 Q104 102 112 108 M144 108 Q152 102 160 108" stroke="#475569" stroke-width="3" fill="none"/>
+<rect x="90" y="118" width="76" height="22" rx="11" fill="#04060d" stroke="#94a3b8" stroke-width="3"/>
+<rect x="98" y="124" width="60" height="10" rx="5" fill="#94a3b8" filter="url(#glow)"/>
+<path d="M52 256 Q56 196 96 188 L160 188 Q200 196 204 256 Z" fill="#141a33"/>
+<path d="M96 188 L112 256 M160 188 L144 256" stroke="#94a3b8" stroke-width="4" opacity="0.7"/>
+<path d="M104 196 h48 l-6 60 h-36 Z" fill="#1f2745"/>
+<circle cx="128" cy="216" r="5" fill="#94a3b8" filter="url(#glow)"/>
+<path d="M84 178 Q128 196 172 178 L168 192 Q128 208 88 192 Z" fill="#94a3b8" opacity="0.85"/>
+<text x="128" y="52" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="bold" fill="#f4f6ff" letter-spacing="3">TUSK</text>
+<text x="128" y="70" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#94a3b8">ทัสก์ · ช้าง · ขนส่งหนัก</text>
+</svg>

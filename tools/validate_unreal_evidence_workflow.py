@@ -23,7 +23,7 @@ def main() -> int:
         "evidence directory": ".runtime/ue-build-evidence",
         "build-version evidence": "Engine/Build/Build.version",
         "checksums": "sha256sum",
-        "evidence upload": "actions/upload-artifact@v4",
+        "evidence upload": "actions/upload-artifact@v7",
         "retention": "retention-days: 30",
         "failure evidence": "if: always()",
     }

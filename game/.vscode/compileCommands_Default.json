@@ -1,0 +1,50 @@
+[
+	{
+		"file": "/home/cvsz/zneondrive/game/Source/NeonDrive/NDPlayerController.cpp",
+		"arguments": [
+			"/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v26_clang-20.1.8-rockylinux8/x86_64-unknown-linux-gnu/bin/clang++",
+			"@/home/cvsz/zneondrive/game/.vscode/compileCommands_Default/NeonDrive.0.rsp"
+		],
+		"directory": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Source"
+	},
+	{
+		"file": "/home/cvsz/zneondrive/game/Source/NeonDrive/NDServerTelemetry.cpp",
+		"arguments": [
+			"/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v26_clang-20.1.8-rockylinux8/x86_64-unknown-linux-gnu/bin/clang++",
+			"@/home/cvsz/zneondrive/game/.vscode/compileCommands_Default/NeonDrive.0.rsp"
+		],
+		"directory": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Source"
+	},
+	{
+		"file": "/home/cvsz/zneondrive/game/Source/NeonDrive/NDServiceSubsystem.cpp",
+		"arguments": [
+			"/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v26_clang-20.1.8-rockylinux8/x86_64-unknown-linux-gnu/bin/clang++",
+			"@/home/cvsz/zneondrive/game/.vscode/compileCommands_Default/NeonDrive.0.rsp"
+		],
+		"directory": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Source"
+	},
+	{
+		"file": "/home/cvsz/zneondrive/game/Source/NeonDrive/NDVehiclePawn.cpp",
+		"arguments": [
+			"/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v26_clang-20.1.8-rockylinux8/x86_64-unknown-linux-gnu/bin/clang++",
+			"@/home/cvsz/zneondrive/game/.vscode/compileCommands_Default/NeonDrive.0.rsp"
+		],
+		"directory": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Source"
+	},
+	{
+		"file": "/home/cvsz/zneondrive/game/Source/NeonDrive/NeonDrive.cpp",
+		"arguments": [
+			"/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v26_clang-20.1.8-rockylinux8/x86_64-unknown-linux-gnu/bin/clang++",
+			"@/home/cvsz/zneondrive/game/.vscode/compileCommands_Default/NeonDrive.0.rsp"
+		],
+		"directory": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Source"
+	},
+	{
+		"file": "/home/cvsz/zneondrive/game/Source/NeonDrive/NeonDriveGameModeBase.cpp",
+		"arguments": [
+			"/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v26_clang-20.1.8-rockylinux8/x86_64-unknown-linux-gnu/bin/clang++",
+			"@/home/cvsz/zneondrive/game/.vscode/compileCommands_Default/NeonDrive.0.rsp"
+		],
+		"directory": "/mnt/zworkforce-storage/dev/UnrealEngine-5.8/Engine/Source"
+	}
+]

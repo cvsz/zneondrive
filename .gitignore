@@ -52,3 +52,6 @@ logs/
 # Local runtime data
 .tmp/
 tmp/
+
+# Local Docker Compose override (e.g. HDD bind mounts, machine-specific)
+compose.override.yaml

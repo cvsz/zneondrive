@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1026"/><stop offset="1" stop-color="#05070f"/></linearGradient>
+<filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="4" y="4" width="248" height="248" rx="28" fill="url(#bg)" stroke="#a78bfa" stroke-width="5"/>
+<ellipse cx="128" cy="222" rx="70" ry="14" fill="#a78bfa" opacity="0.22" filter="url(#glow)"/>
+<path d="M84 128 Q88 84 128 82 Q168 84 172 128 Q170 168 128 170 Q86 168 84 128 Z" fill="#3b4470"/>
+<path d="M88 100 L78 58 L116 84 Z" fill="#2b3352" stroke="#a78bfa" stroke-width="3"/>
+<path d="M168 100 L178 58 L140 84 Z" fill="#2b3352" stroke="#a78bfa" stroke-width="3"/>
+<path d="M92 90 L86 68 L108 82 Z" fill="#f9a8d4"/>
+<path d="M164 90 L170 68 L148 82 Z" fill="#f9a8d4"/>
+<path d="M96 142 h20 M140 142 h20 M98 150 h18 M142 150 h18" stroke="#e5e7eb" stroke-width="2" opacity="0.8"/>
+<path d="M124 146 h8 l-4 6 Z" fill="#f9a8d4"/>
+<rect x="90" y="118" width="76" height="22" rx="11" fill="#04060d" stroke="#a78bfa" stroke-width="3"/>
+<rect x="98" y="124" width="60" height="10" rx="5" fill="#a78bfa" filter="url(#glow)"/>
+<path d="M52 256 Q56 196 96 188 L160 188 Q200 196 204 256 Z" fill="#141a33"/>
+<path d="M96 188 L112 256 M160 188 L144 256" stroke="#a78bfa" stroke-width="4" opacity="0.7"/>
+<path d="M104 196 h48 l-6 60 h-36 Z" fill="#1f2745"/>
+<circle cx="128" cy="216" r="5" fill="#a78bfa" filter="url(#glow)"/>
+<path d="M84 178 Q128 196 172 178 L168 192 Q128 208 88 192 Z" fill="#a78bfa" opacity="0.85"/>
+<text x="128" y="52" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="bold" fill="#f4f6ff" letter-spacing="3">NEON</text>
+<text x="128" y="70" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#a78bfa">นีออน · แมว · สายลับ</text>
+</svg>

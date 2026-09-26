@@ -102,7 +102,7 @@ jobs:
 
       - name: Upload Unreal build evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ue-build-evidence-${{ github.sha }}
           path: .runtime/ue-build-evidence/
