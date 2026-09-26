@@ -60,6 +60,8 @@ make package-all-linux
 
 Packages are archived separately under `dist/packages/client-linux` and `dist/packages/server-linux` through the engine's `RunUAT.sh BuildCookRun` path.
 
+กำหนด UE_CLIENT_PACKAGE_DIR และ UE_SERVER_PACKAGE_DIR เพื่อเลือก absolute output paths แยกกันได้ โดยแต่ละ directory ต้องยังไม่มีอยู่ก่อนเริ่ม package; tooling จะไม่เขียนทับ output เดิม
+
 ## Prototype driving
 
 Default controls:

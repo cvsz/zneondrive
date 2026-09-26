@@ -228,6 +228,42 @@ class UELinuxToolingTests(unittest.TestCase):
                 self.assertTrue(marker.is_file())
                 self.assertFalse(self.calls.exists())
 
+    def test_package_commands_use_target_specific_package_dirs(self) -> None:
+        dist = Path(self.tmp.name) / "default-dist"
+        output_root = Path(self.tmp.name) / "external package outputs"
+        for command, env_name, package_name in (
+            ("package-client", "UE_CLIENT_PACKAGE_DIR", "client"),
+            ("package-server", "UE_SERVER_PACKAGE_DIR", "server"),
+        ):
+            with self.subTest(command=command):
+                self.calls.unlink(missing_ok=True)
+                output = output_root / package_name
+                result = self._run(
+                    command,
+                    extra_env={
+                        "DIST_DIR": str(dist),
+                        env_name: str(output),
+                    },
+                )
+
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue(output.is_dir())
+                self.assertIn(f"-archivedirectory={output}", self.calls.read_text(encoding="utf-8"))
+                self.assertFalse((dist / "packages" / f"{package_name}-linux").exists())
+
+    def test_package_commands_reject_relative_target_specific_package_dirs(self) -> None:
+        for command, env_name in (
+            ("package-client", "UE_CLIENT_PACKAGE_DIR"),
+            ("package-server", "UE_SERVER_PACKAGE_DIR"),
+        ):
+            with self.subTest(command=command):
+                self.calls.unlink(missing_ok=True)
+                result = self._run(command, check=False, extra_env={env_name: "relative/output"})
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(f"{env_name} must be an absolute path", result.stderr)
+                self.assertFalse(self.calls.exists())
+
     def test_package_client_uses_configured_cook_editor(self) -> None:
         editor = Path(self.tmp.name) / "installed engine" / "UnrealEditor-Cmd"
         editor.parent.mkdir(parents=True)
@@ -302,6 +338,40 @@ class UELinuxToolingTests(unittest.TestCase):
         self.assertIn("Refusing to overwrite existing package output", result.stderr)
         self.assertTrue(marker.is_file())
         self.assertFalse(self.calls.exists())
+
+    def test_control_panel_packages_use_target_specific_package_dirs(self) -> None:
+        self._write_exe(
+            self.engine / "GenerateProjectFiles.sh",
+            '#!/usr/bin/env bash\nexit 0\n',
+        )
+        env = os.environ.copy()
+        env.update(
+            UE_ROOT=str(self.engine),
+            DIST_DIR=str(Path(self.tmp.name) / "control-default-dist"),
+            RUNTIME_DIR=str(Path(self.tmp.name) / "runtime"),
+            ENV_FILE=str(Path(self.tmp.name) / "missing.env"),
+            CALLS_LOG=str(self.calls),
+        )
+        for command, env_name, package_name in (
+            ("client-package-linux", "UE_CLIENT_PACKAGE_DIR", "client"),
+            ("game-server-package-linux", "UE_SERVER_PACKAGE_DIR", "server"),
+        ):
+            with self.subTest(command=command):
+                self.calls.unlink(missing_ok=True)
+                output = Path(self.tmp.name) / "external control outputs" / package_name
+                env[env_name] = str(output)
+
+                result = subprocess.run(
+                    ["bash", str(CONTROL_SCRIPT), command],
+                    env=env,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                )
+
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertTrue(output.is_dir())
+                self.assertIn(f"-archivedirectory={output}", self.calls.read_text(encoding="utf-8"))
 
     def test_incomplete_installation_fails_required_tool_preflight(self) -> None:
         (self.engine / "Engine/Build/BatchFiles/RunUAT.sh").unlink()

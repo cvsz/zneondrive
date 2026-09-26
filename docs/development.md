@@ -55,6 +55,14 @@ The repository contains Game, Editor, and Server targets plus a minimal authorit
 
 When packaging from a source tree without `Engine/Binaries/Linux/UnrealEditor-Cmd`, set `UE_COOK_EDITOR` to an absolute path for a locally installed, compatible `UnrealEditor-Cmd`. `UE_ROOT` continues to select the source tree used by UAT and target builds. Confirm engine and asset compatibility before combining separate installations.
 
+## Unreal package output locations
+
+ค่าเริ่มต้นของ Linux packages อยู่ใต้ DIST_DIR/packages/client-linux และ DIST_DIR/packages/server-linux หากต้องการเก็บแต่ละ package บน filesystem คนละจุด ให้กำหนด UE_CLIENT_PACKAGE_DIR และ UE_SERVER_PACKAGE_DIR เป็น absolute paths แยกกันได้
+
+ตัวอย่าง: UE_CLIENT_PACKAGE_DIR=/path/to/client/package make client-package-linux และ UE_SERVER_PACKAGE_DIR=/path/to/server/package make game-server-package-linux
+
+แต่ละ output directory ต้องยังไม่มีอยู่ก่อนเริ่ม package เพื่อป้องกันการเขียนทับข้อมูลเดิม; หากมี path อยู่แล้ว tooling จะหยุดและแจ้ง error
+
 ## Content authoring rules
 
 - Never rename a published stable content ID merely to change display text.
