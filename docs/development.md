@@ -36,7 +36,7 @@ go build ./cmd/server
 make go-integration-local
 ```
 
-คำสั่งนี้เริ่ม PostgreSQL 17 และ Redis 8 ชั่วคราว โดย bind port ไว้ที่ loopback และเลือก host port อัตโนมัติ มี readiness checks และ timeout ก่อนรัน suite แล้วลบเฉพาะ container ที่ติด run label ของตัวเอง Logs จะถูก sanitize และเก็บใน `artifacts/go-integration/<run-id>/` โดยไม่ใช้ `.env` หรือ Compose volumes ของ runtime ที่มีอยู่
+คำสั่งนี้เริ่ม PostgreSQL 17 และ Redis 8 ชั่วคราว โดย bind port ไว้ที่ loopback และเลือก host port อัตโนมัติ ตรวจ `SELECT 1`, Redis `PING` และ host port ด้วย readiness checks ที่มี timeout ก่อนรัน suite; Go packages ทำงานทีละ package เพื่อลดการแย่ง Docker/CPU ขณะที่ concurrency ภายในแต่ละ test ยังทำงานตามเดิม Container, network และ volume ที่ integration tests สร้างจะติด run label เดียวกันเพื่อให้ cleanup ลบได้เฉพาะ resource ของรอบนี้ Logs ดิบอยู่ใน temporary directory ที่จำกัดสิทธิ์และถูก sanitize ก่อนเก็บใน `artifacts/go-integration/<run-id>/`; คำสั่งนี้ไม่ใช้ `.env` หรือ Compose volumes ของ runtime ที่มีอยู่
 
 หากต้องการใช้ service ที่เตรียมไว้แล้ว ให้ตั้ง `TEST_DATABASE_URL` และ `TEST_REDIS_ADDR` แล้วใช้ `make go-integration` ตามเดิม
 

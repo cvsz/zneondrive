@@ -100,11 +100,36 @@ func runDocker(t *testing.T, args ...string) string {
 	t.Helper()
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
+	args = integrationDockerArgs(args)
 	out, err := exec.CommandContext(ctx, "docker", args...).CombinedOutput()
 	if err != nil {
 		t.Fatalf("docker %s failed: %v\n%s", strings.Join(args, " "), err, strings.TrimSpace(string(out)))
 	}
 	return strings.TrimSpace(string(out))
+}
+
+func integrationDockerArgs(args []string) []string {
+	label := os.Getenv("ZNEONDRIVE_INTEGRATION_RESOURCE_LABEL")
+	if label == "" || len(args) == 0 {
+		return args
+	}
+
+	insertAt := -1
+	switch {
+	case args[0] == "run":
+		insertAt = 1
+	case len(args) > 1 && args[0] == "network" && args[1] == "create":
+		insertAt = 2
+	}
+	if insertAt < 0 {
+		return args
+	}
+
+	labeled := make([]string, 0, len(args)+2)
+	labeled = append(labeled, args[:insertAt]...)
+	labeled = append(labeled, "--label", label)
+	labeled = append(labeled, args[insertAt:]...)
+	return labeled
 }
 
 func waitRedisContainerReady(t *testing.T, container string) {
