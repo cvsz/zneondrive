@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "tools" / "ue-linux.sh"
+CONTROL_SCRIPT = ROOT / "tools" / "zneondrive-control.sh"
 PROJECT = ROOT / "game" / "NeonDrive.uproject"
 
 
@@ -201,6 +202,61 @@ class UELinuxToolingTests(unittest.TestCase):
         )
 
         self.assertNotEqual(result.returncode, 0)
+        self.assertTrue(marker.is_file())
+        self.assertFalse(self.calls.exists())
+
+    def test_package_commands_refuse_to_overwrite_existing_outputs(self) -> None:
+        dist = Path(self.tmp.name) / "dist"
+        env = {
+            "DIST_DIR": str(dist),
+        }
+        for command, package_name in (
+            ("package-client", "client-linux"),
+            ("package-server", "server-linux"),
+        ):
+            with self.subTest(command=command):
+                self.calls.unlink(missing_ok=True)
+                output = dist / "packages" / package_name
+                output.mkdir(parents=True, exist_ok=True)
+                marker = output / "preserve.txt"
+                marker.write_text("previous package evidence", encoding="utf-8")
+
+                result = self._run(command, check=False, extra_env=env)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Refusing to overwrite existing package output", result.stderr)
+                self.assertTrue(marker.is_file())
+                self.assertFalse(self.calls.exists())
+
+    def test_control_panel_package_command_refuses_existing_output(self) -> None:
+        dist = Path(self.tmp.name) / "control-dist"
+        output = dist / "packages/server-linux"
+        output.mkdir(parents=True)
+        marker = output / "preserve.txt"
+        marker.write_text("previous package evidence", encoding="utf-8")
+        self._write_exe(
+            self.engine / "GenerateProjectFiles.sh",
+            '#!/usr/bin/env bash\nexit 0\n',
+        )
+        env = os.environ.copy()
+        env.update(
+            UE_ROOT=str(self.engine),
+            DIST_DIR=str(dist),
+            RUNTIME_DIR=str(Path(self.tmp.name) / "runtime"),
+            ENV_FILE=str(Path(self.tmp.name) / "missing.env"),
+            CALLS_LOG=str(self.calls),
+        )
+
+        result = subprocess.run(
+            ["bash", str(CONTROL_SCRIPT), "game-server-package-linux"],
+            env=env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Refusing to overwrite existing package output", result.stderr)
         self.assertTrue(marker.is_file())
         self.assertFalse(self.calls.exists())
 

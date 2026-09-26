@@ -213,6 +213,14 @@ client_build() { ue_build NeonDriveClient; }
 editor_build() { ue_build NeonDriveEditor; }
 game_server_build() { ue_build NeonDriveServer; }
 
+prepare_package_output() {
+  local out="$1"
+  if [[ -e "$out" || -L "$out" ]]; then
+    die "Refusing to overwrite existing package output: $out. Set DIST_DIR to a fresh location."
+  fi
+  mkdir -p "$out"
+}
+
 require_uat() {
   require_ue
   [[ -x "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" ]] || die "RunUAT.sh is missing under UE_ROOT."
@@ -221,7 +229,7 @@ require_uat() {
 client_package_linux() {
   require_uat
   local out="$DIST_DIR/packages/client-linux"
-  rm -rf "$out"; mkdir -p "$out"
+  prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
     -project="$ROOT/game/NeonDrive.uproject" -noP4 -build -cook -stage -pak -archive \
     -archivedirectory="$out" -targetplatform=Linux -clientconfig=Development -client -utf8output
@@ -231,7 +239,7 @@ client_package_linux() {
 game_server_package_linux() {
   require_uat
   local out="$DIST_DIR/packages/server-linux"
-  rm -rf "$out"; mkdir -p "$out"
+  prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
     -project="$ROOT/game/NeonDrive.uproject" -noP4 -build -cook -stage -pak -archive \
     -archivedirectory="$out" -server -noclient -serverplatform=Linux -serverconfig=Development -utf8output
