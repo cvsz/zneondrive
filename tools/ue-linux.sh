@@ -184,11 +184,19 @@ build_target() {
   "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" "$target" Linux Development "$PROJECT" -WaitMutex
 }
 
+prepare_package_output() {
+  local out="$1"
+  if [[ -e "$out" || -L "$out" ]]; then
+    fail "Refusing to overwrite existing package output: $out. Set DIST_DIR to a fresh location."
+  fi
+  mkdir -p "$out"
+}
+
 package_client() {
   version_json >/dev/null
   check_installed_target_support UnrealClient
   local out="$DIST_DIR/packages/client-linux"
-  rm -rf "$out"; mkdir -p "$out"
+  prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
     -project="$PROJECT" -noP4 -build -cook -stage -pak -archive \
     -archivedirectory="$out" -targetplatform=Linux -clientconfig=Development -client -utf8output
@@ -199,7 +207,7 @@ package_server() {
   version_json >/dev/null
   check_installed_target_support UnrealServer
   local out="$DIST_DIR/packages/server-linux"
-  rm -rf "$out"; mkdir -p "$out"
+  prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
     -project="$PROJECT" -noP4 -build -cook -stage -pak -archive \
     -archivedirectory="$out" -server -noclient -serverplatform=Linux -serverconfig=Development -utf8output
