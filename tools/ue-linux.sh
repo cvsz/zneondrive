@@ -187,7 +187,7 @@ build_target() {
 prepare_package_output() {
   local out="$1"
   if [[ -e "$out" || -L "$out" ]]; then
-    fail "Refusing to overwrite existing package output: $out. Set DIST_DIR to a fresh location."
+    fail "Refusing to overwrite existing package output: $out. Set DIST_DIR or the target package path to a fresh location."
   fi
   mkdir -p "$out"
 }
@@ -200,7 +200,10 @@ package_client() {
     [[ "$UE_COOK_EDITOR" == /* && -x "$UE_COOK_EDITOR" ]] || fail "UE_COOK_EDITOR must be an absolute path to an executable UnrealEditor-Cmd."
     editor_args+=("-unrealexe=$UE_COOK_EDITOR")
   fi
-  local out="$DIST_DIR/packages/client-linux"
+  local out="${UE_CLIENT_PACKAGE_DIR:-$DIST_DIR/packages/client-linux}"
+  if [[ -n "${UE_CLIENT_PACKAGE_DIR:-}" && "$out" != /* ]]; then
+    fail "UE_CLIENT_PACKAGE_DIR must be an absolute path."
+  fi
   prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
     "${editor_args[@]}" \
@@ -217,7 +220,10 @@ package_server() {
     [[ "$UE_COOK_EDITOR" == /* && -x "$UE_COOK_EDITOR" ]] || fail "UE_COOK_EDITOR must be an absolute path to an executable UnrealEditor-Cmd."
     editor_args+=("-unrealexe=$UE_COOK_EDITOR")
   fi
-  local out="$DIST_DIR/packages/server-linux"
+  local out="${UE_SERVER_PACKAGE_DIR:-$DIST_DIR/packages/server-linux}"
+  if [[ -n "${UE_SERVER_PACKAGE_DIR:-}" && "$out" != /* ]]; then
+    fail "UE_SERVER_PACKAGE_DIR must be an absolute path."
+  fi
   prepare_package_output "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
     "${editor_args[@]}" \
