@@ -80,6 +80,7 @@
 - [x] Add Redis 8 explicit replica-promotion limiter continuity CI evidence
 - [x] Add Redis 8 Sentinel quorum master-discovery/promotion CI evidence for limiter coordination
 - [x] Add Redis 8 Sentinel old-primary rejoin evidence proving the returned node is reconfigured as a read-only replica of the promoted authority
+- [x] บังคับให้ Sentinel ที่ตั้งค่าไว้เห็นพ้องเสียงข้างมากก่อนทำ Redis limiter mutation
 - [x] Add credential-safe race-integrity/auth rejection telemetry baseline
 - [x] Add bounded Go HTTP request/status/latency/in-flight metrics with separate internal listener
 - [x] Add bounded PostgreSQL pgx pool connection/acquire metrics on the private metrics listener
@@ -138,6 +139,7 @@
 - [x] Redis explicit replica-promotion recovery v5.0 CI evidence/non-claim contract
 - [x] Redis Sentinel master-discovery failover v5.1 CI evidence/non-claim contract
 - [x] Redis Sentinel old-primary rejoin/read-only fencing v5.2 CI evidence/non-claim contract
+- [x] หลักฐานและขอบเขตข้ออ้าง Redis Sentinel majority resolution v5.3 ใน CI
 - [x] observability/SLO, deployment, backup/restore/DR and incident-response plans
 - [x] accessibility, localization, content pipeline and economy/fairness policy
 - [x] moderation/player safety, privacy/data retention and live-ops policy
