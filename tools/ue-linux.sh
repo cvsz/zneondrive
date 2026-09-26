@@ -60,6 +60,49 @@ projectfiles_mode() {
   fi
 }
 
+check_installed_target_support() {
+  local target="${1:-}"
+  [[ -n "$target" ]] || return 0
+  [[ -f "$UE_ROOT/Engine/Build/InstalledBuild.txt" ]] || return 0
+
+  local linux_build_root="$UE_ROOT/Engine/Intermediate/Build/Linux"
+  local candidate module missing found_candidate=0
+  local -a candidates=() missing_modules=()
+  if [[ -d "$linux_build_root" ]]; then
+    mapfile -t candidates < <(
+      find "$linux_build_root" -mindepth 3 -maxdepth 3 -type d \
+        -path "*/$target/Development" -print 2>/dev/null | sort
+    )
+  fi
+
+  for candidate in "${candidates[@]}"; do
+    found_candidate=1
+    missing_modules=()
+    for module in Core CoreUObject TraceLog; do
+      [[ -f "$candidate/$module/$module.precompiled" ]] || missing_modules+=("$module")
+    done
+    if [[ "${#missing_modules[@]}" -eq 0 ]]; then
+      return 0
+    fi
+  done
+
+  if [[ "$found_candidate" -eq 0 ]]; then
+    missing="Core, CoreUObject, TraceLog (no target manifest directory found)"
+  else
+    missing="${missing_modules[*]}"
+  fi
+
+  fail "Installed UE build lacks Linux $target Development precompiled manifests required by this target. Missing: $missing. Expected under $linux_build_root/<architecture>/$target/Development/<Module>/<Module>.precompiled. InstalledBuild.txt alone does not establish Client/Server support; use an installed build containing these target manifests or a complete UE 5.8 source tree."
+}
+
+engine_target_for_project_target() {
+  case "${1:-}" in
+    *Client) printf 'UnrealClient\n' ;;
+    *Server) printf 'UnrealServer\n' ;;
+    *Editor) printf 'UnrealEditor\n' ;;
+  esac
+}
+
 engine_info() {
   local version mode
   version="$(version_json)"
@@ -71,7 +114,7 @@ engine_info() {
 }
 
 preflight() {
-  local version mode dotnet_bin min_free_gb min_free_bytes free_bytes
+  local version mode dotnet_bin min_free_gb min_free_bytes free_bytes target_support
   version="$(version_json)"
   mode="$(projectfiles_mode)"
   [[ "$mode" != "unavailable" ]] || fail "No GenerateProjectFiles.sh or UnrealBuildTool.dll found under UE_ROOT."
@@ -88,6 +131,16 @@ preflight() {
   [[ -f "$ROOT/game/Source/NeonDriveClient.Target.cs" ]] || fail "Missing Unreal client target: game/Source/NeonDriveClient.Target.cs"
   [[ -f "$ROOT/game/Source/NeonDriveServer.Target.cs" ]] || fail "Missing Unreal server target: game/Source/NeonDriveServer.Target.cs"
 
+  if [[ -f "$UE_ROOT/Engine/Build/InstalledBuild.txt" ]]; then
+    check_installed_target_support UnrealClient
+    check_installed_target_support UnrealServer
+    target_support="installed-manifest-baseline-present"
+  elif [[ -x "$UE_ROOT/GenerateProjectFiles.sh" ]]; then
+    target_support="source-tree-compile"
+  else
+    target_support="unverified-ubt-layout"
+  fi
+
   min_free_gb="${UE_MIN_FREE_GB:-20}"
   [[ "$min_free_gb" =~ ^[0-9]+$ ]] || fail "UE_MIN_FREE_GB must be a non-negative integer."
   min_free_bytes=$((min_free_gb * 1024 * 1024 * 1024))
@@ -98,6 +151,7 @@ preflight() {
   printf 'PREFLIGHT_STATUS=ok\n'
   printf 'UE_VERSION=%s\n' "$version"
   printf 'UE_PROJECTFILES_MODE=%s\n' "$mode"
+  printf 'UE_CLIENT_SERVER_PREFLIGHT=%s\n' "$target_support"
   printf 'UE_FREE_DISK_BYTES=%s\n' "$free_bytes"
   printf 'UE_MIN_FREE_DISK_BYTES=%s\n' "$min_free_bytes"
   printf 'UE_CLIENT_TARGET=present\n'
@@ -122,14 +176,17 @@ projectfiles() {
 }
 
 build_target() {
-  local target="${1:-}"
+  local target="${1:-}" engine_target
   [[ -n "$target" ]] || fail "build-target requires a target name"
   version_json >/dev/null
+  engine_target="$(engine_target_for_project_target "$target")"
+  [[ -z "$engine_target" ]] || check_installed_target_support "$engine_target"
   "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh" "$target" Linux Development "$PROJECT" -WaitMutex
 }
 
 package_client() {
   version_json >/dev/null
+  check_installed_target_support UnrealClient
   local out="$DIST_DIR/packages/client-linux"
   rm -rf "$out"; mkdir -p "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
@@ -140,6 +197,7 @@ package_client() {
 
 package_server() {
   version_json >/dev/null
+  check_installed_target_support UnrealServer
   local out="$DIST_DIR/packages/server-linux"
   rm -rf "$out"; mkdir -p "$out"
   "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun \
