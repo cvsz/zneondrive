@@ -100,6 +100,25 @@ jobs:
               -print 2>/dev/null | sort
           )
 
+      - name: Assert both Unreal targets have retained build evidence
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$GITHUB_WORKSPACE/.runtime/ue-build-evidence"
+          test -s "$evidence/Build.version"
+          test -s "$evidence/target-files.txt"
+          test -s "$evidence/sha256sums.txt"
+          for target in NeonDriveClient NeonDriveServer; do
+            if ! grep -Eq "(^|/)${target}([[:space:].-]|$)" "$evidence/target-files.txt"; then
+              echo "BLOCKED: no retained build output for $target" >&2
+              exit 1
+            fi
+            if ! grep -Fq "$target" "$evidence/sha256sums.txt"; then
+              echo "BLOCKED: no checksum evidence for $target" >&2
+              exit 1
+            fi
+          done
       - name: Upload Unreal build evidence
         if: always()
         uses: actions/upload-artifact@v7
