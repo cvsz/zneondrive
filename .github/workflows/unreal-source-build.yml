@@ -110,7 +110,7 @@ jobs:
           test -s "$evidence/target-files.txt"
           test -s "$evidence/sha256sums.txt"
           for target in NeonDriveClient NeonDriveServer; do
-            if ! grep -Eq "(^|/)\\${target}([[:space:].-]|$)" "$evidence/target-files.txt"; then
+            if ! grep -Eq "(^|/)${target}([[:space:].-]|$)" "$evidence/target-files.txt"; then
               echo "BLOCKED: no retained build output for $target" >&2
               exit 1
             fi
