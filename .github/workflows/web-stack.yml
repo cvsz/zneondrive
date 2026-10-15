@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'web/**'
+      - 'tests/test_adsense_surface.py'
       - 'compose.yaml'
       - '.env.example'
       - 'docs/deployment-zneon-domain.md'
@@ -12,6 +13,7 @@ on:
     branches: [main]
     paths:
       - 'web/**'
+      - 'tests/test_adsense_surface.py'
       - 'compose.yaml'
       - '.env.example'
       - 'docs/deployment-zneon-domain.md'
@@ -65,6 +67,24 @@ jobs:
           done
           code="$(curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:18085/api/not-public)"
           test "$code" = "404"
+      - name: Verify served AdSense policy boundaries
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_adsense_surface.py' -v
+          home="$(curl -fsS http://127.0.0.1:18085/)"
+          privacy="$(curl -fsS http://127.0.0.1:18085/privacy.html)"
+          terms="$(curl -fsS http://127.0.0.1:18085/terms.html)"
+          release="$(curl -fsS http://127.0.0.1:18085/client-v-0-0-1/)"
+          headers="$(curl -fsS -D - -o /dev/null http://127.0.0.1:18085/)"
+          grep -Fq 'ca-pub-4971034675329740' <<<"$home"
+          grep -Fq 'pagead2.googlesyndication.com' <<<"$home"
+          grep -Fq 'Google AdSense' <<<"$privacy"
+          if grep -Fq 'pagead2.googlesyndication.com/pagead/js/adsbygoogle.js' <<<"$privacy$terms$release"; then
+            echo 'BLOCKED: advertising loader present on a legal or pending-release page' >&2
+            exit 1
+          fi
+          grep -Fi 'content-security-policy:' <<<"$headers" | grep -Fq "script-src 'self' https://pagead2.googlesyndication.com"
+          grep -Fi 'content-security-policy:' <<<"$headers" | grep -Fq "frame-ancestors 'none'"
       - name: Verify unpublished artifacts stay absent
         run: |
           set -euo pipefail
