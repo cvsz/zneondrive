@@ -25,8 +25,8 @@ func main() {
 	redisSentinelMaster := strings.TrimSpace(os.Getenv("REDIS_SENTINEL_MASTER"))
 	trustedProxyCIDRs := strings.TrimSpace(os.Getenv("TRUSTED_PROXY_CIDRS"))
 	gameServerKey := strings.TrimSpace(os.Getenv("GAME_SERVER_SHARED_KEY"))
-	if len(gameServerKey) < 32 {
-		log.Fatal("GAME_SERVER_SHARED_KEY must be configured with at least 32 characters")
+	if err := validateGameServerKey(gameServerKey); err != nil {
+		log.Fatal(err)
 	}
 
 	redisSentinelAddrs := splitCSV(redisSentinelAddrsRaw)
@@ -145,4 +145,15 @@ func env(name, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+func validateGameServerKey(key string) error {
+	key = strings.TrimSpace(key)
+	if len(key) < 32 {
+		return errors.New("GAME_SERVER_SHARED_KEY must be configured with at least 32 characters")
+	}
+	if key == "zneondrive-local-server-key-change-me-0001" {
+		return errors.New("GAME_SERVER_SHARED_KEY must not use the documented example value")
+	}
+	return nil
 }

@@ -29,6 +29,8 @@ jobs:
     env:
       WEB_PORT: 18085
       GAME_SERVER_SHARED_KEY: ci-web-stack-test-key-not-for-production
+      POSTGRES_PASSWORD: ci-postgres-test-password-not-for-production
+      POSTGRES_EXPORTER_PASSWORD: ci-exporter-test-password-not-for-production
     steps:
       - uses: actions/checkout@v7
       - name: Validate Compose model

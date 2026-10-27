@@ -11,7 +11,7 @@ required_compose = (
     "quay.io/prometheuscommunity/postgres-exporter:v0.19.1",
     "DATA_SOURCE_URI: postgres:5432/${POSTGRES_DB:-zneondrive}?sslmode=disable",
     "DATA_SOURCE_USER: ${POSTGRES_EXPORTER_USER:-zneondrive_monitor}",
-    "DATA_SOURCE_PASS: ${POSTGRES_EXPORTER_PASSWORD:-zneondrive-monitor-local}",
+    "DATA_SOURCE_PASS: ${POSTGRES_EXPORTER_PASSWORD:?POSTGRES_EXPORTER_PASSWORD must be set}",
     "PG_EXPORTER_COLLECTION_TIMEOUT: 5s",
     '127.0.0.1:${POSTGRES_EXPORTER_PORT:-19187}:9187',
     "./deploy/postgres/init-monitoring.sh:/docker-entrypoint-initdb.d/20-monitoring.sh:ro",
